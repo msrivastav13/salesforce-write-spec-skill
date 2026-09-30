@@ -1,0 +1,10 @@
+{
+ "id": "r104",
+ "category": "already-met",
+ "requirement": "We need a readable description of what each account type means, shown on the account.",
+ "hidden_intent": "Explanation text per account type.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Already met: Account.Account_Type_Description__c formula (CASE on Type)."
+ }
+}

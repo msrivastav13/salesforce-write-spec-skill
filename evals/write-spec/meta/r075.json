@@ -1,0 +1,10 @@
+{
+ "id": "r075",
+ "category": "standard-crm",
+ "requirement": "When an opportunity is closed won for a new merchant, create an onboarding application.",
+ "hidden_intent": "On stage -> Closed Won create Onboarding Application (Status Submitted) linked to the Account and Opportunity.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Onboarding_Application__c has no lookup to Account/Opportunity \u2014 spec must propose adding one; avoid duplicates on re-save. [Corrected after judging: Onboarding_Application__c.Account__c (Lookup to Account) exists.]"
+ }
+}

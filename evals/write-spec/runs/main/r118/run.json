@@ -1,0 +1,42 @@
+{
+  "id": "r118",
+  "skill_rev": "v35",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r118/menu-item-price-availability-top-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55},
+    {"seq": 13, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"seq": 18, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 23},
+    {"seq": 19, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 23}
+  ],
+  "org_queries": [
+    {"seq": 2, "purpose": "Menu_Item__c and Menu__c DurableIds", "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Layouts for Menu_Item__c (first attempt)", "command_summary": "Tooling Layout WHERE TableEnumOrId LIKE '01I%' (failed: invalid operator on id field)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "FlexiPages exist and are queryable (D1 said not queryable)", "command_summary": "Tooling FlexiPage list", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 5, "purpose": "Layout for Menu_Item__c exists, unmanaged", "command_summary": "Tooling Layout WHERE TableEnumOrId = '01Iak00000Dx4JS'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Current Dynamic Forms field order on Menu_Item_Record_Page", "command_summary": "Tooling FlexiPage.Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Current layout sections/fields (Price/Available absent)", "command_summary": "Tooling Layout.Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Record types on Menu_Item__c", "command_summary": "RecordType WHERE SobjectType = 'Menu_Item__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Complete custom field list", "command_summary": "Tooling CustomField WHERE TableEnumOrId = DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Custom compact layouts", "command_summary": "Tooling CompactLayout WHERE SobjectType = 'Menu_Item__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "FLS on Price__c/Available__c; layout profile assignments; custom object scan; field types", "command_summary": "FieldPermissions; Tooling ProfileLayout; sf sobject list custom; sobject describe Menu_Item__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "(grouped with seq 11) layout assigned to all profiles, no record type", "command_summary": "Tooling ProfileLayout WHERE TableEnumOrId = DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "LWC/Aura bundles queryable (D2 said not queryable)", "command_summary": "Tooling LightningComponentBundle, AuraDefinitionBundle (unmanaged)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 15, "purpose": "Apex classes named by D2 exist", "command_summary": "Tooling ApexClass WHERE Name IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "What references the FlexiPage (activation hint)", "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId = FlexiPage Id (15 char)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "What references the layout", "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId = Layout Id (0 rows)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "R claims: Data 360 streams, triggers, flows, validation rules, record count", "command_summary": "COUNT DataStream; Tooling ApexTrigger; FlowDefinitionView by name and DurableId; Tooling ValidationRule; COUNT Menu_Item__c", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 0, "update": 2, "delete": 0},
+  "skill_friction": [
+    "Dynamic Forms vs page layout: spec-format says 'when page activation cannot be read, the layout update is a Conditional: row', but it does not say what the condition is when the layout lacks the fields entirely and still drives New/Clone dialogs regardless of activation; I made it Conditional with a recommended default of deploying it.",
+    "The 'wrong AskCoworker claim' counter does not say whether a misreading of a verified fact I sent (R said profile FLS 'unknown' although I sent that no profile rows exist) counts as a wrong claim; I counted it, which reached four and allowed skipping T.",
+    "'At the top' (first section row vs highlights panel/compact layout) sits between 'placement' (decide) and 'which ... is meant' (ask); I treated it as placement and decided, listing the compact layout as a proposal.",
+    "No guidance on whether an Update target whose metadata is not in the local project (force-app empty) needs a retrieve step; I added a retrieve-before-edit step as backup/rollback.",
+    "The org_queries seq model does not fit batched Bash calls that run several queries; I grouped some queries under one seq."
+  ]
+}

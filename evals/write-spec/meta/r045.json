@@ -1,0 +1,10 @@
+{
+ "id": "r045",
+ "category": "integration",
+ "requirement": "Send a Slack message to #merchant-escalations whenever a storefront gets suspended.",
+ "hidden_intent": "Message with storefront name and account on status -> Suspended.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Record-triggered flow with Slack action or Named Credential webhook; no existing notification."
+ }
+}

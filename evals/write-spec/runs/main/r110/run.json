@@ -1,0 +1,63 @@
+{
+  "id": "r110",
+  "skill_rev": "v33",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r110/high-priority-case-escalation-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 3, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 18},
+    {"seq": 4, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"seq": 33, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 37},
+    {"seq": 37, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 38, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 15},
+    {"seq": 39, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 19}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org connectivity", "command_summary": "sf org display (connectedStatus, alias, id, apiVersion only)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Case field semantics (Priority, Status, IsEscalated, custom fields)", "command_summary": "sf sobject describe Case", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Case status values and IsClosed", "command_summary": "SELECT MasterLabel, IsClosed FROM CaseStatus", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "data shape of Priority/IsClosed/IsEscalated", "command_summary": "Case GROUP BY Priority, IsClosed, IsEscalated", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "complete custom field list on Case", "command_summary": "Tooling CustomField WHERE TableEnumOrId='Case'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "same concept elsewhere (escalation/activity fields)", "command_summary": "Tooling CustomField LIKE Escalat/Touch/Aging/Activity", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "triggers on Case and activity objects", "command_summary": "Tooling ApexTrigger TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "record-triggered flows on Case and related", "command_summary": "FlowDefinitionView TriggerObjectOrEventId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "scheduled flows", "command_summary": "FlowDefinitionView TriggerType='Scheduled'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Escalate_Case flow existence", "command_summary": "FlowDefinitionView ApiName LIKE '%scalat%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "concept fields excluding Data 360 DMOs", "command_summary": "Tooling CustomField LIKE Escalat/Touch/Aging/Inactiv/Stale, filtered locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Escalate_Case logic", "command_summary": "Tooling Flow.Metadata by ActiveVersionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Orch scheduled flow identity", "command_summary": "FlowDefinitionView ApiName='Orch'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "existing escalation rules", "command_summary": "SELECT FROM EscalationRule", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "assignment rules", "command_summary": "AssignmentRule Name, Active, SobjectType", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "entitlement processes", "command_summary": "SlaProcess Name, IsActive, SobjectType", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "entitlements in use", "command_summary": "SELECT COUNT() FROM Entitlement", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "business hours", "command_summary": "BusinessHours IsDefault, times", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "queues supporting Case", "command_summary": "QueueSobject", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "all queues", "command_summary": "Group WHERE Type='Queue'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "Omni-Channel service channels", "command_summary": "ServiceChannel", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "routing flows", "command_summary": "FlowDefinitionView ProcessType='RoutingFlow'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "org edition", "command_summary": "Organization OrganizationType, IsSandbox", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "Escalate_Case FlowDefinition Id", "command_summary": "Tooling FlowDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 28, "purpose": "callers of Escalate_Case (agent actions)", "command_summary": "Tooling GenAiFunctionDefinition InvocationTargetType='flow'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 29, "purpose": "open High cases count", "command_summary": "SELECT COUNT() FROM Case WHERE IsClosed=false AND Priority='High'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 30, "purpose": "escalation email templates", "command_summary": "EmailTemplate DeveloperName LIKE '%scalat%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 31, "purpose": "IsEscalated FLS", "command_summary": "FieldPermissions Field='Case.IsEscalated' LIMIT 5", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 34, "purpose": "template bodies (AskCoworker said body unknown, proposed Update)", "command_summary": "EmailTemplate Subject, Body", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 35, "purpose": "Escalations group does not exist", "command_summary": "SELECT COUNT() FROM Group WHERE DeveloperName='Escalations'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 36, "purpose": "Case edit grants", "command_summary": "ObjectPermissions SobjectType='Case' AND PermissionsEdit=true (local parser failed on null Parent; result not used)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 40, "purpose": "Case OWD (AskCoworker OD-4 said unverified)", "command_summary": "Organization DefaultCaseAccess", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 32, "question": "When an open High-priority case has not been modified for 4 hours, what should escalation do? A) Mark it escalated only (IsEscalated = true) and email the case owner with the existing SupportEscalatedCaseNotification template [recommended; standard escalation rule]; B) Mark it escalated and reassign it to a new Escalations queue (no Case queue exists today) - if so, who should be the queue members?; C) Mark it escalated and also set Status = 'Escalated' (value exists). Also: should the 4 hours count business hours only? (only BusinessHours is Default 24x7)", "simulated_answer": "B: set IsEscalated and reassign to an Escalations queue; only open (not Closed) cases, 4 hours with no modification. Business hours not required. Queue members: No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 2, "update": 0, "delete": 0},
+  "skill_friction": [
+    "D1 timed out at 300 words for a one-object requirement; the narrowed retry (150 words, Case fields only) returned but dropped relationships/other-object sections, covered by org queries. D1 template may be too broad for the 60 s limit.",
+    "R also timed out at 300 words with 4 facts and 2 inventory rows; the '>8 changes or >6 facts' split threshold in askcoworker-calls.md is too high.",
+    "Case escalation rules are the standard mechanism but EscalationRule is not queryable and cannot be retrieved under the rules; SKILL/org-verification lists assignment-rule reading limits but not escalation rules explicitly (only 'escalation rule entries'), and there is no guidance on whether the EscalationRules row should be Create vs Conditional when only one active rule is allowed.",
+    "Unknown queue members fit 'named placeholder, blocking' rule, but step 5 does not say whether to ask for members in the same question; answer mapped to no preference.",
+    "AskCoworker repeatedly introduced an unrequested IsEscalated = false entry criterion and a Status update; design-rules 'scope filters' rule handled it, but the R answer then reasoned on that invented criterion."
+  ]
+}

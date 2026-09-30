@@ -1,0 +1,198 @@
+{
+  "id": "r108",
+  "skill_rev": "v33",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r108/data-cloud-unified-customer-profile-spec.md",
+  "askcoworker_calls": [
+    {
+      "seq": 1,
+      "kind": "d1",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 69
+    },
+    {
+      "seq": 15,
+      "kind": "i",
+      "error": true,
+      "timed_out": true,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 121
+    },
+    {
+      "seq": 16,
+      "kind": "retry",
+      "error": true,
+      "timed_out": true,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 74
+    },
+    {
+      "seq": 17,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 35
+    },
+    {
+      "seq": 18,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 39
+    },
+    {
+      "seq": 19,
+      "kind": "r",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 43
+    },
+    {
+      "seq": 20,
+      "kind": "r",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 51
+    },
+    {
+      "seq": 22,
+      "kind": "t",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 50
+    }
+  ],
+  "org_queries": [
+    {
+      "seq": 2,
+      "purpose": "Full custom object scan; find loyalty/review/app-account objects and __dlm/__dll",
+      "command_summary": "sf sobject list --sobject custom",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 3,
+      "purpose": "Data Cloud provisioning and existing DMOs/streams",
+      "command_summary": "sf sobject list --sobject all filtered for Data Cloud keywords; SELECT COUNT() FROM DataStream",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 4,
+      "purpose": "Existing IR rulesets, bundles, record counts, org edition",
+      "command_summary": "COUNT() on IdentityResolution, DataSourceBundle, Individual, Contact, Loyalty_Transaction__c, Review__c, Transaction__c, Account; Organization",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 5,
+      "purpose": "Entity DurableIds",
+      "command_summary": "Tooling EntityDefinition for 6 objects",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 6,
+      "purpose": "Complete custom field lists (missed components)",
+      "command_summary": "Tooling CustomField by TableEnumOrId for Contact, Account, Loyalty_Transaction__c, Review__c, Transaction__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 7,
+      "purpose": "Field semantics (types, external ID, master-detail, picklists)",
+      "command_summary": "sf sobject describe Contact, Loyalty_Transaction__c, Review__c, Transaction__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 8,
+      "purpose": "Data shape of identity keys and review links; shared emails",
+      "command_summary": "COUNT/GROUP BY on Contact app ID, Email, Member_Number, Contact_Status; Review Customer__c, Status__c; duplicate Email HAVING",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 9,
+      "purpose": "Connector permission set object/field grants (D1 claimed Contact__c FLS missing blocks ingestion)",
+      "command_summary": "PermissionSet LIKE a360/Data Cloud; ObjectPermissions; FieldPermissions for sfdc_a360*",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 10,
+      "purpose": "Project files for Data Cloud metadata or object references",
+      "command_summary": "ls/grep force-app",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 11,
+      "purpose": "Automation and Apex readers/writers on source objects",
+      "command_summary": "Tooling ApexTrigger; FlowDefinitionView per object; Tooling ApexClass body search",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 12,
+      "purpose": "Whether name and master-detail fields have FLS rows anywhere; Contact__c master-detail properties",
+      "command_summary": "FieldPermissions GROUP BY Field; describe Contact__c cascadeDelete/updateable",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 21,
+      "purpose": "AskCoworker View All claim; Data Cloud PS assignments",
+      "command_summary": "ObjectPermissions ViewAllRecords for connector PS; PermissionSetAssignment GROUP BY PS name",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 23,
+      "purpose": "Whether the two shared-email Contacts have distinct app account IDs",
+      "command_summary": "SELECT app ID presence, Contact_Status__c FROM Contact WHERE Email = shared address",
+      "ok": true,
+      "contradicted_askcoworker": false
+    }
+  ],
+  "user_questions": [
+    {
+      "seq": 14,
+      "question": "Which source should the unified profile use for app accounts, and which keys should decide that two records are the same customer? Options: (a) CRM Contact records via the Salesforce CRM connector, with Contact.Pronto_App_Account_Id__c (198 of 198 populated) as the app account ID, together with Loyalty_Transaction__c and Review__c (recommended); (b) an external Pronto app system through the Ingestion API. Keys: app account ID only, or app account ID plus email (one email is shared by 2 Contacts).",
+      "simulated_answer": "Ingest Contact, Loyalty Transaction, Review via CRM connector; identity resolution on Pronto App Account Id + email; calculated insight for lifetime points."
+    }
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 15,
+    "create": 15,
+    "update": 0,
+    "delete": 0
+  },
+  "skill_friction": [
+    "Split-retry accounting is ambiguous: 'A split sends both halves and counts as one retry' does not say what happens when one half times out and the other succeeds. I resent only the failed half, narrower, as the second retry; the rule could be read as requiring both halves again.",
+    "Data Cloud metadata type names (DataStreamDefinition, MktDataTranObject, ObjectSourceTargetMap, IdentityResolution, MktCalcInsightObjectDef) and their Module paths cannot be verified with the allowed commands, and neither SKILL.md nor spec-format.md gives canonical types or folders for Data Cloud rows; I used 'Not specified' for Module and recorded the types as assumptions.",
+    "The spec-format rule to put every data stream, DLO, DMO, and mapping on its own row inflates a Data Cloud spec to 15 Setup-delivered rows; guidance on whether Setup-generated DLOs are separate deployable rows would help.",
+    "Rule 'Every component the spec names, including rejected candidates, is verified to exist' conflicts with naming platform-generated Data Cloud objects (standard ssot__ DMOs, unified link objects) that do not exist until provisioning; the org-verification note covers ssot__Individual__dlm but not how to name them in the spec.",
+    "The step 5 'predict the answer' rule and the business-value 'ask' rule both applied to the 'lifetime points' definition (Earn-only vs net); I decided (Earn-only, sign-independent) rather than spend the second message, but the skill does not say which rule wins when a safe default exists for a business definition.",
+    "An answer to a scope question added scope (the calculated insight); the skill says added scope becomes part of the requirement but gives no guidance on whether D1/D2 must be re-run for the new scope.",
+    "Runner deviation: D2 was not sent. D1 did not cover automation, so the skill required it; behavior on the three objects (triggers, flows, Apex readers, connector permission sets) was covered by org queries instead (seq 9, 11, 12), and Section 2 does not state that D2 was skipped. The workflow could make the D2-skip condition an explicit checkpoint."
+  ]
+}

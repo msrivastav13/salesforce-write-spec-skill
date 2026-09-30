@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Recompute Contact Lifetime Orders/Value from order data nightly. They aren't sure where order data lives; the app used to write these fields via integration and stopped."
+}

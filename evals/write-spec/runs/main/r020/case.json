@@ -1,0 +1,4 @@
+{
+ "id": "r020",
+ "requirement": "We want a Task created for the account owner whenever a storefront goes into Pending Activation, due in 3 business days, to do the activation call."
+}

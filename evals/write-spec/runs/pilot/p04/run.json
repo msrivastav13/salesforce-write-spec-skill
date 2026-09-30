@@ -1,0 +1,45 @@
+{
+  "id": "p04",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/pilot/p04/gift-certificate-inactivity-expiry-spec.md",
+  "askcoworker_calls": [
+    {"kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 27},
+    {"kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34}
+  ],
+  "org_queries": [
+    {"purpose": "Org reachable, API version", "command_summary": "sf org display", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Gift_Certificate__c exists; find related objects", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Field list, types, Status__c picklist includes Expired, no last-used field, no custom child objects", "command_summary": "sf sobject describe Gift_Certificate__c", "ok": true, "contradicted_askcoworker": true},
+    {"purpose": "Transaction__c cannot record redemptions (AskCoworker cited prior session)", "command_summary": "sf sobject describe Transaction__c (custom fields)", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "No triggers on Gift_Certificate__c/Transaction__c", "command_summary": "Tooling ApexTrigger by TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "No record-triggered flows on Gift_Certificate__c; scheduled flows", "command_summary": "FlowDefinitionView by TriggerObjectOrEventId and TriggerType=Scheduled", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "No validation rules (AskCoworker said Unknown)", "command_summary": "EntityDefinition DurableId, then Tooling ValidationRule by EntityDefinitionId", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "No custom scheduled Apex jobs", "command_summary": "CronTrigger with CronJobDetail name/type", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Data shape for anchor fallback (status distribution, null Issue_Date__c)", "command_summary": "Gift_Certificate__c GROUP BY Status__c; COUNT where Issue_Date__c null", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Existing gift classes; new class names not taken; no expiry/redeem classes", "command_summary": "Tooling ApexClass name LIKE filters", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Creator classes sharing mode and fields they set", "command_summary": "Tooling ApexClass Body scan for sharing and field assignments", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "No last-used/redeem custom field (DeveloperName scan)", "command_summary": "Tooling CustomField by TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Object and field permissions for permission set updates", "command_summary": "ObjectPermissions and FieldPermissions on Gift_Certificate__c (Status__c, Remaining_Value__c, Issue_Date__c)", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Whether proposed permission sets are editable (namespace)", "command_summary": "PermissionSet Name, NamespacePrefix, Type", "ok": true, "contradicted_askcoworker": true},
+    {"purpose": "OWD for batch sharing decision (AskCoworker said Unknown)", "command_summary": "EntityDefinition InternalSharingModel/ExternalSharingModel", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Dependencies on Gift_Certificate__c", "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentName", "ok": false, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 10, "create": 7, "update": 3, "delete": 0},
+  "skill_friction": [
+    "Runner: meta.json in the out directory contains hidden_intent and expected behavior; RUNNER.md only warns about intent.json, so an `ls` plus reading meta.json for context leaked the hidden intent before any question. The runner should forbid meta.json or keep it out of {out}.",
+    "SKILL.md rule 1 says to ignore deploy instructions but gives no guidance on how to surface that in the spec (which section, whether to add a Section 1 row); I used a Section 1 'Not applicable' row plus a Section 8 item.",
+    "SKILL.md step 8 hard-codes design/ paths and has no --root flag; RUNNER.md adds --root. Fine for the eval, but the skill's own command differs from the one used.",
+    "The I call proposed FLS updates to three platform-managed sfdcInternalInt permission sets; org-verification.md does not list 'is the permission set editable (NamespacePrefix/Type)' as a check, which was needed to prune the inventory.",
+    "Inventory rows were changed after the I call (3 permission set rows dropped, batch changed from with to without sharing, trigger guard added from the R answer); SKILL.md does not say whether such changes need a re-run of I or a follow-up, so I treated them as verified corrections without a follow-up.",
+    "The T call marked 'definition of used' as blocking; SKILL.md step 5 asks the user only when the answer changes the inventory. With no alternative usage source in the org, I kept it as a non-blocking assumption. The rule for downgrading an AskCoworker 'blocking' label is not stated.",
+    "AskCoworker invented an unrelated manual step (Average_Review_Score__c on Storefront__c) and an unverified writer class (AgentUpdateStorefrontDetailsActions); the response table has no row for irrelevant or hallucinated content beyond 'prior session' facts.",
+    "Tooling MetadataComponentDependency does not accept RefMetadataComponentName; org-verification.md documents only RefMetadataComponentId, and getting a custom object Id for that filter is not described."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "r064",
+  "skill_rev": "v24",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r064/storefront-average-rating-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 45},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Field types, formula body, master-detail and picklist values on Storefront__c and Review__c", "command_summary": "sf sobject describe Storefront__c and Review__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 4, "purpose": "DurableIds for Tooling lookups", "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName IN (Storefront__c, Review__c)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Complete custom field list and descriptions", "command_summary": "Tooling CustomField WHERE TableEnumOrId = each DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Roll-up operation and filters, formula and blank handling (AskCoworker said not queryable)", "command_summary": "Tooling CustomField.Metadata by Id for Total_Reviews, Total_Score, Average_Review_Score", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "Data shape: status distribution, null ratings, min/max rating", "command_summary": "SELECT Status__c, COUNT(Id), COUNT(Rating__c), MIN, MAX FROM Review__c GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Storefront count and zero-review storefronts", "command_summary": "SELECT COUNT() FROM Storefront__c; WHERE Total_Reviews__c = 0", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Rating distribution", "command_summary": "SELECT Rating__c, COUNT(Id) FROM Review__c GROUP BY Rating__c (failed: double field cannot be grouped)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Formula result for zero-review and normal storefronts", "command_summary": "SELECT Name, Total_Reviews__c, Total_Score__c, Average_Review_Score__c FROM Storefront__c (two filters, LIMIT 3)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Absence of triggers, record-triggered flows, validation rules", "command_summary": "Tooling ApexTrigger, FlowDefinitionView, Tooling ValidationRule on both objects", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 12, "purpose": "Apex readers/writers of rating fields and AgentReviewActions null handling", "command_summary": "Tooling ApexClass Body for unmanaged classes, searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Same concept elsewhere and dependents of Average_Review_Score__c", "command_summary": "Tooling CustomField DeveloperName LIKE Rating/Review/Star/Average; MetadataComponentDependency on Average_Review_Score__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Org edition", "command_summary": "SELECT OrganizationType, IsSandbox FROM Organization", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 0, "create": 0, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Already-met case with a small defect in the existing component (divide-by-zero in Average_Review_Score__c for 2 zero-review storefronts): SKILL.md says both 'name only real gaps' / 'the inventory covers only the verified gap' and 'do not add nearby enhancements'. It does not say whether a defect in an existing component that affects only an edge case (no reviews) counts as a gap to fix or a proposal; I chose a Section 8 proposal and a zero-change spec.",
+    "Step 6 says skip I when verification shows the requirement is met, but it is not explicit whether step 5's intent question (Submitted vs Published status filter, raised by AskCoworker as blocking) must still be considered; I resolved it from the requirement wording ('whenever a review comes in') per step 5's 'intent answered by wording' rule.",
+    "AskCoworker gave three wrong 'not queryable' claims (formula body, roll-up filters, validation rules). The two-wrong-claims rule triggered 'verify every AskCoworker fact the spec keeps'; the one kept unverified fact (AgentSummarizeReviewsActions behavior) was tagged reported by AskCoworker although its body was fetched only for field names. The rule is ambiguous about whether a peripheral kept fact must be fully verified or can be dropped."
+  ]
+}

@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Inbound endpoint receiving {appAccountId, orderTotal, orderId}; match Contact by Pronto App Account Id; create Earn loyalty transaction; idempotent on orderId."
+}

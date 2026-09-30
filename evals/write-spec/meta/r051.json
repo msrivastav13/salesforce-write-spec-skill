@@ -1,0 +1,10 @@
+{
+ "id": "r051",
+ "category": "data360-analytics",
+ "requirement": "A calculated insight for merchant health: avg rating, refund rate, and promo usage per storefront.",
+ "hidden_intent": "Calculated insight per storefront; refund rate = completed refunds / orders.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Refund rate needs order counts \u2014 no order data; avg rating and refund totals are computable; flag gap."
+ }
+}

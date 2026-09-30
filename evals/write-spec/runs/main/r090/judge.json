@@ -1,0 +1,30 @@
+{
+ "id": "r090",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 2,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Section 6 says system administrators see the new object through View All Data / Modify All Data. That covers object and record access only; Unique_Key__c gets no profile FLS on deploy, so admins will not see that field. The statement is imprecise, not wrong for the object.",
+   "skill_gap": "None explicit; spec-format could state that VAD/MAD do not grant field-level security."
+  }
+ ]
+}

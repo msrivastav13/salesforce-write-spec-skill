@@ -1,0 +1,8 @@
+{"id": "r006", "claims": {"correct": 5, "wrong": 0, "unverifiable": 1}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Test case 8 is self-contradictory as written: it names sfdc_slack (Read-only on Processed_Date__c) but requires Edit on Status__c 'via another grant' without naming one; the org shows only three permission sets with Edit on Status__c, none of them sfdc_slack. The case cannot be set up as described.", "skill_gap": "None exists; SKILL.md has no instruction that test setups must be realizable from the verified permission grants."},
+  {"defect": "Section 1 rows 1 and 2 describe the same flow and the same entry condition; the 'never overwrite' guard is a property of row 1, not a separate responsibility.", "skill_gap": "None exists; no instruction against splitting one component's conditions into separate responsibility rows."},
+  {"defect": "Data 360 non-use rests only on AskCoworker 'prior session' evidence; the run did not try an alternative allowed check (e.g. Tooling or sobject list for DataStream) before labelling it unverifiable. Labelled correctly, so impact is small.", "skill_gap": "org-verification.md gives no allowed query for Data 360 data streams."}
+ ]}

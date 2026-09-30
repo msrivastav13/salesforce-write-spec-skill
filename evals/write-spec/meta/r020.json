@@ -1,0 +1,10 @@
+{
+ "id": "r020",
+ "category": "new-automation",
+ "requirement": "We want a Task created for the account owner whenever a storefront goes into Pending Activation, due in 3 business days, to do the activation call.",
+ "hidden_intent": "Record-triggered flow on Storefront create or status change to Pending Activation: Task for Account owner, subject 'Activation call', due in 3 business days (calendar approximation acceptable).",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "After-save flow on Storefront__c; owner via Account__c; business-day math; avoid duplicate tasks on repeat saves (only on change to the status)."
+ }
+}

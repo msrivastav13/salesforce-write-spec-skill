@@ -1,0 +1,10 @@
+{
+ "id": "p02",
+ "category": "data-integrity",
+ "requirement": "Customers keep getting refunded twice for the same order. Stop that from happening.",
+ "hidden_intent": "Block a second refund for the same transaction unless the combined refund amount stays within the original transaction amount. Show a clear error to the agent.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Must discover Refund__c/Transaction__c relationship before designing."
+ }
+}

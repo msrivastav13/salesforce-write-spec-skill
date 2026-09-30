@@ -1,0 +1,10 @@
+{
+ "id": "r084",
+ "category": "already-met",
+ "requirement": "Store the storefront's lat/long so we can do distance searches later",
+ "hidden_intent": "Geolocation for storefronts.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Already met: Storefront__c.Address__c compound address includes Latitude/Longitude components; no new geolocation field needed (at most populate via geocoding)."
+ }
+}

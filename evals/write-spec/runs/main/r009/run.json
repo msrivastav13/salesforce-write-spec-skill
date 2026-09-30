@@ -1,0 +1,61 @@
+{
+  "id": "r009",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r009/remove-average-review-score-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 36},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 33},
+    {"seq": 28, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 37},
+    {"seq": 33, "kind": "rt", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 34, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 15},
+    {"seq": 37, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 26}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "DurableIds of Storefront__c/Review__c, not namespaced", "command_summary": "Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "field list on Storefront__c; target exists", "command_summary": "Tooling CustomField WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "formula definition (18-char Id)", "command_summary": "Tooling CustomField.Metadata by 18-char Id", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "dependents of field (18-char Id)", "command_summary": "Tooling MetadataComponentDependency by 18-char Id (0 rows)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "formula definition", "command_summary": "Tooling CustomField.Metadata by 15-char Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "dependents of field", "command_summary": "Tooling MetadataComponentDependency by 15-char Id: layout, 4 classes, flow", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 10, "purpose": "Apex readers of field (all bodies)", "command_summary": "Tooling ApexClass Body scan", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 11, "purpose": "flow identity/type", "command_summary": "FlowDefinitionView by Label", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "flow versions", "command_summary": "Tooling Flow by MasterLabel", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "flow logic using field", "command_summary": "Tooling Flow.Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "class Ids", "command_summary": "Tooling ApexClass Id by Name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "callers of flow", "command_summary": "Tooling MetadataComponentDependency on flow ids", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "callers of classes (tests, LWC)", "command_summary": "Tooling MetadataComponentDependency on class ids", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "agent actions invoking classes/flow", "command_summary": "GenAiFunctionDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "data shape of average", "command_summary": "Storefront__c COUNT/MIN/MAX", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "zero-review storefronts", "command_summary": "COUNT WHERE Total_Reviews__c = 0", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "review volume", "command_summary": "Review__c COUNT", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "existing reports", "command_summary": "Report WHERE Name LIKE Review/Storefront", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "Review__c fields and M-D (AskCoworker cited prior session)", "command_summary": "Tooling FieldDefinition Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "CustomObject Id for enableReports", "command_summary": "Tooling CustomObject Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "enableReports/sharing", "command_summary": "Tooling CustomObject.Metadata (No such column; not retried)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "layout name", "command_summary": "Tooling Layout by TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "FlexiPages on Storefront__c", "command_summary": "Tooling FlexiPage by EntityDefinitionId (0 rows)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 29, "purpose": "flow filters/sort/variables detail", "command_summary": "local parse of Flow.Metadata (seq 13 result)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 30, "purpose": "FLS on field; sharing and FLS enforcement in classes; test assertions", "command_summary": "FieldPermissions on Average_Review_Score__c + Apex body scan", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 31, "purpose": "FLS on Total_* fields", "command_summary": "FieldPermissions on Total_Score__c/Total_Reviews__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 32, "purpose": "formula result on zero reviews", "command_summary": "Storefront__c WHERE Total_Reviews__c = 0", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 35, "purpose": "Data 360 streams (R claim)", "command_summary": "DataStream COUNT", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 36, "purpose": "flow runInMode", "command_summary": "local parse of Flow.Metadata", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 27, "question": "Before I finalize the inventory, three scope questions. (1) Average_Review_Score__c is read by 4 Apex classes (AgentStorefrontActions, AgentGetStorefrontsByAccountActions, StorefrontPickerController, MerchantRiskScoreAction), the active flow Get_Partner_Quality_Watchlist (filters and sorts on it), and Storefront Layout. How should they be handled? A) rewrite each to compute Total_Score__c / Total_Reviews__c inline (recommended); B) remove the score from those outputs entirely; C) keep the field. (2) Keep the roll-ups Total_Score__c and Total_Reviews__c? A) keep (recommended; reports and consumers use them); B) delete them too. (3) Should the spec include building the replacement report? A) no, separate deliverable (recommended); B) yes.", "simulated_answer": "(1) No preference; use your recommended default. (2) Keep Total_Score__c and Total_Reviews__c. (3) No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 10, "create": 0, "update": 9, "delete": 1},
+  "skill_friction": [
+    "Workflow orders Inventory (step 4) before Scope check (step 5), but the inventory call needs scope answers (keep roll-ups? rewrite consumers?) as 'established' facts; I asked the scope questions before sending I, which deviates from the literal order.",
+    "org-verification.md says to query CustomField.Metadata and MetadataComponentDependency by CustomField.Id; the 18-char Id returned 0 rows for both in this org and only the 15-char Id worked. The reference does not mention this, and a silent 0-row MCD result could produce a false absence claim.",
+    "The D2 call missed MerchantRiskScoreAction and the Get_Partner_Quality_Watchlist flow that read the field; only the step-3 dependency query caught them. The skill could make MetadataComponentDependency mandatory before any Delete, not optional.",
+    "Allowed commands do not cover how to check reports/list views for a field being deleted (MCD does not reliably list them, Report SOQL has no column info), so the spec can only flag the gap.",
+    "The combined R+T call (500 words) timed out at ~61 s; the skill permits combining for <=5 changes only, but even split calls were needed here with 10 changes. Guidance on the 'narrower retry' being R-only then T separately was implicit.",
+    "No guidance on whether a pre-existing defect found during verification (hard-coded threshold 25 in Get_Watchlist_By_Cuisine) that a required change must touch should be preserved or fixed; handled as a non-blocking open decision.",
+    "Section 8 heading format requires '(blocking | non-blocking)' on every item, which is awkward for informational entries like inventory corrections and conflicts."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r085",
+ "category": "contradictory",
+ "requirement": "Make the promotion discount field required, but merchants should also be able to create promotions without a discount for free-delivery offers.",
+ "hidden_intent": "Add Promotion Type (Percentage Discount / Free Delivery); discount required only for Percentage Discount.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Contradiction; resolve via conditional requirement \u2014 ask or propose a type field."
+ }
+}

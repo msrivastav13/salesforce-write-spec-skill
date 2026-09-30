@@ -1,0 +1,41 @@
+{
+  "id": "r021",
+  "skill_rev": "v20",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/regress/r021/contact-loyalty-tier-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 35},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 31},
+    {"seq": 14, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53},
+    {"seq": 17, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 56},
+    {"seq": 19, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Org reachable, org id", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Contact fields, Loyalty_Tier__c picklist values and default; Loyalty_Transaction__c fields and Transaction_Type__c values; full custom object list", "command_summary": "sf sobject describe Contact / Loyalty_Transaction__c; sf sobject list custom", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 5, "purpose": "No existing points/balance/tier field anywhere", "command_summary": "Tooling CustomField DeveloperName LIKE Point/Tier/Balance/Loyal", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "No triggers or record-triggered flows on Contact / Loyalty_Transaction__c; EntityDefinition DurableIds", "command_summary": "Tooling ApexTrigger; FlowDefinitionView by TriggerObjectOrEventId; EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "No validation rules; data shape (0 transactions, 198 contacts all blank tier, no negative points)", "command_summary": "Tooling ValidationRule; aggregates on Loyalty_Transaction__c and Contact; Transaction__c describe", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Field descriptions; Apex readers/writers of Loyalty_Tier__c, Points__c, Loyalty_Transaction__c", "command_summary": "Tooling CustomField descriptions; Tooling ApexClass bodies searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Dependencies on Loyalty_Tier__c, Points__c, Loyalty_Transaction__c", "command_summary": "Tooling MetadataComponentDependency by RefMetadataComponentId (x3)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "FLS grants on Loyalty_Tier__c and Points__c", "command_summary": "FieldPermissions WHERE Field = ...", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Org edition", "command_summary": "SELECT OrganizationType, IsSandbox FROM Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Master-detail reparentable?", "command_summary": "Tooling CustomField Metadata by Id for Contact__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "New flow name not taken; re-run Contact and transaction counts", "command_summary": "FlowDefinitionView ApiName LIKE Loyal/Tier; COUNT on Contact and Loyalty_Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Data 360 involvement (AskCoworker cited prior-session 0 DataStreams)", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 12, "question": "1) What points thresholds map to each tier (Explorer, Insider, Pronto Plus, Pronto One, Pronto Elite)? No threshold config exists in the org; recommendation: give fixed ranges. 2) What is the 'points balance': net points (Earn minus Redeem, since Transaction_Type__c has Earn and Redeem) or lifetime earned points? Recommendation: net. 3) Should tiers go down when the balance drops, and should the tier be recalculated on transaction delete as well as insert/update? Recommendation: yes to both.", "simulated_answer": "Net points (Earn minus Redeem across all Loyalty Transactions): Explorer 0-999, Insider 1000-4999, Pronto Plus 5000-9999, Pronto One 10000-24999, Pronto Elite 25000+. Recalculate on every loyalty transaction insert/update/delete. Tiers can go down."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 4, "create": 4, "update": 0, "delete": 0},
+  "skill_friction": [
+    "The skill says to ask 'after D1' but also to verify in step 3 before resolving forks in step 4; the order of D2 vs the question message is not stated. I asked after D2 and verification, which made the options better grounded but the rule is ambiguous.",
+    "AskCoworker's I proposal was architecturally wrong (after-trigger reading a roll-up that recalculates only after the child's after-triggers; claimed flows do not fire on delete). The skill's table says 'wrong details in proposals: fix from evidence, record in Section 8' but does not say whether replacing the whole architecture counts as a fix or requires resending I; I fixed it myself and sent the corrected inventory in R and T.",
+    "Order-of-execution facts (roll-up recalculation saves the parent through before-save flows; roll-up over a same-object formula) cannot be verified with allowed commands and are load-bearing; the skill only offers the 'assumption (documented platform behavior)' tag, with no guidance on whether that is acceptable for the core mechanism.",
+    "FlowTest for a before-save flow whose input is a read-only roll-up field: unclear whether Flow Tests can set it; spec-format mandates FlowTest or manual checks for flow-only changes but gives no rule for when a FlowTest row should be Conditional.",
+    "AskCoworker repeatedly cited 'prior session' facts and marked FLS grants for unexposed new fields as blocking; the skill handles prior-session facts but not AskCoworker's blocking/non-blocking classifications, which I overrode per the least-access content rule."
+  ]
+}

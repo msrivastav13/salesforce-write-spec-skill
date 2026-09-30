@@ -1,0 +1,56 @@
+{
+  "id": "r003",
+  "skill_rev": "v7",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r003/account-sla-expiring-soon-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55},
+    {"seq": 22, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 25},
+    {"seq": 29, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50},
+    {"seq": 33, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 38}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Org reachable, API version", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Account custom fields exist; no existing flag or account-manager field", "command_summary": "Tooling FieldDefinition WHERE EntityDefinition.QualifiedApiName='Account'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No Apex triggers on Account", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId='Account'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "No record-triggered flows on Account", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId='Account'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "No scheduled flow evaluates SLA dates", "command_summary": "FlowDefinitionView WHERE TriggerType='Scheduled'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Org edition", "command_summary": "SELECT OrganizationType, IsSandbox FROM Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Validation rules on Account (AskCoworker: unknown)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId='Account'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "CustomField IDs and namespaces on Account", "command_summary": "Tooling CustomField WHERE TableEnumOrId='Account'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Identify the Orch scheduled flow", "command_summary": "FlowDefinitionView WHERE ApiName='Orch'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "What references SLAExpirationDate__c, Contract_Status__c, SLA__c", "command_summary": "Tooling MetadataComponentDependency by field Id (18 and 15 char)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "SLAExpirationDate__c populated (AskCoworker: frequency 1.0)", "command_summary": "COUNT(Id), COUNT(SLAExpirationDate__c), NEXT_N_DAYS:30, < TODAY, MIN/MAX on Account", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 14, "purpose": "Contract_Status__c distribution", "command_summary": "GROUP BY Contract_Status__c on Account", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "No unmanaged Apex reads/writes SLA fields", "command_summary": "Tooling ApexClass Body WHERE NamespacePrefix=null, local keyword scan", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "AccountRule classes are managed", "command_summary": "Tooling ApexClass WHERE Name='AccountRule'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "No other SLA store (Contract, ServiceContract, Entitlement, Asset)", "command_summary": "COUNT(Id) per object; Contract EndDate NEXT_N_DAYS:30", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Field types and picklist values", "command_summary": "sf sobject describe Account", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "SLA__c populated", "command_summary": "GROUP BY SLA__c on Account", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 23, "purpose": "Editability and ownership of permission sets proposed in I", "command_summary": "PermissionSet WHERE Name IN (Agentforce_Reference_App, sfdc_accelerate_dms, sfdc_a360)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "FLS on SLAExpirationDate__c across profiles and permission sets", "command_summary": "FieldPermissions WHERE Field='Account.SLAExpirationDate__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "Permission set assignee counts", "command_summary": "PermissionSetAssignment GROUP BY PermissionSet.Name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "List view name not taken", "command_summary": "ListView WHERE SobjectType='Account'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "Who the account managers are", "command_summary": "User GROUP BY Profile.Name (active, Standard)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 28, "purpose": "Account owner count", "command_summary": "COUNT_DISTINCT(OwnerId) FROM Account", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 30, "purpose": "Account sharing default (R: unknown)", "command_summary": "SELECT DefaultAccountAccess FROM Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 31, "purpose": "No Account data stream (R: prior session claim)", "command_summary": "COUNT(Id) FROM DataStreamDefinition", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 32, "purpose": "New permission set name not taken", "command_summary": "PermissionSet WHERE Name='SLA_Expiring_Soon_Access'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 20, "question": "Before I propose changes, three decisions: (1) How should an account be flagged? (a) new formula checkbox 'SLA Expiring Soon' on Account (recommended: always current, no automation); (b) scheduled flow sets Contract_Status__c = 'Pending Renewal' (value exists; 2 accounts already use it); (c) scheduled flow sets a stored checkbox. (2) How should account managers act on it? (a) an Account list view of flagged accounts; (b) email or task to the owner; (c) both. (3) SLAExpirationDate__c is empty on all 200 accounts and nothing populates it except manual entry on the Account layouts. (a) proceed and document manual entry as the data dependency (recommended); (b) include a bulk-load procedure in the spec.", "simulated_answer": "(1) Formula checkbox 'SLA Expiring Soon'. (2) A list view; no emails. (3) No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "A new field needs FLS to be usable, but SKILL.md and spec-format only say broad or integration grants are open decisions; there is no guidance on whether a new dedicated permission set is the least-access default or 'behavior nobody asked for'. I chose a new PermissionSet and dropped AskCoworker's Agentforce_Reference_App grant.",
+    "Permission set assignment is a data step (PermissionSetAssignment). The content rule says every data operation needs backup and rollback steps, which fits a bulk load but reads oddly for an assignment; no guidance on this.",
+    "AskCoworker labels facts I sent in the message as '[Verified: prior session]'. The response-handling table treats 'prior session' facts as needing verification, so it is unclear whether echoed established facts must be re-checked or can be accepted as-is.",
+    "Some list view settings (sort order) are not part of ListView metadata; spec-format has no guidance on UI-only settings, so I recorded them as an assumption in Section 8.",
+    "DataStreamDefinition is not queryable with the allowed commands, so AskCoworker's 'no Account data stream' claim cannot be verified; Section 5 guidance is just 'Not applicable' vs 'not specified', with no place for 'not applicable, but a reported unverifiable claim'.",
+    "Step 5 lists 'depends on data nothing provides' as a scope-check trigger, but when the data can be entered by hand on existing layouts it is unclear whether that counts as 'provided'; the simulated intent did not cover it and the answer was 'no preference'."
+  ]
+}

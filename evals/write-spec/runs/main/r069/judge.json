@@ -1,0 +1,8 @@
+{"id": "r069", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 1, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Asked whether decimals should be rejected or rounded and whether blank should be rejected; 'whole numbers only' already implies rejection and 0 null ratings in data gave a clear default for required, so the question had clear defaults (meta expected no question).", "skill_gap": "Step 5 'predict the answer first' / design-rules 'required-ness follows data shape' existed but was not applied."},
+  {"defect": "Conditional Update of Review__c.Rating__c precision/scale touches a field summed by Storefront__c.Total_Score__c; handled as conditional with verification M9, but it edges toward the meta warning not to change the field.", "skill_gap": "None; the conditional-row mechanism was used correctly."}
+ ]}

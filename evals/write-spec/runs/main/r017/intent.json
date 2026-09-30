@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "When the Pronto app posts an order, create an Earn Loyalty Transaction with points = floor(order total). They assume order data exists in Salesforce; it would come from the app payload."
+}

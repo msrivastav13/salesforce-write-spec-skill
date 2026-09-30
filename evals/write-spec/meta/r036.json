@@ -1,0 +1,10 @@
+{
+ "id": "r036",
+ "category": "integration",
+ "requirement": "Nightly sync menu items from each merchant's POS (Square/Toast) into Salesforce.",
+ "hidden_intent": "Scheduled job per storefront calling the POS API, upserting Menu Items by external id.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Menu_Item__c has no external id; POS system only recorded on Lead, not Storefront/Account \u2014 ask which POS and credentials model."
+ }
+}

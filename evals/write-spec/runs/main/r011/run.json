@@ -1,0 +1,49 @@
+{
+  "id": "r011",
+  "skill_rev": "v9",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r011/promotion-end-date-validation-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 31},
+    {"seq": 22, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30},
+    {"seq": 23, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"seq": 26, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Promotion__c field existence, types, nillable, picklist values", "command_summary": "sf sobject describe --sobject Promotion__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Promotion__c DurableId and namespace (editability)", "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName='Promotion__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No Apex triggers on Promotion__c", "command_summary": "Tooling COUNT() ApexTrigger WHERE TableEnumOrId='Promotion__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "No record-triggered flows on Promotion__c", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId='Promotion__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Existing validation rules on Promotion__c (AskCoworker said unknown / not queryable)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId='01Iak00000Dx4JZ'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Data shape: record count and null dates", "command_summary": "Aggregate COUNT(Id), COUNT(Start_Date__c), COUNT(End_Date__c) FROM Promotion__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Status distribution", "command_summary": "Promotion__c GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Writers of date fields and exception handling in Promotion Apex classes", "command_summary": "Tooling ApexClass Body for AgentCreatePromotionActions, AgentUpdatePromotionStatusActions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Catch block returns e.getMessage()", "command_summary": "Tooling ApexClass Body AgentCreatePromotionActions, lines 125-160", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Existing record already satisfies rule", "command_summary": "SELECT Start_Date__c, End_Date__c FROM Promotion__c LIMIT 5", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "CustomField IDs for dependency lookup", "command_summary": "Tooling CustomField WHERE TableEnumOrId='01Iak00000Dx4JZ'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Missed writers: scan all unmanaged Apex bodies for Promotion__c / End_Date__c", "command_summary": "Tooling ApexClass Name, Body WHERE NamespacePrefix=null, local search", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Dependencies on End_Date__c", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId=00Nak00004nK0Tr", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Dependencies on Start_Date__c", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId=00Nak00004nK0Tt", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Dependencies on Promotion__c object", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId=01Iak00000Dx4JZ", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Org edition and sandbox status (production deploy request)", "command_summary": "SELECT OrganizationType, IsSandbox FROM Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "Promotion test classes exist?", "command_summary": "Tooling ApexClass WHERE Name LIKE '%Promotion%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "Name conflict for new rule", "command_summary": "Tooling ValidationRule WHERE ValidationName LIKE '%Date%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "MerchantRiskScoreAction reads or writes Promotion__c", "command_summary": "Tooling ApexClass Body MerchantRiskScoreAction, local search", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "Create/Edit grants on Promotion__c", "command_summary": "ObjectPermissions WHERE SobjectType='Promotion__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "sfdc_accelerate_dms namespace and type (AskCoworker said namespaced)", "command_summary": "PermissionSet WHERE Name='sfdc_accelerate_dms'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 1, "create": 1, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Rule 1 says to ignore the deploy instruction and mention it in Section 1 and the report, but the skill never says whether to raise it as a user question. Here I did not ask, so the simulated user was never told before the spec was saved.",
+    "AskCoworker labels facts that came from my own 'Established so far' bullets as 'prior session' / '[Verified: user decision — prior session]'. The response table sends 'prior session' facts to step 3 verification, but these facts can be traced to my message. The skill should say that echoed context is not a prior-session fact.",
+    "AskCoworker's I inventory added an Apex test class the requirement did not ask for. Rule 4 covers dropping it, but the skill does not say whether a validation-rule-only change should include tests, and spec-format Section 7 expects 'test components in the inventory'. I dropped the class and listed manual verification instead.",
+    "AskCoworker gave an incorrect platform claim (a validation rule is not evaluated on a status-only update). Rule 3 covers this, but the tag for a correction based on documented platform behavior that is combined with a verified data point is awkward. I used two tags.",
+    "The requirement says 'production', but the target org is a Developer Edition (not a sandbox). The skill gives no guidance on noting a mismatch between the named target environment and the configured org."
+  ]
+}

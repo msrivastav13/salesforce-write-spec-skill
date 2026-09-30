@@ -1,0 +1,33 @@
+{
+  "id": "r104",
+  "skill_rev": "v32",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r104/account-type-description-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 45},
+    {"seq": 7, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 62},
+    {"seq": 8, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 35},
+    {"seq": 10, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 35}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org context", "command_summary": "sf org display (connectedStatus, alias, id, apiVersion only)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Account.Type picklist values, custom field list, Account_Type_Description__c formula body", "command_summary": "sf sobject describe Account", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "field Id/managed state; placement on 4 layouts and 2 FlexiPages", "command_summary": "Tooling CustomField, Layout, FlexiPage lists and Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "FLS grants, dependencies, record types, Type data shape", "command_summary": "FieldPermissions on field and Account.Type; MetadataComponentDependency (18/15 char); RecordType; Account GROUP BY Type", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "grant holders' namespace/assignments; profile grants; Apex and LWC readers; existing Account permission sets; FlexiPage section placement of Type", "command_summary": "PermissionSet with Assignments; FieldPermissions profile rows; ApexClass bodies; LightningComponentResource prontoProfileCard; PermissionSet name LIKE Account; FlexiPage.Metadata field instances", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Data 360 involvement (R claim about data streams)", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "re-count profiles reading Account.Type before stating 45 in spec", "command_summary": "FieldPermissions Account.Type profile rows, distinct count", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 7, "create": 1, "update": 6, "delete": 0},
+  "skill_friction": [
+    "D2 was skipped because D1 plus org queries fully covered behavior (a formula field with no readers), but SKILL.md only permits skipping D2 when 'D1 already answered its questions'; here org queries, not D1, answered them. The skip criterion should allow org-query coverage.",
+    "spec-format says 'with Dynamic Forms, place the field on the FlexiPage; when page activation cannot be read, the layout update is a Conditional: row'. With 4 layouts this produces 4 near-identical Conditional rows; no guidance on whether deploying harmless layout additions unconditionally is preferable.",
+    "Audience/persona for field access ('shown on the account' with 45 profiles reading Account.Type, including portal and guest) is arguably an intent question (persona), but step 5 also says enforcement/access mechanism is decided. Unclear which bucket 'who should see a new-on-page field' falls in; I decided (dedicated permission set, internal users) without asking.",
+    "Wrong-claim counting: AskCoworker invented example values ('Prospect', 'Customer - Direct') and claimed View All Data gives implicit FLS; SKILL.md does not say whether an illustrative wrong example counts as a 'wrong claim' toward the two-strike threshold.",
+    "Permission set that grants field Read must also grant object Read; the design rules do not say whether adding Account Read to a new permission set counts as widening access (it adds nothing for users who already have it via profile)."
+  ]
+}

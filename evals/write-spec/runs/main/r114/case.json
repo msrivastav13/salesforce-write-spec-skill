@@ -1,0 +1,4 @@
+{
+ "id": "r114",
+ "requirement": "Menu items need a price greater than zero if they're marked available."
+}

@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Nightly scheduled job (flow or Apex) that sets Promotion status to Expired where End Date < today and status is Active. Canceled promos stay canceled. No notifications needed."
+}

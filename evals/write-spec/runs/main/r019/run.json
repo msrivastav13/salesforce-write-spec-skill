@@ -1,0 +1,39 @@
+{
+  "id": "r019",
+  "skill_rev": "v15",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r019/gift-certificate-auto-expiry-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 4, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 58},
+    {"seq": 14, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 15, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 31},
+    {"seq": 18, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable, API version", "command_summary": "sf org display", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "scan custom objects for gift certificate / voucher concepts", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Gift_Certificate__c fields, Status__c picklist values and default, Expiration_Date__c type/required", "command_summary": "sf sobject describe Gift_Certificate__c + EntityDefinition DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "absence of triggers, record-triggered flows, validation rules on Gift_Certificate__c; scheduled flows; cron jobs", "command_summary": "Tooling ApexTrigger, FlowDefinitionView by object and TriggerType Scheduled, Tooling ValidationRule, CronTrigger", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "data shape: status distribution, past-dated records, null expiration count", "command_summary": "GROUP BY Status__c aggregates, COUNT() null Expiration_Date__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "same concept elsewhere (Expir* custom fields); org type and time zone", "command_summary": "Tooling CustomField LIKE '%Expir%'; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "field IDs; Orch scheduled flow object; Apex bodies reading/writing Status__c and Expiration_Date__c, no class sets Expired", "command_summary": "Tooling CustomField by TableEnumOrId; FlowDefinitionView Orch; Tooling ApexClass Body search", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "readers of Status__c, Expiration_Date__c, object", "command_summary": "Tooling MetadataComponentDependency x3", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "FLS on Status__c and Expiration_Date__c", "command_summary": "FieldPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "field descriptions and required flag", "command_summary": "Tooling CustomField.Metadata by Id x2", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "existing Gift flows", "command_summary": "FlowDefinitionView ApiName LIKE '%Gift%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Data 360 involvement (AskCoworker claimed 0 DataStreams)", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Automated Process user exists (flow execution user)", "command_summary": "User WHERE Name LIKE 'Automated Process%'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 1, "create": 1, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Requirement ('expire on their expiration date') conflicts with the field description ('date after which it can no longer be redeemed'). Rule 5 treats this as a non-inventory detail (only the filter operator changes), so no question was asked; SKILL.md example 'the requirement contradicts itself' could be read as requiring a question, but here the contradiction is between requirement and org metadata and does not change the inventory. Guidance on requirement-vs-metadata semantic conflicts that only change a filter would help.",
+    "AskCoworker's I call proposed an Apex test class for a schedule-triggered flow with a test design that cannot exercise the flow; Rule 4 / 'wrong details in proposals' covered dropping it, but SKILL.md has no guidance on whether test components are expected for flow-only inventories.",
+    "AskCoworker repeatedly tagged facts I sent as '[Verified: prior session]', blurring the provenance labels; the table rule on echoed facts handled it, but the label noise is persistent.",
+    "The RUNNER's --root flag for validate_spec.py is not mentioned in SKILL.md step 8; worked fine."
+  ]
+}

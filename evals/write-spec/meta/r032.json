@@ -1,0 +1,10 @@
+{
+ "id": "r032",
+ "category": "already-met",
+ "requirement": "The average rating should only count Published reviews, not ones still Submitted.",
+ "hidden_intent": "Average should exclude Submitted reviews.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Partly met: Total_Reviews__c and Total_Score__c roll-ups exist with NO filter; change = add Status=Published filter to both existing roll-ups, not new fields."
+ }
+}

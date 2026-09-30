@@ -1,0 +1,37 @@
+{
+  "id": "r061",
+  "skill_rev": "v24",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r061/remove-case-junk-fields-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 38},
+    {"seq": 13, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 23},
+    {"seq": 14, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 29},
+    {"seq": 15, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Org reachable; Case custom fields exist with labels/types/picklist values", "command_summary": "sf org display; sf sobject describe Case (custom fields)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Target fields unmanaged; field IDs", "command_summary": "Tooling CustomField WHERE TableEnumOrId='Case'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Data shape: 0 of 9 Cases have values in the three fields", "command_summary": "SELECT COUNT(Id), COUNT(each field) FROM Case", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Dependencies of each field", "command_summary": "Tooling MetadataComponentDependency by 18- and 15-char field IDs", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "No Apex class/trigger body references; CaseRule/CaseCommentRule namespace", "command_summary": "Tooling ApexClass/ApexTrigger Body search; hidden unmanaged count", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Validation rules on Case (AskCoworker said not queryable)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId='Case'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "History tracking, required, value set of target fields", "command_summary": "FieldDefinition IsFieldHistoryTracked; Tooling CustomField.Metadata by Id x3", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "No flow references", "command_summary": "FlowDefinitionView unmanaged; Tooling Flow.Metadata per active version (13)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "FlexiPage references, same concept org-wide, FLS grants, DataStreams", "command_summary": "Tooling FlexiPage Case + Metadata; Tooling CustomField name search; FieldPermissions; COUNT() DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Approval processes and workflow rules on Case", "command_summary": "ProcessDefinition TableEnumOrId='Case'; Tooling WorkflowRule TableEnumOrId='Case'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 0, "update": 0, "delete": 3},
+  "skill_friction": [
+    "spec-format.md links design-rules.md ('Design choices ... follow design-rules.md') but that file does not exist under .claude/skills/write-spec/reference/.",
+    "Step 7/8 hard-code design/.{slug}-spec.md.tmp while the eval protocol writes to {out}; fine under RUNNER, but the skill's own rule 'Use a directory other than design/ only if the user names one' has no hook for harness overrides.",
+    "The 'two wrong AskCoworker claims -> verify every fact' rule triggered here (validation rules 'not queryable', layouts 'block deletion'); the skill does not say whether wrong platform-behavior claims (untestable by query) count toward the two, only facts.",
+    "Step 5 lists 'a change that alters behavior for other users or callers of a shared component' as an ask trigger; deleting fields granted to integration permission sets (sfdc_accelerate_dms R/E) arguably fits, but empty data made it predictable, so no question was asked. The skill gives no guidance on whether FLS grants alone count as 'callers'.",
+    "org-verification.md has no note on ProcessDefinition/WorkflowRule queries; AskCoworker raised approval processes as an unknown and I had to improvise the check."
+  ]
+}

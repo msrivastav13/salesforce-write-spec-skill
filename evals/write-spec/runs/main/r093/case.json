@@ -1,0 +1,4 @@
+{
+ "id": "r093",
+ "requirement": "Payment methods are PII. Lock them down so only the finance team can see them, and encrypt them."
+}

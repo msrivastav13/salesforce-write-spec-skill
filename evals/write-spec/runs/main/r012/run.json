@@ -1,0 +1,39 @@
+{
+  "id": "r012",
+  "skill_rev": "v10",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r012/storefront-hours-validation-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 2, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 17},
+    {"seq": 4, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 29},
+    {"seq": 13, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30},
+    {"seq": 14, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 51},
+    {"seq": 16, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 35}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Existence, namespace, DurableIds of Storefront__c and Storefront_Hours_of_Operation__c; field list and types (D1 claims)", "command_summary": "Tooling EntityDefinition + FieldDefinition on hours object", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No triggers / record-triggered flows / validation rules; existing duplicates; row count; day distribution", "command_summary": "Tooling ApexTrigger, FlowDefinitionView, Tooling ValidationRule by EntityDefinitionId, GROUP BY Storefront__c,Day_of_Week__c HAVING COUNT>1, COUNT, GROUP BY day", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Time value format in data; storefront count; same concept on other objects; Apex class names", "command_summary": "GROUP BY Opening_Time__c, Closing_Time__c; COUNT Storefront__c; Tooling CustomField LIKE search; Tooling ApexClass name search", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "AgentUpdateStorefrontHoursActions behavior and that it is the only Apex reader/writer; trigger bodies", "command_summary": "Tooling ApexClass Body for class and all unnamespaced classes, local search; Tooling ApexTrigger bodies", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Field semantics (picklist restricted, nillable, unique, cascade) and dependencies on hours fields/object", "command_summary": "sobject describe hours object; Tooling MetadataComponentDependency per field/object Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Agent actions invoking the class; blank values in data; org edition", "command_summary": "Tooling GenAiFunctionDefinition LIKE on InvocationTarget (failed: invalid operator on id field); COUNT blank day/times; Organization", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Agent actions invoking the class (retry with class Id)", "command_summary": "Tooling ApexClass Id, then GenAiFunctionDefinition WHERE InvocationTarget = Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Master-detail reparentable; full custom field list; flows by name; write grants", "command_summary": "Tooling CustomField.Metadata by Id; CustomField by TableEnumOrId; Tooling Flow DeveloperName (failed, not retried); ObjectPermissions on hours object", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Data 360 involvement (R claimed DataStream=0 from prior session); FLS grants on hours fields", "command_summary": "COUNT() FROM DataStream; FieldPermissions on Opening_Time__c", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 12, "question": "(1) Opening/Closing times are Text(255); all 147 rows use 12-hour 'hh:mm AM/PM' but the agent action documents 24-hour 'HH:MM'. Should the rule A) accept both formats and reject anything else (recommended), B) convert the fields to Time type (migration, changes agent action), or C) accept only 12-hour? (2) Must overnight hours (closing after midnight) be allowed? (3) Should rows with a blank opening or closing time (e.g. a closed day) be allowed?", "simulated_answer": "(1) No preference; use your recommended default. (2) Overnight hours are not needed. (3) No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Response-handling table says 'A split counts as one retry' but gives no guidance on how the retried D1 should be kind-labelled or whether a narrower D1 that drops sections (e.g. 'fields on OTHER objects', 'what does NOT exist') needs a follow-up; I covered the dropped parts with org queries instead of a follow-up.",
+    "Step 4 says apply Rule 4 and correct rows, but does not say whether replacing AskCoworker's entire inventory (Apex trigger -> declarative field+flow+VR) requires resending I; I recorded the correction in Section 8 and passed the corrected inventory to R and T without resending I.",
+    "Step 5 says ask only when blocking with no clear default, yet I had a recommended default for the time-format fork; the boundary between 'ask' and 'take default and record' is judgment-heavy when the choice (text parsing vs Time type conversion) changes the inventory.",
+    "AskCoworker R/T repeatedly cited 'prior session' for facts I had supplied in 'Established so far'; the table treats echoed facts as established, but also cited an unsent fact (DataStream=0) as prior session, which required an extra query. Guidance is fine but the label is noisy.",
+    "Rule on backfill/data steps: skill says data steps go in Section 8 deployment sequence, but unclear whether a required post-deploy backfill that is necessary for a responsibility end to end must be treated as 'blocking for delivery' or merely a sequenced step."
+  ]
+}

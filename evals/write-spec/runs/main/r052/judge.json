@@ -1,0 +1,9 @@
+{"id": "r052", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 1, "missing_intent": 0},
+ "scores": {"requirement_fit": 1, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Flow adds an unrequested third outcome ('Restored' -> Status__c = Active when Remaining >= Original on Partially/Fully Redeemed records). The requirement only covers the zero and below-original cases. This new overwrite path was never asked for, and the run adopted it from an AskCoworker proposal.", "skill_gap": "Rule 4 (drop unrequested behavior) exists, but spec-format's 'records that start/stop matching' guidance pulls the other way and the skill does not say which wins (the run's own friction note says so)."},
+  {"defect": "Question (1), whether to also update RenderGiftCardAction/IssueGiftCardAction filters, had a clear default (leave unchanged, out of scope). The run recommended that default itself, so the question was an unneeded implementation question.", "skill_gap": "Step 5 should say that out-of-scope follow-on changes with an obvious 'not requested' default go to Section 8 as proposals, not to the user."},
+  {"defect": "Treating a negative remaining value as Fully Redeemed is an interpretation beyond 'hits zero'. It is labelled as an assumption, but it is load-bearing.", "skill_gap": "none"}
+ ]}

@@ -1,0 +1,10 @@
+{
+ "id": "r120",
+ "category": "standard-crm",
+ "requirement": "Opportunities over $50k need a competitor listed before moving to Negotiation.",
+ "hidden_intent": "Validation: Amount > 50000 and Stage = Negotiation/Review -> Main Competitors required.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Opportunity.MainCompetitors__c exists; exact stage name must be verified against the org picklist."
+ }
+}

@@ -1,0 +1,4 @@
+{
+ "id": "r052",
+ "requirement": "gift cert status should update itself based on remaining value \u2014 if it hits zero its fully redeemed, if its less than original its partially redeemed"
+}

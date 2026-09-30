@@ -1,0 +1,10 @@
+{
+ "id": "r024",
+ "category": "deletion-refactor",
+ "requirement": "Clean up the Lead object \u2014 delete the leftover generator fields from the old demo.",
+ "hidden_intent": "Delete ProductInterest__c, CurrentGenerators__c, SICCode__c, Primary__c on Lead; also Opportunity CurrentGenerators__c.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Leftover demo fields exist (ProductInterest__c GC series, CurrentGenerators__c); include dependency check and backup; delete nothing now."
+ }
+}

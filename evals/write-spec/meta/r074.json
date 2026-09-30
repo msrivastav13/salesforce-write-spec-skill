@@ -1,0 +1,10 @@
+{
+ "id": "r074",
+ "category": "multi-part",
+ "requirement": "For reviews: block duplicate reviews, auto-publish 4-5 stars, open a case for 1-2 stars, and refresh the storefront's AI review summary every night.",
+ "hidden_intent": "All four; cases to Merchant Success queue; nightly summary via existing summarize action.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Reuse AgentSummarizeReviewsActions and Review_Summary__c; consolidate Review__c automation to avoid ordering issues."
+ }
+}

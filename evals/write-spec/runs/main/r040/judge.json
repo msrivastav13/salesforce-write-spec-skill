@@ -1,0 +1,9 @@
+{"id": "r040", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0},
+ "wrong_claims": ["Storefront_Record_Page's 'Tags' dynamic related list (Storefront__r) is said to have 'no columns set'; FlexiPage Metadata shows relatedListFieldAliases = [NAME]. The Update still works, but the claim is wrong."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Misread FlexiPage metadata: said the Tags related list has no columns, but it already has the NAME column. The claim is labelled 'verified by org query'.", "skill_gap": "None specific. The org-verification guidance does not ask the run to quote the exact property value it read before summarising it."},
+  {"defect": "Allow Reports on Storefront_Tag__c was left as a blocking Conditional because Tooling CustomObject.Metadata was rejected. The report row depends on a setting that was never verified.", "skill_gap": "org-verification reference names CustomObject.Metadata as the source for Allow Reports, which fails in this org, and gives no fallback query."}
+ ]}

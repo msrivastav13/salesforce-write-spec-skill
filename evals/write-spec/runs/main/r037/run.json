@@ -1,0 +1,41 @@
+{
+  "id": "r037",
+  "skill_rev": "v9",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r037/storefront-status-change-event-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42},
+    {"seq": 5, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 29},
+    {"seq": 12, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30},
+    {"seq": 15, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 33},
+    {"seq": 17, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41}
+  ],
+  "org_queries": [
+    {"seq": 2, "purpose": "D1 claim that a platform event named like Storefront_Status exists; find Storefront objects", "command_summary": "Tooling EntityDefinition LIKE '%__e' OR 'Storefront%'; sf sobject list custom", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 3, "purpose": "Confirm no __e platform event and no CDC selection exists", "command_summary": "Tooling EntityDefinition LIKE '%\\_\\_e'; Tooling CustomObject by name; Tooling PlatformEventChannelMember", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 4, "purpose": "Storefront__c fields, Status__c picklist values, FLS-hidden fields, status data shape", "command_summary": "sf sobject describe Storefront__c; Tooling CustomField by TableEnumOrId; GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Existing automation on Storefront__c; org edition", "command_summary": "Tooling ApexTrigger; FlowDefinitionView by TriggerObjectOrEventId and by TriggerType; Tooling ValidationRule; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Writers of Status__c in Apex; any EventBus usage", "command_summary": "Tooling ApexClass bodies (unmanaged), local search for Storefront__c/Status__c/EventBus/DML", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Object and field access on Storefront__c and Status__c", "command_summary": "ObjectPermissions and FieldPermissions for Storefront__c / Storefront__c.Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Dependencies on Status__c; permission set editability; named credentials; connected apps", "command_summary": "Tooling MetadataComponentDependency by CustomField Id; PermissionSet NamespacePrefix/Type; Tooling NamedCredential; Tooling ConnectedApplication", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Whether flow Get_Partner_Quality_Watchlist writes Storefront__c", "command_summary": "FlowDefinitionView by label; Tooling Flow.Metadata recordUpdates/recordLookups", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Existence of an OAuth client / integration user for the mobile backend", "command_summary": "Tooling ExternalClientApplication; active standard Users with profile", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Data 360 involvement; names to create are free", "command_summary": "COUNT() DataStream; PermissionSet by name; FlowDefinitionView by ApiName", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Status__c nillable/restricted (drives Old_Status__c required and text type)", "command_summary": "sf sobject describe Storefront__c (Status__c nillable, restrictedPicklist)", "ok": true, "contradicted_askcoworker": true}
+  ],
+  "user_questions": [
+    {"seq": 11, "question": "Two scope choices before I build the inventory. (1) Mechanism: (a) [recommended] a new custom platform event published by a record-triggered flow only when Storefront__c.Status__c changes, carrying storefront Id, old status, new status; or (b) Change Data Capture on Storefront__c (no custom event, but publishes every field change and no named old-status field). Evidence: no __e events and no CDC selections exist in the org. (2) Subscriber access: the consumer needs Read on the event. Options: (a) [recommended] a new dedicated permission set for the mobile backend integration user; (b) add Read to existing Agentforce_Reference_App; (c) leave access out of scope. Evidence: sfdc_accelerate_dms is managed and not editable.", "simulated_answer": "(1) An event with storefront id, old/new status, consumed by the mobile backend. (2) No preference; use your recommended default."},
+    {"seq": 14, "question": "The mobile backend needs an OAuth client (Connected App or External Client App) and an integration user to subscribe; none in the org is identified as the mobile backend (only Pronto_MCP_Access and Claude_Code_Access ECAs and standard connected apps). Options: (a) [recommended] defer the client, user, and permission set assignment to the mobile team and mark it blocking for delivery; (b) add an External Client App to this inventory.", "simulated_answer": "No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 6, "create": 6, "update": 0, "delete": 0},
+  "skill_friction": [
+    "AskCoworker's I proposed an Apex trigger + test class on a false claim that record-triggered flows cannot compare old picklist values. Rule 3 (reject proposals contradicting documented platform behavior) and Rule 4 handled it, but the skill gives no guidance on whether to resend I after such a reshape or just correct rows locally; I corrected locally and fed the correction into R/T.",
+    "Step 5 lists end-to-end gaps as a scope trigger, but the external consumer's OAuth client/integration user only surfaced after I; D2's template asks about integrations reading the objects but not about external subscribers/credentials for a new outbound channel, so the fork was found late and required the second allowed scope message.",
+    "spec-format content rule 'every new field includes access (permission set) and UI placement' does not fit platform event fields (no FLS, no UI placement); unclear whether Section 8 must justify their absence.",
+    "AskCoworker repeatedly tagged facts 'Verified: ... prior session' even when they were facts I sent in 'Established so far'; the response-handling table covers echoed facts, but the '[Verified]' label on echoed assumptions (e.g. delete path) is misleading and has to be stripped manually.",
+    "RUNNER overrides the skill's design/.{slug}-spec.md.tmp path and adds --root; no friction, but SKILL.md step 8 does not mention --root."
+  ]
+}

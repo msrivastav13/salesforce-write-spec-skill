@@ -1,0 +1,44 @@
+{
+  "id": "r023",
+  "skill_rev": "v17",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r023/gift-certificate-balance-case-link-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 36},
+    {"seq": 5, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 15, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49},
+    {"seq": 18, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 67},
+    {"seq": 20, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50}
+  ],
+  "org_queries": [
+    {"seq": 2, "purpose": "Existence and type of Remaining_Value__c, Issued_For_Case__c, Status__c, Type__c on Gift_Certificate__c", "command_summary": "sf sobject describe Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "DurableId, custom child objects (redemption ledger), data shape by Type/Status and case link fill", "command_summary": "Tooling EntityDefinition; describe childRelationships; aggregate SOQL on Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Complete custom field list; absence of triggers, record-triggered flows, validation rules", "command_summary": "Tooling CustomField by TableEnumOrId; ApexTrigger; FlowDefinitionView; ValidationRule", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "All Apex readers/writers of Gift_Certificate__c and Remaining_Value__c (absence of decrement logic)", "command_summary": "Tooling ApexClass bodies searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "IssueGiftCardAction inputs, case link, duplicate behavior", "command_summary": "Tooling ApexClass Body IssueGiftCardAction, AgentGiftCertificateActions", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "FLS on the fields; layouts and record pages", "command_summary": "FieldPermissions; Tooling Layout; Tooling FlexiPage", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "Layout contents; Case child relationship name", "command_summary": "Tooling Layout.Metadata; describe Case/Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Whether Remaining_Value__c is on the Dynamic Forms record page", "command_summary": "Tooling FlexiPage.Metadata Gift_Certificate_Record_Page", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Callers of IssueGiftCardAction (agent action, dependencies, tests)", "command_summary": "Tooling GenAiFunctionDefinition; ApexClass LIKE Gift; MetadataComponentDependency; test method names", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Object permissions on Gift_Certificate__c and Case", "command_summary": "ObjectPermissions; COUNT Case", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Editability of GenAiFunction, ApexClasses, FlexiPage", "command_summary": "Tooling NamespacePrefix/ManageableState", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Which topic contains Issue_Gift_Card", "command_summary": "Tooling GenAiPluginFunctionDef (failed: wrong column); GenAiPluginDefinition list", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "Lookup delete constraint, Remaining_Value__c metadata, Data 360 involvement", "command_summary": "Tooling CustomField.Metadata by Id x2; COUNT DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "Exception handling in IssueGiftCardAction for invalid case Id", "command_summary": "Tooling ApexClass Body lines after insert", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "How should partial redemptions reduce the balance? A) keep Gift_Certificate__c.Remaining_Value__c as the stored balance, updated by whoever records a redemption, and show it on the record page (recommended; field exists, no redemption process exists in the org); B) create a redemption child object with a roll-up and automation to set the balance and status.", "simulated_answer": "No preference; use your recommended default."},
+    {"seq": 14, "question": "IssueGiftCardAction (agent action Issue_Gift_Card, defaults Type to Recovery) cannot set Issued_For_Case__c. A) add an optional caseId input (recommended; backward compatible); B) leave it, relying on AgentGiftCertificateActions which already accepts caseId.", "simulated_answer": "No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 4, "create": 0, "update": 4, "delete": 0},
+  "skill_friction": [
+    "Both questions were asked in one message but the simulated intent did not cover them; SKILL.md gives no guidance on whether a 'recommend-anyway' fork like ledger vs stored field should be asked, since Rule 5 says take the recommendation while step 5 says ask when a wrong guess changes the inventory substantially. The two rules pull in opposite directions here.",
+    "AskCoworker I folded the test class into the main class row and omitted the GenAiFunction input schema; spec-format says one row per deployable component, but the I template does not prompt for agent action schema updates when an invocable signature changes.",
+    "AskCoworker labelled facts from this run's own earlier messages as '[Verified: prior session]'; the response-handling table does not say whether echoed facts relabelled as prior-session need re-verification.",
+    "org-verification.md does not give the column names for GenAiPluginFunctionDef, so the topic-membership query failed once.",
+    "The T answer contained text after the end marker (claim that a previous response was complete); handled by dropping it per the table."
+  ]
+}

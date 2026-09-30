@@ -1,0 +1,10 @@
+{
+ "id": "r026",
+ "category": "standard-crm",
+ "requirement": "When a lead from a ghost kitchen comes in, route it to the Ghost Kitchen sales team queue.",
+ "hidden_intent": "Business Type = Ghost Kitchen -> 'Ghost Kitchen Sales' queue. Other leads unchanged.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Lead.Business_Type__c has 'Ghost Kitchen'; prefer a lead assignment rule entry; queue may need creating; note existing (inactive) ApprovalDispatcher flow on Lead."
+ }
+}

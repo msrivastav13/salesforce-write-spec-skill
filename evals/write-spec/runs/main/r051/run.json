@@ -1,0 +1,37 @@
+{
+  "id": "r051",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r051/merchant-health-calculated-insight-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 37},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 9, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 12, "kind": "rt", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 13, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 20},
+    {"seq": 14, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 21}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Field lists and exact API names on Storefront__c, Review__c, Refund__c, Gift_Certificate__c, Promotion__c (D1 claims)", "command_summary": "Tooling FieldDefinition by EntityDefinition.QualifiedApiName for 5 objects", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Missed components: any order, DMO (__dlm), promo/redemption objects", "command_summary": "sf sobject list custom + EntityDefinition LIKE %__dlm/%__cio/%Order%", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Data Cloud provisioned? existing data streams / calculated insights", "command_summary": "EntityDefinition LIKE DataStream%/MktCalc%/DataSpace%; SELECT from DataSpace, DataStream, MktCalculatedInsight; Tooling DataStreamDefinition (MktCalculatedInsightObject, DataSpaceDefinition unsupported)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Data shape: record counts incl. standard Order (refund-rate denominator)", "command_summary": "COUNT() on 5 objects and Order", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Picklist values for Type__c/Status__c, Average_Review_Score__c formula, gift cert and promotion distribution", "command_summary": "sobject describe x4; GROUP BY on Gift_Certificate__c and Promotion__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Review status distribution; CRM connector permission set assignment and object Read (resolve Conditional CRM connector row)", "command_summary": "Review__c Status__c picklist + GROUP BY; PermissionSetAssignment and ObjectPermissions for sfdc_a360_sfcrm_data_extract", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Roll-up filter on Total_Score__c/Total_Reviews__c so CI avg matches existing formula", "command_summary": "Tooling EntityDefinition DurableId -> CustomField Ids -> CustomField.Metadata by Id", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 8, "question": "Three scope questions: (1) Build as a Data 360 calculated insight (org has Data 360 with a default data space but 0 data streams and 0 calculated insights, so all streams must be created) or as CRM formula/roll-up fields on Storefront__c? (2) Refund rate needs an order count, but Salesforce has no storefront orders (Order = 0 records, no order link on Refund__c/Storefront__c; AskCoworker says orders are in an external Heroku API). How should refund rate be defined and where do orders come from: (a) completed refunds / orders ingested from the external system, (b) Review__c count as an order proxy, (c) refund count only? (3) Promo usage: (a) redeemed Gift_Certificate__c with Type__c = 'Promotion' (recommended), or (b) count of Promotion__c records (no redemption field exists)?", "simulated_answer": "Calculated insight per storefront; refund rate = completed refunds / orders. Order source and promo usage definition: No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 7, "create": 7, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Workflow puts the scope check (step 5) after the Inventory call (step 4), but here the answers (Data 360 CI vs CRM fields, orders source, promo definition) determined the whole inventory; I asked before sending I so the I call could carry the decisions. SKILL.md does not allow or forbid asking before I.",
+    "Data 360 metadata types and source folders are not covered by org-verification.md; Tooling MktCalculatedInsightObject and DataSpaceDefinition are unsupported, and there is no documented way to verify metadata type names (AskCoworker used sObject MktCalculatedInsight as a type) or module paths for Data Cloud metadata.",
+    "Module column is required non-empty, but for Data 360 metadata there is no existing folder in force-app; had to assume paths and record as an assumption.",
+    "AskCoworker labels open decisions blocking (e.g. divide-by-zero guard, order status values) that are really design defaults; Rule 5 says judge myself, which worked, but guidance on converting AskCoworker 'blocking' items after the scope question was already used would help.",
+    "Retry rule after a combined R+T timeout: unclear whether splitting into separate R and T calls counts the T call as a retry of the combined call or a new T call; recorded R as retry and T as t.",
+    "AskCoworker labelled 'prior session' facts as [Verified]; the response-handling table says drop or verify them, but some (external Heroku Orders API) cannot be verified by any allowed query, so they stay reported-by-AskCoworker."
+  ]
+}

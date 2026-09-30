@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Approval process on Refund when Amount > 500; submitter's manager approves; approve -> Approved, reject -> Cancelled. Block manual status change past Pending without approval."
+}

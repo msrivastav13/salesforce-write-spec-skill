@@ -1,0 +1,27 @@
+{
+  "id": "p01",
+  "outcome": "stopped",
+  "stop_reason": "AskCoworker Discovery follow-up (asking for the missing sections A-F: Partner Quality Watchlist flow, AlertManager relevance, email templates/alerts/notification types, permission sets, non-existent components, already-met check) timed out, and the single allowed retry with 'Restate your full answer.' also timed out. Per SKILL.md response-handling rule ('If it fails again, stop and report'), the run stopped before org verification, Inventory, Details, and rendering. No spec saved.",
+  "spec_path": null,
+  "askcoworker_calls": [
+    {"kind": "discovery", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 69},
+    {"kind": "retry", "error": false, "timed_out": false, "end_marker": false, "resumed_fragment": false, "seconds": 74},
+    {"kind": "followup", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 71},
+    {"kind": "retry", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 65}
+  ],
+  "org_queries": [
+    {"purpose": "Org reachable (workflow step 1)", "command_summary": "sf org display --target-org TestWriteSpecDE --json", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Storefront__c and Review__c exist", "command_summary": "sf sobject list --sobject custom --target-org TestWriteSpecDE --json", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": false,
+  "validator_attempts": 0,
+  "counts": {"total": 0, "create": 0, "update": 0, "delete": 0},
+  "skill_friction": [
+    "The retried Discovery call returned an interim progress report (no end marker, 6 'remaining steps') that ended with a question ('Would you like me to proceed?'). Two rows of the response-handling table applied at once (incomplete -> one follow-up; AskCoworker asks a question -> answer from context). SKILL.md does not say they can be combined into one call. I combined them ('Yes, proceed' plus the missing parts).",
+    "The retry-once-then-stop rule is per request. After the Discovery retry succeeded, the follow-up got its own retry budget. When that follow-up failed twice, the skill forced a hard stop, even though a useful partial Discovery answer was already in hand (Primary_Contact__c, the Review__c master-detail, no triggers or flows, no flag field). There is no option to continue into org verification and Inventory with a partial Discovery, or to save a draft spec without a user request. As a result, a case that should be buildable (expect.should_ask_user=false) ended with no output.",
+    "The timeout rule does not account for the service continuing to work after a timeout ('may keep working'). There is no guidance on waiting or polling before the retry, or on sending a shorter or narrower request after a timeout. Every call timed out at about 65-75 s. The templates' 'Keep answers short' advice did not stop the timeouts, even for a narrowed six-question follow-up.",
+    "The first Discovery answer said the Get_Partner_Quality_Watchlist flow is highly relevant but did not read it. SKILL.md's verify step could have checked it with a FlowDefinitionView query, but because of the stop rule the step never ran.",
+    "Runner process note: the 'cat case.json' in step 1 exposed hidden_intent before any user question. It was not used in any decision because no user question was reached. RUNNER.md could tell runners to extract only 'requirement' (for example with python/jq)."
+  ]
+}

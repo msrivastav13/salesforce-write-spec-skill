@@ -1,0 +1,34 @@
+{
+ "id": "r096",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 1,
+  "implementation": 0,
+  "missing_intent": 1
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 1,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "How drivers are represented (Contact record type vs User vs ServiceResource vs new object) is a persona/data-model question the eval expects to be asked, because no driver concept exists. It was decided as an assumption. Who records tips (app integration vs staff) was also left as a blocking Open item instead of being asked.",
+   "skill_gap": "SKILL.md step 5 does not say whether a missing core entity (who the persona is) counts as a data-structure decision or an intent question (the run's skill_friction notes this)."
+  },
+  {
+   "defect": "The Tipping_Reports folder, the Tips_Per_Driver_Per_Week report, and the Pronto_Tipping_Access permission set could not be checked for prior existence: the org's daily API request limit ran out during judging. Driver__c, Order_Number__c, and Contact.Driver were confirmed absent.",
+   "skill_gap": "None (judge limitation)."
+  }
+ ]
+}

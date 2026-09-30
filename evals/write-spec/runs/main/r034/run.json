@@ -1,0 +1,37 @@
+{
+  "id": "r034",
+  "skill_rev": "v20",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r034/storefront-closure-cascade-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 44},
+    {"seq": 11, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 353},
+    {"seq": 12, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 56},
+    {"seq": 15, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 58}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Field types, picklist values, relationships, defaults on Storefront__c, Menu__c, Menu_Item__c", "command_summary": "sf sobject describe x3", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Menu_Category__c is not an alternate storefront-to-item path", "command_summary": "sf sobject describe Menu_Category__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No triggers on the objects (D2 claim)", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "No record-triggered flows on the objects; full flow list for name collisions", "command_summary": "FlowDefinitionView filtered and unfiltered", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "DurableIds and validation rules (D2 said unknown)", "command_summary": "EntityDefinition; Tooling ValidationRule by EntityDefinitionId x3", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Data shape: status distribution, menu active and item available counts by storefront status, null Menu__c items", "command_summary": "aggregate SOQL x4", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Writers and readers of Status__c, Active__c, Available__c in Apex", "command_summary": "Tooling ApexClass Body, local search", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Writer/reader details of AgentUpdateStorefrontDetailsActions, MenuBrowserController, AgentGetMenuItemsActions, AgentUpdateMenuItemActions", "command_summary": "local grep of ApexClass bodies", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Re-check 'prior session' 0 DataStreams claim", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Re-check permission set object grants", "command_summary": "ObjectPermissions on 3 objects, non-profile", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 2, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 7/8 hardcode design/.{slug}-spec.md.tmp paths; RUNNER overrides them, fine, but SKILL has no --root mention.",
+    "spec-format says 'A planned Flow Test is an inventory row (Type FlowTest)' but gives no guidance on FlowTest API naming (FlowName.TestName vs other) or when a FlowTest is warranted for a record-triggered flow whose main effect is on other records that Flow Test assertions cannot observe; I added one for the entry condition and left child-record outcomes to manual checks.",
+    "The I call took 353 s yet returned complete with end marker; the ~60 s timeout guidance in SKILL.md did not match observed behavior, and there is no rule for a slow-but-successful call.",
+    "AskCoworker labeled echoed facts from my own message as '[Verified: prior session]'; the table says echoed facts are already established, but the 'prior session' wording also triggers the verify rule. Ambiguous which rule wins; I re-verified the ones not already checked.",
+    "No explicit guidance on whether wrong AskCoworker platform claims in R (3N bulk cost) should cause R to be resent; I corrected them in Section 8 per the 'wrong details in proposals' row."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r040",
+ "category": "vague",
+ "requirement": "storefront tags - make them useful",
+ "hidden_intent": "Tag picklist (Vegan, Late Night, Family Friendly, Halal, Kosher) on Storefront Tag and ability to filter storefronts by tag.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Storefront_Tag__c has only a Storefront__c lookup \u2014 must ask what tags represent."
+ }
+}

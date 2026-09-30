@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "New Health Inspection object (master-detail to Storefront, date, score, grade A/B/C/Fail); Fail sets Storefront Suspended."
+}

@@ -1,0 +1,10 @@
+{"id": "r044", "claims": {"correct": 5, "wrong": 0, "unverifiable": 1},
+ "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The claim that sfdc_accelerate_dms was the former app-side writer is reported by AskCoworker and cannot be verified. The Edit FLS it relies on is verified. The spec labels it correctly, but it is part of the 'second writer' reasoning.", "skill_gap": "None; the claim is labelled correctly."},
+  {"defect": "All three Creates are Conditional on an unknown external API contract (path, key, response shape). The spec was saved as complete, not as a draft, so the implementable content depends on an item that only the integration owner can resolve.", "skill_gap": "SKILL.md has no rule for a spec whose whole inventory is Conditional on an external contract; the run itself flagged this in skill_friction."},
+  {"defect": "testHttpErrorKeepsPreviousValues asserts that 'the job records an error'. An exception thrown from batch execute() surfaces at Test.stopTest(), so the test must catch it; the spec does not say so.", "skill_gap": "None."}
+ ]}

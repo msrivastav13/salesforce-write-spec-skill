@@ -1,0 +1,10 @@
+{
+ "id": "r049",
+ "category": "already-met",
+ "requirement": "Track which loyalty tier each customer is in \u2014 Explorer, Insider, Plus, One, Elite.",
+ "hidden_intent": "Just the tier value on the customer.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Already met: Contact.Loyalty_Tier__c picklist with exactly these values. Automating the tier is a separate ask."
+ }
+}

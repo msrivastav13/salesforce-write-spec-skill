@@ -1,0 +1,42 @@
+{
+  "id": "r023",
+  "skill_rev": "v20",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/regress/r023/gift-certificate-balance-case-link-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 8, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 37},
+    {"seq": 12, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 59},
+    {"seq": 15, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 16, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28},
+    {"seq": 18, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53}
+  ],
+  "org_queries": [
+    {"seq": 2, "purpose": "Full custom object list; Gift_Certificate__c fields, types, picklists, child relationships", "command_summary": "sf sobject list --sobject custom; sf sobject describe Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Same concept elsewhere (balance/redemption/voucher/gift fields org-wide) and object DurableId", "command_summary": "Tooling EntityDefinition; Tooling CustomField DeveloperName LIKE keywords", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Field descriptions; data shape (Type/Status, null counts of balance and case fields)", "command_summary": "Tooling CustomField by TableEnumOrId; aggregate SOQL on Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Existing automation and readers/writers: triggers, flows, validation rules, dependencies, Apex bodies", "command_summary": "Tooling ApexTrigger, FlowDefinitionView, Tooling ValidationRule (first attempt failed on bad column), MetadataComponentDependency, ApexClass bodies", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Redemption-like objects; agent actions invoking the classes; object and field permissions", "command_summary": "describe Transaction__c/Refund__c/Loyalty_Transaction__c; GenAiFunctionDefinition by InvocationTarget; ObjectPermissions; FieldPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "GenAiFunction names for gift actions", "command_summary": "Tooling GenAiFunctionDefinition DeveloperName LIKE '%Gift%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Verify RenderGiftCardAction 'Resolution Center' comment, any redemption code, Agentforce_Action_Access Case access", "command_summary": "ApexClass bodies keyword scan; ObjectPermissions for Case", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Test class, layouts, FlexiPages, object names, permission set name collisions, org edition", "command_summary": "Tooling ApexClass/Layout/FlexiPage; sf sobject list all; PermissionSet; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Sharing model (AskCoworker OWD unknown); existing record values; IssueGiftCardActionTest body", "command_summary": "EntityDefinition InternalSharingModel; SOQL Gift_Certificate__c LIMIT 1; Tooling ApexClass body", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Class validity; FlexiPage Dynamic Forms contents (placement of Remaining_Value__c, related lists)", "command_summary": "Tooling ApexClass IsValid; Tooling FlexiPage.Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Data 360 involvement (AskCoworker cited prior session for 0 DataStreams)", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 11, "question": "Q1: Who records a partial redemption, and where? (a) internal staff in the Salesforce UI on the certificate [recommended; nothing in the org records redemptions today]; (b) an Agentforce agent action; (c) an external POS/storefront system via API. Q2: Should the Case link be enforced for service-recovery certificates? (a) make it possible on every issuance path by adding an optional caseId to IssueGiftCardAction, no hard rule [recommended]; (b) also require Issued_For_Case__c when Type__c = Recovery via validation rule (the existing Issue_Gift_Card agent action would then fail when no case is passed).", "simulated_answer": "No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 15, "create": 10, "update": 5, "delete": 0},
+  "skill_friction": [
+    "Step 5 lists 'which channel/persona' as an intent question, but when the hidden intent is terse the only answer is 'no preference', so asking produced no information; the skill gives no guidance on skipping the question when the recommended default is clearly safe.",
+    "The I template has no slot for the validation-rule-on-update edge case; AskCoworker's child-level 'Amount__c > parent Remaining_Value__c' rule was wrong on edits and bulk, and correcting it required redesigning rows myself. The Rule 'Correct rows the facts contradict' covers facts, not flawed logic; it is unclear whether a logic redesign should trigger a resend of I (counts as follow-up) or be done locally.",
+    "AskCoworker repeatedly labeled facts '[Verified: prior session]' that I had sent it; the skill's memory rule says echoed facts are established, but it also cited a DataStream count I had not sent, which needed a separate check.",
+    "R call with the full 14-row inventory timed out at 60s even at 400 words; the template's accepted-inventory list plus the Established block is too long for R on medium inventories. The narrower retry dropped permission/CRUD topics, which then had to be covered from org queries alone; the skill does not say whether a split R counts as covering the whole topic.",
+    "org-verification.md suggests ValidationRule via Tooling but does not warn that ErrorConditionFormula is not selectable in a multi-row query (it is a Metadata-only field), costing one failed query.",
+    "spec-format says 'For flow-only changes, use Flow Tests', but for a record-triggered flow driven by roll-up recalculation an Apex DML test is the natural choice; the rule's boundary (flow-only vs. mixed inventory) is ambiguous."
+  ]
+}

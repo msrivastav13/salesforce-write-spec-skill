@@ -1,0 +1,8 @@
+{"id": "r041", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 3, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Asking whether the field is required was weakly justified: 190 of 200 accounts are blank, which makes optional the obvious default. The question was still about a business value, and it was asked in the same single message, so the cost was low.", "skill_gap": "Step 5 does not say that strong data evidence can settle an intent question without asking."},
+  {"defect": "Under the grandfathering default, the 10 existing 10-character codes still violate 'exactly 8', and the field stays Text(10). The requirement is therefore only enforced for new and changed codes until a separate data cleanup happens. This is clearly labelled as an assumption and as an Open item.", "skill_gap": "None. The handling is documented."}
+ ]}

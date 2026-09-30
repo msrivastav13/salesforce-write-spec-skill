@@ -1,0 +1,10 @@
+{
+ "id": "r012",
+ "category": "new-automation",
+ "requirement": "Storefront hours: closing time must be after opening time, and each storefront can only have one row per day of the week.",
+ "hidden_intent": "Validation + duplicate prevention on Storefront Hours: one record per Storefront+Day; closing > opening; overnight hours are not needed.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Opening_Time__c/Closing_Time__c are TEXT, not Time \u2014 comparison needs parsing or a field-type change; uniqueness needs trigger/flow or a unique composite key. Overnight-hours ambiguity."
+ }
+}

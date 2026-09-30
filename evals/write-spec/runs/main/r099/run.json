@@ -1,0 +1,226 @@
+{
+  "id": "r099",
+  "skill_rev": "v32",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r099/happy-hour-pricing-spec.md",
+  "askcoworker_calls": [
+    {
+      "seq": 3,
+      "kind": "d1",
+      "error": true,
+      "timed_out": false,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 10
+    },
+    {
+      "seq": 4,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 30
+    },
+    {
+      "seq": 5,
+      "kind": "d2",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 50
+    },
+    {
+      "seq": 18,
+      "kind": "i",
+      "error": true,
+      "timed_out": true,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 60
+    },
+    {
+      "seq": 19,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 20
+    },
+    {
+      "seq": 20,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 34
+    },
+    {
+      "seq": 23,
+      "kind": "r",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 49
+    },
+    {
+      "seq": 24,
+      "kind": "r",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 52
+    },
+    {
+      "seq": 26,
+      "kind": "t",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 63
+    }
+  ],
+  "org_queries": [
+    {
+      "seq": 1,
+      "purpose": "Org context (connectedStatus, alias, id, apiVersion)",
+      "command_summary": "sf org display --json, token not printed",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 2,
+      "purpose": "Full custom object list; find restaurant/menu/promotion objects",
+      "command_summary": "sf sobject list --sobject custom",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 6,
+      "purpose": "Field semantics of Menu_Item__c, Promotion__c, Storefront_Hours_of_Operation__c, Menu__c, Menu_Category__c, Transaction__c, Storefront__c",
+      "command_summary": "sf sobject describe x7",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 7,
+      "purpose": "Same concept elsewhere (Happy/Discount/Special/Sale/Price/Time/Hour/Promo fields); EntityDefinition DurableIds",
+      "command_summary": "Tooling CustomField LIKE search; Tooling EntityDefinition",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 8,
+      "purpose": "Complete custom field lists (FLS-hidden fields)",
+      "command_summary": "Tooling CustomField WHERE TableEnumOrId for Menu_Item__c, Promotion__c, Menu__c, Transaction__c",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 9,
+      "purpose": "Existing automation: triggers, record-triggered/scheduled flows, validation rules",
+      "command_summary": "Tooling ApexTrigger; FlowDefinitionView per object; Tooling ValidationRule by EntityDefinitionId",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 10,
+      "purpose": "Apex readers/writers of Menu_Item__c, Price__c, Promotion__c and their sharing; read bodies",
+      "command_summary": "Tooling ApexClass Name, Body (unmanaged), searched locally",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 11,
+      "purpose": "LWC bundles, dependencies on Price__c/Promotion__c/Menu_Item__c, data shape, storefront locations, hours format, org time zone",
+      "command_summary": "Tooling LightningComponentBundle, MetadataComponentDependency x3; aggregate SOQL on Promotion__c, Menu_Item__c, Storefront__c; Storefront_Hours sample; Organization",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 12,
+      "purpose": "menuBrowser source, AgentGetMenuItemsActions body",
+      "command_summary": "Tooling LightningComponentResource for menuBrowser; ApexClass body",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 13,
+      "purpose": "Access to Menu_Item__c and Price__c; storefront cities; agent actions using the classes",
+      "command_summary": "ObjectPermissions, FieldPermissions, Storefront__c GROUP BY city, Tooling GenAiFunctionDefinition, ApexClass Ids, CustomObject name search",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 14,
+      "purpose": "Merchant channels and record pages",
+      "command_summary": "BotDefinition, Network, Tooling FlexiPage by entity, PermissionSetAssignment count, GenAiPlannerDefinition, GenAiPluginFunctionDef (failed: bad column)",
+      "ok": false,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 15,
+      "purpose": "Existing test coverage; OWD sharing models; FlexiPage Id",
+      "command_summary": "local search of Apex bodies; EntityDefinition sharing models; Tooling FlexiPage Id",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 16,
+      "purpose": "Menu_Item_Record_Page components (related lists?)",
+      "command_summary": "Tooling FlexiPage.Metadata by Id",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 21,
+      "purpose": "Callers of MenuBrowserController/AgentGetMenuItemsActions; new names do not already exist",
+      "command_summary": "MetadataComponentDependency on class Ids; Apex body search; EntityDefinition/ApexClass/PermissionSet existence checks",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 22,
+      "purpose": "No time-zone field on Storefront__c or elsewhere; Storefront count, VRs, triggers",
+      "command_summary": "Tooling CustomField on Storefront__c and LIKE %Zone%; COUNT Storefront__c; Tooling ValidationRule; ApexTrigger",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 25,
+      "purpose": "Re-verify AskCoworker facts kept after 2+ wrong claims: DataStream count, Agentforce_Reference_App type",
+      "command_summary": "SELECT COUNT() FROM DataStream; PermissionSet by Name",
+      "ok": true,
+      "contradicted_askcoworker": false
+    }
+  ],
+  "user_questions": [
+    {
+      "seq": 17,
+      "question": "1) How should the happy-hour price be expressed: (a) a fixed override price per menu item, or (b) a percentage discount (reuse Promotion__c.Discount_Percentage__c and link promotions to items)? Recommended: (a). 2) What schedule shape: (a) recurring days of the week with a start and end time, (b) a specific date range with daily start/end time (extend Promotion__c Start/End_Date__c), or (c) both? Recommended: (a).",
+      "simulated_answer": "Fixed price override per item, on chosen days of the week between a start and end time (a new Menu Item Price Rule object: item, price, days, start/end time)."
+    }
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 22,
+    "create": 18,
+    "update": 4,
+    "delete": 0
+  },
+  "skill_friction": [
+    "Time-zone handling is an implementation vs intent gray area: the org default (America/Los_Angeles) differs from where all storefronts are (TX). The skill says decide implementation, but adding a Storefront__c.Time_Zone__c field plus a blocking backfill grows scope; no design rule covers time-of-day evaluation across time zones.",
+    "Channel for 'restaurants should be able to' is ambiguous (agents vs internal UI vs Experience sites under construction). Step 5 lists channel/persona as an ask topic, but the 'predict the answer; if no preference, decide' rule overrode it; the boundary between the two is unclear.",
+    "Rule 3's AskCoworker error count: it is unclear whether AskCoworker design proposals that contradict design rules (Lookup vs Master-Detail, widening Agentforce_Reference_App) count as 'wrong claims'; I counted only factual/platform errors (3).",
+    "spec-format says a new custom object people use 'includes its Layout, CustomTab, and permission set rows'; a CustomTab shares the object's API name, and it was not obvious the validator would accept two Create bullets with the same API name in Section 4 (it did).",
+    "Content rule on GenAiFunction rows covers input-schema changes only; for an additive output variable on an invocable class used by ~20 GenAiFunction copies, the skill gives no guidance on whether output-schema refresh is a row or a setup step."
+  ]
+}

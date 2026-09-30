@@ -1,0 +1,41 @@
+{
+  "id": "r073",
+  "skill_rev": "v27",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r073/one-review-per-storefront-order-date-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 36},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49},
+    {"seq": 14, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49},
+    {"seq": 18, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 21, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Full custom object list; Review__c/Storefront__c exist; no other review-like object", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Review__c fields, types, nillability, picklist values", "command_summary": "sf sobject describe Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "DurableIds, triggers, record-triggered flows on Review__c/Storefront__c/Contact", "command_summary": "EntityDefinition; Tooling ApexTrigger; FlowDefinitionView", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Duplicate rules on Review__c (AskCoworker said not queryable)", "command_summary": "SELECT DeveloperName, SobjectType, IsActive FROM DuplicateRule", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "Data shape and existing duplicates (92 rows, 79 customer, 92 order date, 0 dup groups, Status all null)", "command_summary": "Review__c COUNT aggregates and GROUP BY HAVING", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Validation rules on Review__c (AskCoworker said not queryable)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "Complete custom field list and same-concept key fields org-wide", "command_summary": "Tooling CustomField by TableEnumOrId and DeveloperName LIKE", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Review Apex classes and dependencies on Review__c", "command_summary": "Tooling ApexClass LIKE Review; MetadataComponentDependency on 01I", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "AgentReviewActions body and all Apex bodies referencing Review__c", "command_summary": "Tooling ApexClass Body scan", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Flows/agent actions invoking review creation; permissions on Review__c and Order_Date__c", "command_summary": "FlowDefinitionView label LIKE; GenAiFunctionDefinition; MetadataComponentDependency on Order_Date__c; ObjectPermissions; FieldPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Callers of AgentReviewActions; order date distribution; project source", "command_summary": "GenAiFunctionDefinition 15-char; MetadataComponentDependency on class; GROUP BY Order_Date__c; ls force-app", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Reparentable master-detail; AgentActionsTest review inserts; sfdc_accelerate_dms editability", "command_summary": "Tooling CustomField Metadata by Id; ApexClass body; PermissionSet NamespacePrefix", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 19, "purpose": "Data 360 streams; new field and flow names not already present", "command_summary": "SELECT COUNT() FROM DataStream; Tooling CustomField Unique_Review_Key; FlowDefinitionView ApiName", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "The only Apex writer of reviews (AgentReviewActions, 'Leave Review') never sets Order_Date__c, and 13 of 92 reviews have no Customer__c. How should reviews without a customer or an order date be treated? Options: (a) exempt them - the rule applies only when customer and order date are both filled, and AgentReviewActions is unchanged (recommended; no caller behavior changes); (b) block saving reviews missing either value; (c) change AgentReviewActions to take an Order Date input and set it. Also confirm duplicates should be blocked with an error (vs. a warning).", "simulated_answer": "Prevent duplicate Review for same Customer + Storefront + Order Date. Block with error. (No preference on missing values; use your recommended default.)"}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Order of operations: I encoded the (not yet formally asked) exemption decision into the I call; SKILL.md says ask after D1 and step 3, but the question was composed after verification and before I, so it fits, yet the runner's record order (question vs. intent.json read) is easy to blur.",
+    "Two wrong AskCoworker claims (validation rules and duplicate rules 'not queryable'; before-save flow order) triggered the verify-everything rule; platform-claim corrections like save order have no query test, and SKILL.md does not say whether an untestable wrong platform claim counts toward the two-strike threshold.",
+    "Design-rules says required-ness follows data shape (all 92 have Order_Date__c) but the only code writer never sets it; SKILL.md gives no guidance for when data shape and the sole writer point opposite ways.",
+    "Flow Test inclusion guidance ('only when it can assert the main outcome') is ambiguous when the flow's outcome (key stamping) is testable but the requirement's outcome (duplicate rejection by unique index) is not exercisable by FlowTest."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "p02",
+  "outcome": "stopped",
+  "stop_reason": "AskCoworker Discovery call timed out twice (initial call and one retry with 'Restate your full answer.'). Per SKILL.md response-handling rule, stopped and reported. No spec was saved.",
+  "spec_path": null,
+  "askcoworker_calls": [
+    {"kind": "discovery", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 0},
+    {"kind": "retry", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 0}
+  ],
+  "org_queries": [
+    {"purpose": "Context: confirm target org is reachable (workflow step 1)", "command_summary": "sf org display --target-org TestWriteSpecDE --json", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": false,
+  "validator_attempts": 0,
+  "counts": {"total": 0, "create": 0, "update": 0, "delete": 0},
+  "skill_friction": [
+    "The timeout rule says 'stop and report' after one retry, but the skill also notes the service 'may keep working' and a later answer can begin with a 'Resuming from...' fragment. There is no guidance on waiting before the retry or on a later third attempt, so a transient timeout on Discovery ends the whole run.",
+    "SKILL.md does not say whether read-only org queries (workflow step 3) can still ground a partial or draft spec when AskCoworker is unavailable but the org is reachable. Here the org was connected, and describing Refund__c/Transaction__c could have produced useful grounding, but the stop rule blocks that.",
+    "The tool returned only 'The operation timed out.' with no elapsed time, so the seconds field could not be measured and is recorded as 0.",
+    "RUNNER.md's run.json has no field for 'validator not run'. validator_first_pass_ok=false with validator_attempts=0 is the closest fit."
+  ]
+}

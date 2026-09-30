@@ -1,0 +1,10 @@
+{
+ "id": "r119",
+ "category": "deletion-refactor",
+ "requirement": "Retire the Transaction object, nobody uses it.",
+ "hidden_intent": "Delete Transaction__c after confirming no data/references.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Transaction__c has 6 custom fields and 0 records; spec must include record count, reference checks (Apex/flows/perm sets), rollback note; must not delete."
+ }
+}

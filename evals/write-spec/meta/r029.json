@@ -1,0 +1,10 @@
+{
+ "id": "r029",
+ "category": "deletion-refactor",
+ "requirement": "Account has Total_Storefronts and Total_Orders fields that are never populated. Either make them work or delete them.",
+ "hidden_intent": "Make Total Storefronts work (maintain count); delete Total Orders since there's no order model.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Explicit either/or \u2014 ask or present options; both plain Numbers; Storefront__c.Account__c is a lookup so no roll-up summary."
+ }
+}

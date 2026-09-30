@@ -1,0 +1,9 @@
+{"id": "r013", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 1},
+ "defects": [
+  {"defect": "Internal count error: Sections 6, 8.4 and 8.5 refer to 'nine new roll-up fields', but the change set creates eight (Active_Menu_Count__c plus seven day counts). Section 2 also says the 3 existing roll-ups leave 'room for 8 more' under a limit it states as 25, which is garbled.", "skill_gap": "None exists. No SKILL.md or validator instruction requires counts in the prose to match the Section 9 inventory."},
+  {"defect": "Asked the user three questions (recipient, channel, insert enforcement) although meta expects no question. 'Account owner' plainly means Account__r.Owner, and the run had a recommended default for each question. The user answered 'as stated / use your default' for all three.", "skill_gap": "Step 5 says to ask only when a fork is blocking and has no clear default. It is judgment-heavy and was not followed. A rule such as 'if every fork has a recommended default, record the defaults and do not ask' would have prevented this."},
+  {"defect": "The run sent the inventory (I) call to AskCoworker with the recipient pre-tagged as a user decision, before the user had been asked. This is self-reported as a deviation.", "skill_gap": "Step 5 ordering exists ('ask as soon as a fork is known, before I'), but there is no hard gate between step 3 and step 4."},
+  {"defect": "Wrong cross-reference: Section 8 Resolved says 'see Section 3, item 5' for the one-flow vs two-flow split, but the rationale is in item 4.", "skill_gap": "None exists."}
+ ]}

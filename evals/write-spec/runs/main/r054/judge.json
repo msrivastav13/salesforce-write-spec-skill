@@ -1,0 +1,8 @@
+{"id": "r054", "claims": {"correct": 5, "wrong": 1, "unverifiable": 1}, "wrong_claims": ["'standard Promotion object has no end date or status picklist' (reported by AskCoworker): describe shows standard Promotion has EndDateTime (datetime) and IsActive (boolean). The 'no status picklist' part is true, but 'no end date' is wrong. The run used this to reject a candidate without a one-line describe check. The conclusion still holds, because standard Promotion has 0 records and Promotion__c is the clear target."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "An AskCoworker claim used to reject the standard Promotion object was left unverified, although a describe (an allowed command) would have shown EndDateTime/IsActive. It was labelled 'reported by AskCoworker', so this is not dishonest, but it is verifiable and partly wrong.", "skill_gap": "The skill should require verifying, with an allowed query, any AskCoworker claim that rejects a reuse candidate when a describe can check it."},
+  {"defect": "Open 1 (external customer-facing reader) is marked 'blocking for delivery' even though the inventory does not depend on it. That overstates the blocking status.", "skill_gap": "The run's friction note flags the conflict between 'undeliverable responsibility: mark blocking' and the case where the inventory does not depend on it. SKILL.md has no tie-break."}
+ ]}

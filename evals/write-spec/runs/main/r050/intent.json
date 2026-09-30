@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "If Storefront set and Business Account blank, copy Storefront's Account into Business Account on create and update."
+}

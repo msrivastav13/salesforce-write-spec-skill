@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Scheduled job per storefront calling the POS API, upserting Menu Items by external id."
+}

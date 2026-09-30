@@ -1,0 +1,44 @@
+{
+  "id": "r010",
+  "skill_rev": "v9",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r010/storefront-review-score-sum-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 24},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"seq": 19, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 19},
+    {"seq": 21, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28},
+    {"seq": 22, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 25}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable, API version", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Storefront__c and Review__c exist, not namespaced; get DurableIds", "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "full field lists and types of both objects (missed components)", "command_summary": "sf sobject describe Storefront__c / Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "field IDs for Metadata lookups (FLS-independent field list)", "command_summary": "Tooling CustomField WHERE TableEnumOrId = DurableId (both objects)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Total_Score__c is SUM of Rating__c with no filter; Total_Reviews__c COUNT; master-detail not reparentable; Rating__c Number(1,0)", "command_summary": "Tooling CustomField Metadata by Id x4", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "stored Total_Score__c equals child SUM(Rating__c); Status__c distribution; null ratings", "command_summary": "aggregate SELECTs on Storefront__c and Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "no triggers on either object", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "no record-triggered flows on either object", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "validation rules on either object (AskCoworker: unknown)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "what references Total_Score__c", "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId = field Id (18 and 15 char)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "same concept elsewhere; no ranking field", "command_summary": "Tooling CustomField WHERE DeveloperName LIKE Score/Rank/Rating", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Apex readers/writers of Total_Score__c, Rating__c, Average_Review_Score__c", "command_summary": "Tooling ApexClass Body for non-namespaced classes, searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "FLS grants on Total_Score__c incl. profiles", "command_summary": "FieldPermissions WHERE Field = 'Storefront__c.Total_Score__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Status__c picklist values; child relationship details", "command_summary": "sf sobject describe (picklistValues, childRelationships)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "org edition", "command_summary": "SELECT OrganizationType, IsSandbox FROM Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "storefronts with zero reviews", "command_summary": "SELECT COUNT(Id) FROM Storefront__c WHERE Total_Reviews__c = 0", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "AskCoworker I claim of no active data streams", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 0, "create": 0, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Workflow step 4-6 mandate I, R, and T calls even when D1/D2 plus org queries already establish the requirement is fully met; for a zero-change spec R and T added little beyond platform-behavior restatements. The skill could allow skipping or shortening R/T when the inventory is empty.",
+    "Scope-check bullet 'requirement is already met, but they asked for a specific build' is ambiguous for phrasing like 'we need to track a sum': it is unclear whether that counts as asking for a specific build (a new field) and so requires a question. I treated it as not a specific build and asked nothing.",
+    "AskCoworker D2/R/T tagged many facts as 'prior session' even though they came from this run's messages; the handling table treats prior-session facts as needing verification, which caused extra re-checking of facts already verified.",
+    "sobject describe reports precision 1 for the roll-up Total_Score__c (inherited from Rating__c Number(1,0)) while stored values reach 33; org-verification.md does not mention that roll-up describe precision is misleading, which could lead to a false 'truncation' finding.",
+    "AskCoworker labelled OD items 'blocking if ...' conditionally; SKILL.md says to judge blocking status oneself, but the spec format has no way to express conditional blocking, so I collapsed them to non-blocking with a recommended default."
+  ]
+}

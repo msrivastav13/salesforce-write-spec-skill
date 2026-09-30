@@ -1,0 +1,21 @@
+{"id": "r004",
+ "claims": {"correct": 6, "wrong": 0, "unverifiable": 0},
+ "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Section 1 labels the merchant-case definition as '(user decision: Case.Type = Merchant Operations)'. The user actually answered 'no preference', so this is a default. Section 8 item 1 correctly calls it a default, so the spec contradicts itself and presents a default as a user decision.", "skill_gap": "The run logged this friction: the skill does not say how to tag a default chosen after a 'no preference' answer. It needs an explicit rule that such defaults are labelled assumption or recommended default, never user decision."},
+  {"defect": "Routing (on create only), escalation (flow triggers on create only), and auto-fill (on update only when Storefront__c changes) all miss a case that is created with another Type and later re-typed to Merchant Operations. Such a case gets no queue owner, possibly no Business_Account__c, and no 2-hour escalation. The validation rule does enforce the storefront link on that update. The gap is not listed in Section 8.", "skill_gap": "None exists. No instruction asks the run to list, for each responsibility's trigger, the entry transitions it does not cover (for example, a record that starts to match the criteria on update)."},
+  {"defect": "Module is 'Not specified' for the two flows and the queue, but standard paths are given for the validation rule, LWC, FlexiPage, and Apex class. The inventory is inconsistent.", "skill_gap": "The run flagged the module rule ('known force-app path or Not specified') as ambiguous when the needed subdirectory does not exist yet. It needs a clarifying instruction."},
+  {"defect": "Section 6 'Queue' bullet says 'Only queue members ... see the routed cases', then qualifies it: Case OWD ReadEditTransfer (verified) lets all internal users see them. The lead statement is misleading.", "skill_gap": "None exists."},
+  {"defect": "The only claims labelled 'reported by AskCoworker' are platform-behavior statements (the flow runs in system context, the scheduled path runs as the Automated Process user, a deleted/undeleted case may miss the scheduled path), not org state, so none could be spot-checked by query. They are plausible and correctly attributed.", "skill_gap": "None exists (informational)."}
+ ],
+ "verification_notes": [
+  "correct: Case.Storefront__c is Lookup(Storefront) with child relationship Storefront_Cases__r, and Case.Business_Account__c is Lookup(Account).",
+  "correct: Case.Type includes the active value 'Merchant Operations'. 0 of 9 cases use it. The only Case record type is Master. Active Status values are New, On Hold, Escalated, Closed.",
+  "correct: QueueSobject shows only Merchant_Messaging_Queue (MessagingSession) and Unqualified_Leads (Lead). Merchant_Support is a GuestUserGroup. No Case queue exists, and Merchant_Support_Queue does not exist.",
+  "correct: Route_Merchant_to_Queue and Route_to_Merchant_Support_Agent are active RoutingFlow (Omni-Channel), not Case record automation. The meta 'reuse' hint therefore does not apply, and the spec was right not to reuse them.",
+  "correct: Escalate_Case is an active AutoLaunchedFlow with inputs caseId and escalationReason. It sets IsEscalated=true, Priority=High, and Description, and does not set Status.",
+  "correct: 4 cases have Storefront__c set with Business_Account__c null. All Storefront__c records have Account__c. Case OWD is ReadEditTransfer. Storefront_Record_Page is a RecordPage on Storefront__c.",
+  "creates checked: the flows Case_Merchant_Auto_Fill_And_Route and Case_Merchant_Escalation, the Case validation rule (Case has no validation rules), the LWC storefrontCaseHistory, the Apex class MerchantCaseAutomationTest, and the queue Merchant_Support_Queue do not exist. Update target Storefront_Record_Page exists."
+ ]}

@@ -1,0 +1,10 @@
+{
+ "id": "r004",
+ "category": "multi-part",
+ "requirement": "Case management for merchants: link every merchant case to the storefront, auto-fill the business account, route to the merchant support queue, and escalate if no response in 2 hours. Also build an LWC showing the storefront's last 5 cases on the storefront page.",
+ "hidden_intent": "All five parts; 'response' = first agent email or comment.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Case.Storefront__c/Business_Account__c exist; Route_Merchant_to_Queue and Escalate_Case flows exist \u2014 reuse; 'no response' may need clarifying."
+ }
+}

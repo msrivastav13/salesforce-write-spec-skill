@@ -1,0 +1,42 @@
+{
+  "id": "r027",
+  "skill_rev": "v18",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r027/lead-conversion-pos-locations-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 33},
+    {"seq": 17, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 35},
+    {"seq": 18, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42},
+    {"seq": 20, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Lead field names, types, picklist values, duplicate Number of Locations fields", "command_summary": "sf sobject describe Lead, filtered custom/POS/location/convert fields", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Same concept elsewhere; field IDs, namespaces", "command_summary": "Tooling CustomField WHERE DeveloperName LIKE %Location%/%POS%/%Storefront%", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Data shape: converted/unconverted Leads and population of both location fields and POS", "command_summary": "Lead aggregate GROUP BY IsConverted with COUNT per field; Account aggregate", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Readers of the Lead POS/location fields and Account.NumberofLocations__c", "command_summary": "Tooling MetadataComponentDependency by field Id (4 fields)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Existing automation on Lead (VR unknown in AskCoworker D2)", "command_summary": "Tooling ValidationRule on Lead; FlowDefinitionView on Lead; Tooling ApexTrigger on Lead/Account/Contact/Opportunity", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Apex references to the fields or lead conversion; Lead layouts, record types, FlexiPages", "command_summary": "Tooling ApexClass bodies searched locally; Tooling Layout; RecordType; Tooling FlexiPage", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Layout assignments and FLS on the three fields", "command_summary": "Tooling ProfileLayout counts; FieldPermissions for the three Lead fields", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Who holds Convert Leads; editability of existing permission sets", "command_summary": "PermissionSet WHERE PermissionsConvertLeads = true; PermissionSet namespace/type for Agentforce_Reference_App and sfdc_accelerate_dms", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Active users and custom object scan for business concepts", "command_summary": "PermissionSetAssignment counts; User GROUP BY Profile; sf sobject list --sobject custom filtered", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Assignees of the two permission sets; Onboarding_Application__c fields", "command_summary": "PermissionSetAssignment with Assignee; describe Onboarding_Application__c (first parser failed on null profile)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Assignees of the two permission sets (retry of parser)", "command_summary": "PermissionSetAssignment Assignee.Name, Profile", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Which profiles use the non-default Lead layouts", "command_summary": "Tooling ProfileLayout for non-'Lead Layout'; Profile Ids; FlexiPage Ids", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Whether Lead record pages use Dynamic Forms or layout detail panel", "command_summary": "Tooling FlexiPage.Metadata by Id (2 pages)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "Data 360 involvement; new permission set name unused; org edition", "command_summary": "SELECT COUNT() FROM DataStream; PermissionSet Name LIKE %Lead%; Organization", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 14, "question": "Two Lead fields are labelled 'Number of Locations': Lead.NumberofLocations__c (Number 3,0; on the Sales and Marketing Lead layouts, FLS on all profiles, pairs with Account.NumberofLocations__c) and Lead.Number_of_Locations__c (Number 5,0; on no layout; FLS only via Agentforce_Reference_App and sfdc_accelerate_dms; created with POS_System__c). Both are blank on all 5 Leads. Which should conversion require? Options: A) NumberofLocations__c, B) Number_of_Locations__c, C) either one populated. No clear recommendation from the evidence (layout placement points to A, sibling origin with POS_System__c points to B).", "simulated_answer": "Block conversion if POS System or Number of Locations blank. The web form writes Number_of_Locations__c."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 4, "create": 2, "update": 2, "delete": 0},
+  "skill_friction": [
+    "SKILL.md step 5 says to decide when evidence points to one option, but gives no rule for split evidence (two same-label fields where layout placement points one way and sibling origin/FLS points the other); I treated split evidence as 'recommendation would only be a guess' and asked.",
+    "The key platform dependency (Lead Settings 'Require Validation for Converted Leads') is not metadata I could confidently name as a deployable Settings row and cannot be read with the allowed commands; the skill has no guidance on whether an org setting that has a metadata representation should be an inventory row or a non-metadata setup step.",
+    "Active Lightning record page assignment cannot be read with the allowed commands, forcing a Conditional FlexiPage row; org-verification.md does not mention this gap for UI requirements.",
+    "RUNNER.md says to use validate_spec.py with --root; SKILL.md step 8 does not mention --root, so the two instructions differ slightly."
+  ]
+}

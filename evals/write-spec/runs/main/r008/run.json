@@ -1,0 +1,51 @@
+{
+  "id": "r008",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r008/review-moderation-by-rating-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 31},
+    {"seq": 20, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 22, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53},
+    {"seq": 29, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable", "command_summary": "sf org display", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Review__c and Storefront__c exist, no namespace, DurableIds", "command_summary": "Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "no triggers on Review__c/Storefront__c", "command_summary": "Tooling ApexTrigger by TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "no record-triggered flows (D1 cited 'prior session')", "command_summary": "FlowDefinitionView by TriggerObjectOrEventId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no approval process on Review__c", "command_summary": "ProcessDefinition WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Status__c data shape", "command_summary": "COUNT GROUP BY Status__c (all 92 null)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Review__c fields, picklist values, default", "command_summary": "sobject describe Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "validation rules (AskCoworker said unknown)", "command_summary": "Tooling ValidationRule by EntityDefinitionId (0)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "sharing model", "command_summary": "Tooling EntityDefinition sharing models", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Apex creators/readers of Review__c", "command_summary": "Tooling ApexClass bodies grep Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "all components referencing Review__c", "command_summary": "MetadataComponentDependency on 01Iak00000Dx4JW", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "AgentSummarizeReviewsActions has no Status filter", "command_summary": "ApexClass body excerpt", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "other flows named Review", "command_summary": "FlowDefinitionView ApiName LIKE %Review%", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "rating distribution", "command_summary": "GROUP BY Rating__c (failed)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "existing test classes for review Apex", "command_summary": "Tooling ApexClass Name LIKE %Test%", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "rating distribution for backfill default", "command_summary": "COUNT() by rating bucket (52 >=4, 40 <4, 0 null)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "AgentActionsTest review coverage and assertions", "command_summary": "ApexClass body excerpt", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "whether Apex enforces FLS (R claimed Read FLS on Status__c required)", "command_summary": "ApexClass bodies scanned for USER_MODE/SECURITY_ENFORCED/stripInaccessible", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 24, "purpose": "FLS on Review__c.Status__c", "command_summary": "FieldPermissions WHERE Field", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "Agentforce_Reference_App lacks Create", "command_summary": "ObjectPermissions Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "Storefront__c roll-ups (R claim)", "command_summary": "sobject describe Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "roll-up filters", "command_summary": "Tooling CustomField.Metadata by Id x2", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 28, "purpose": "readers of roll-ups and Review_Summary__c", "command_summary": "MetadataComponentDependency on field Ids", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 21, "question": "Q1: The requirement contradicts itself (publish immediately vs. approve before anyone sees it). Which do you want? (a) every review is held and becomes visible only after approval; (b) every review publishes immediately and moderation removes bad ones afterwards; (c) a rule decides: some reviews publish immediately, others need approval (which rule, e.g. rating?). Evidence: Review__c.Status__c has only Submitted/Published; no approval process, flow, or trigger exists. Q2: All 92 existing reviews have Status__c null (52 rated >=4, 40 <4); once the read path filters on Published they disappear. (a) separate data backfill by the same rule; (b) treat null as published in the filter; (c) leave hidden. Q3: Who moderates? Review__c is a Master-Detail child (no owner, so no queue): (a) a named user; (b) another related user.", "simulated_answer": "Q1: 4-5 star reviews publish immediately; 1-3 stars require moderation. Q2: No preference; use your recommended default. Q3: No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 6, "create": 4, "update": 2, "delete": 0},
+  "skill_friction": [
+    "Workflow orders Inventory (I) before the scope check, but for a self-contradictory requirement the I call has to guess an interpretation (AskCoworker chose 'moderate everything'), so most of its inventory was discarded after the user answered. The skill has no rule for asking before I when the requirement is internally contradictory (step 1 only covers 'too vague').",
+    "After the user decision changed the design, the skill does not say whether to resend I (counts as follow-up?) or build the inventory from verified facts and pass it as 'Accepted inventory' to R/T; I did the latter.",
+    "R/T combine rule is 'five changes or fewer'; the approval process needs a separate WorkflowFieldUpdate, pushing the count to 6 and forcing two calls for a small design.",
+    "AskCoworker output conflated platform claims (approver needs Edit, queue as approver on a detail object, 1,000 approval submissions limit) with verified facts; the skill says to keep them 'reported by AskCoworker' but gives no guidance on rejecting a proposal that contradicts documented platform behavior versus merely recording it.",
+    "Reading intent.json is only allowed when asking; follow-up discoveries after the one scope-check message (roll-ups include unmoderated ratings) could have changed scope, but the skill limits scope questions to one message, so they became non-blocking proposals."
+  ]
+}

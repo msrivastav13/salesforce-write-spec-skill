@@ -1,0 +1,10 @@
+{
+ "id": "r009",
+ "category": "deletion-refactor",
+ "requirement": "Remove the Average Review Score field, we'll just compute it in reports.",
+ "hidden_intent": "Delete Average_Review_Score__c; keep Total_Score__c/Total_Reviews__c.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Field may be referenced by agent actions/LWCs/prompts \u2014 dependency check essential; question the value of removing."
+ }
+}

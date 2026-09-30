@@ -1,0 +1,10 @@
+{
+ "id": "r064",
+ "category": "already-met",
+ "requirement": "Can we calculate the average star rating for each storefront? Should update whenever a review comes in.",
+ "hidden_intent": "Wants average rating on storefront updating in real time.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Already met: Average_Review_Score__c formula = Total_Score__c / Total_Reviews__c (both roll-ups). Possible gaps: divide-by-zero with no reviews; includes unpublished reviews."
+ }
+}

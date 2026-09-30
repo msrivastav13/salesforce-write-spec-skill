@@ -1,0 +1,34 @@
+{
+ "id": "r116",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 1,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "The replacement description for Apply_Remediation silently drops the existing sentence 'Adapted from Issue_Refund for the Resolution Center capstone.'. The spec presents the new text as a full replacement and does not note what it removes.",
+   "skill_gap": "None exists. SKILL.md has no instruction to keep the still-true parts of a description when a false part is corrected."
+  },
+  {
+   "defect": "Refund_Manager_Access grants field Read on nine Refund__c fields but leaves out Processed_Date__c, and it does not say why, so approvers see an incomplete record.",
+   "skill_gap": "None exists. SKILL.md does not require explaining why a field is left out of a permission set's field list."
+  }
+ ]
+}

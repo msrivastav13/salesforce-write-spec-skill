@@ -1,0 +1,151 @@
+{
+ "id": "r090",
+ "skill_rev": "v30",
+ "outcome": "saved",
+ "stop_reason": null,
+ "spec_path": "evals/write-spec/runs/main/r090/favorite-storefronts-spec.md",
+ "askcoworker_calls": [
+  {
+   "seq": 2,
+   "kind": "d1",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 36
+  },
+  {
+   "seq": 3,
+   "kind": "d2",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 41
+  },
+  {
+   "seq": 11,
+   "kind": "i",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 55
+  },
+  {
+   "seq": 13,
+   "kind": "r",
+   "error": true,
+   "timed_out": true,
+   "end_marker": false,
+   "resumed_fragment": false,
+   "seconds": 60
+  },
+  {
+   "seq": 14,
+   "kind": "retry",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 24
+  },
+  {
+   "seq": 15,
+   "kind": "retry",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 38
+  },
+  {
+   "seq": 16,
+   "kind": "t",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 30
+  }
+ ],
+ "org_queries": [
+  {
+   "seq": 1,
+   "purpose": "Context and full custom object list (entry check / grounding)",
+   "command_summary": "sf org display (filtered); sf sobject list --sobject custom",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 4,
+   "purpose": "Same concept elsewhere, sharing models, sites, triggers, flows, LWC, Apex names, connected apps, org type",
+   "command_summary": "Tooling CustomField LIKE Favo/Saved/Wish/Bookmark; EntityDefinition sharing; Network; ApexTrigger; FlowDefinitionView; LightningComponentBundle; ApexClass names; ConnectedApplication; Organization",
+   "ok": true,
+   "contradicted_askcoworker": true
+  },
+  {
+   "seq": 5,
+   "purpose": "Field lists of Storefront__c, Review__c, Contact; FlexiPages; person accounts",
+   "command_summary": "Tooling CustomField by TableEnumOrId; Tooling FlexiPage; describe Account",
+   "ok": true,
+   "contradicted_askcoworker": true
+  },
+  {
+   "seq": 6,
+   "purpose": "Pronto app identity and data shape",
+   "command_summary": "CustomField Ids; COUNT Contact with Pronto_App_Account_Id__c; COUNT Storefront__c; LWC descriptions",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 7,
+   "purpose": "Semantics of Contact.Pronto_App_Account_Id__c and Favorite_Cuisine__c; dependencies on the field and on Storefront__c",
+   "command_summary": "Tooling CustomField.Metadata by Id; MetadataComponentDependency",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 8,
+   "purpose": "Data 360 streams, similar sObjects, credentials, integration/site users, permission sets on Storefront__c",
+   "command_summary": "DataStream; sobject list all filtered; NamedCredential; ExternalCredential; User; PermissionSet via ObjectPermissions",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 9,
+   "purpose": "Named credential endpoints, Pronto Apex, community users, review customer links",
+   "command_summary": "NamedCredential Endpoint; ApexClass LIKE Pronto; COUNT User ContactId; COUNT Review__c Customer__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 12,
+   "purpose": "Re-verify AskCoworker facts after two wrong claims: Pronto_ECP_Access, flow name collision, Review/Loyalty/Storefront_Tag relationships",
+   "command_summary": "PermissionSet LIKE Pronto; PermissionSetAssignment/ObjectPermissions/FieldPermissions/SetupEntityAccess for Pronto_ECP_Access; FlowDefinitionView LIKE Favorite; describe Review__c, Loyalty_Transaction__c, Storefront_Tag__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  }
+ ],
+ "user_questions": [
+  {
+   "seq": 10,
+   "question": "Which app and customer record is meant? Options: (A) the external Pronto consumer mobile/web app, customers as Contact matched by Contact.Pronto_App_Account_Id__c (recommended; populated on 198/198 Contacts, no community users); (B) the Customer Support Experience Cloud site (UnderConstruction, 0 customer users); (C) internal Salesforce users recording favourites for customers. Also: should a customer be able to favourite the same storefront more than once?",
+   "simulated_answer": "Junction object Favorite Storefront (Contact, Storefront), unique pair. (No preference on the app connection; use your recommended default.)"
+  }
+ ],
+ "validator_first_pass_ok": true,
+ "validator_attempts": 1,
+ "counts": {
+  "total": 6,
+  "create": 6,
+  "update": 0,
+  "delete": 0
+ },
+ "skill_friction": [
+  "The requirement's 'the app' names an external system; SKILL.md says 'how to connect is implementation' once a platform is named, but does not say whether an integration user / OAuth client that does not exist is a blocking setup step versus an ask; spec-format's line about integration users being Setup steps settled it, but only after reading spec-format.",
+  "The 'after two wrong AskCoworker claims, verify every kept fact' rule is clear, but platform claims (cascade delete hard-delete, Delete without Edit) are untestable with the allowed commands; the fallback 'documented behavior' is fine but it's unclear whether they count toward the two-claim threshold when they come from I/R/T proposals rather than facts.",
+  "Spec-format guidance on FlowTest does not address record-triggered flows whose initial record needs org-specific parent Ids (master-detail); I chose manual checks, but the rule 'Add a Flow Test row only when it can assert the main outcome' suggested a FlowTest row.",
+  "The R split rule ('for more than 8 changes... split R') didn't apply (6 rows) yet the full R still timed out; the retry table handled it, but the template could suggest splitting R by default when the established-facts list is long."
+ ]
+}

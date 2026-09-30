@@ -1,0 +1,9 @@
+{"id": "r076", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 3, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 1, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "User decision 'success -> Processing then Completed' is not met: Processing is written only when Stripe returns pending. The stated reason (no DML before the callout) applies only inside the Queueable; a before-update/before-insert step could set Processing on approval and the job could then move it to Completed/Failed.", "skill_gap": "None exists; the skill has no guidance for mapping a user-stated state sequence onto a platform constraint before downgrading it to an assumption."},
+  {"defect": "Stripe_Refund_Processing grants only Read on Refund__c.Stripe_Payment_Intent_Id__c, yet the layout places it as editable and Open decision 1 says the creator or approving person fills it; approvers without Edit FLS cannot enter it.", "skill_gap": "None specific; a check that FLS grants match the layout's editable fields and the stated data-entry path would prevent it."},
+  {"defect": "Delivery depends on a PaymentIntent ID that no existing creator supplies; every approved card refund ends Failed until a follow-up changes three callers. Recorded honestly as blocking, but the inventory alone does not deliver the requirement.", "skill_gap": "SKILL.md step 5 ('ask only if it defeats the main purpose') is ambiguous about later intent forks after the one question message was used (reported in skill_friction)."}
+ ]}

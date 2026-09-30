@@ -1,0 +1,10 @@
+{
+ "id": "r095",
+ "category": "security",
+ "requirement": "Merchants in the portal should only see their own storefronts, reviews and refunds.",
+ "hidden_intent": "External merchant users see Storefronts where Account = their account, and Reviews/Refunds of those storefronts. External OWD Private.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Sharing sets/external OWD Private on Storefront__c, Review__c, Refund__c; Review/Refund are lookups not master-detail so sharing doesn't inherit \u2014 per-object design needed."
+ }
+}

@@ -1,0 +1,7 @@
+{"id": "r063", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 1, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Existing Omni-Channel routing was not examined or rejected. The active RoutingFlow flows Route_Merchant_to_Queue and Route_to_Merchant_Support_Agent, and the org's service channels (sfdc_livemessage and sfdc_phone only), are not mentioned in 'Candidates examined and rejected'. The flow check was limited to flows with a trigger object, which excludes routing flows. Omni-Channel would probably be rejected (no service channel for Onboarding_Application__c, and no strict round-robin), but the spec should state that before building custom Apex routing.", "skill_gap": "None exists specifically: the reuse-before-building grounding step does not tell the run to check platform routing features (Omni-Channel routing flows, service channels) for assignment requirements."}
+ ]}

@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Tiers by net points (Earn minus Redeem across all Loyalty Transactions): Explorer 0-999, Insider 1000-4999, Pronto Plus 5000-9999, Pronto One 10000-24999, Pronto Elite 25000+. Recalculate on every loyalty transaction insert/update/delete. Tiers can go down."
+}

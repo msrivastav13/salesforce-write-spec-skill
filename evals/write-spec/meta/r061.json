@@ -1,0 +1,10 @@
+{
+ "id": "r061",
+ "category": "deletion-refactor",
+ "requirement": "The case Product field with the GC1040 stuff is junk. Remove it and the Engineering Req Number and Potential Liability fields.",
+ "hidden_intent": "Delete Case.Product__c, EngineeringReqNumber__c, PotentialLiability__c after dependency check.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Fields exist on Case; check references (layouts, flows like CreateCaseEnhancedData, reports); spec-only."
+ }
+}

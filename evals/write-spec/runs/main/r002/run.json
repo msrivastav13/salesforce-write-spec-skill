@@ -1,0 +1,32 @@
+{
+  "id": "r002",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r002/storefront-weekly-hours-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 83},
+    {"seq": 2, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 31},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55},
+    {"seq": 8, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 36},
+    {"seq": 10, "kind": "rt", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 59}
+  ],
+  "org_queries": [
+    {"seq": 4, "purpose": "Hours object fields, types, picklist values, Master-Detail and cascade delete; Storefront__c has no hours fields; child relationships", "command_summary": "sf sobject describe Storefront_Hours_of_Operation__c and Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No triggers/record-triggered flows; objects unmanaged; hours Apex class exists; no duplicate storefront+day; data counts (147 records, 21 storefronts)", "command_summary": "Tooling ApexTrigger, FlowDefinitionView, Tooling EntityDefinition, Tooling ApexClass LIKE %Hours%, GROUP BY HAVING COUNT>1, COUNT/COUNT_DISTINCT", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "No validation rules (AskCoworker said Unknown); 7 days x 21 each; time value format; dependencies on hours object; ObjectPermissions on hours object", "command_summary": "Tooling ValidationRule by EntityDefinitionId, GROUP BY Day_of_Week__c, GROUP BY Opening/Closing time, MetadataComponentDependency, ObjectPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "AgentUpdateStorefrontHoursActions sharing and upsert behavior; existence of storefront test classes", "command_summary": "Tooling ApexClass Body; ApexClass LIKE %Storefront%Test%", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Pronto_Deep_Dive_Workshop has Storefront__c read but no hours access; whether Time data type exists in org (AskCoworker claimed no Time type)", "command_summary": "ObjectPermissions WHERE Parent.Name='Pronto_Deep_Dive_Workshop'; FieldDefinition BusinessHours DataType='Time'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 11, "purpose": "FLS on hours fields (drives Section 6); null times count", "command_summary": "FieldPermissions WHERE SobjectType='Storefront_Hours_of_Operation__c'; COUNT where Opening/Closing null", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 0, "create": 0, "update": 0, "delete": 0},
+  "skill_friction": [
+    "D1 template at 400 words timed out on first call; the narrower retry (single-question, 250 words) succeeded. The default D1 limit may be too broad for this service.",
+    "Step 5 scope check only triggers on 'already met but user asked for a specific build'; for a generic 'store X' requirement that is already met but has gaps (closed-day flag, time format, uniqueness) it is unclear whether those gaps warrant a user question. I chose a zero-change spec with non-blocking open decisions.",
+    "Response-handling rules cover org queries contradicting AskCoworker, but not AskCoworker platform-behavior claims that cannot be tested by a read-only query (cascade delete Recycle Bin behavior). I recorded it as an assumption conflict in Section 8.",
+    "The run.json 'kind' enum has 'retry' but no way to indicate which call it retried (here D1); seq order implies it.",
+    "The validator --save path plus the SKILL.md instruction to write drafts to design/ conflicts with RUNNER.md; followed RUNNER.md (draft in out)."
+  ]
+}

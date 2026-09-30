@@ -1,0 +1,10 @@
+{
+ "id": "r023",
+ "category": "already-met",
+ "requirement": "Gift certificates need to track how much balance is left after partial redemptions, and link to the case they were issued for if it was a service recovery.",
+ "hidden_intent": "Remaining balance tracking + case link.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Already met: Gift_Certificate__c has Remaining_Value__c, Original_Value__c, Issued_For_Case__c and Type 'Recovery'. Only redemption automation would be a gap."
+ }
+}

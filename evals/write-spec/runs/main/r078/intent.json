@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Shared storefront selector/service used by all Agent*Actions; no behaviour change; keep invocable signatures stable."
+}

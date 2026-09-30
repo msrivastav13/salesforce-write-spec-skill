@@ -1,0 +1,8 @@
+{"id": "r086", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0},
+ "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Layout row is left as 'Conditional' because layout assignment cannot be read; acceptable, but it adds a possibly unneeded change on a Dynamic Forms page.", "skill_gap": "None exists (skill does not say whether an unsettleable layout row should be Conditional or dropped)."}
+ ]}

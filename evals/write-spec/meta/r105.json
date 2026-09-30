@@ -1,0 +1,10 @@
+{
+ "id": "r105",
+ "category": "new-automation",
+ "requirement": "We need to stop promotions being created where the end date is before the start date.",
+ "hidden_intent": "Validation rule on Promotion: End Date must be on or after Start Date when both populated. Same-day promos are allowed.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Validation rule on Promotion__c (org currently has zero validation rules); handle blank dates; same-day allowed."
+ }
+}

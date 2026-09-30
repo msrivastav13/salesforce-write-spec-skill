@@ -1,0 +1,8 @@
+{"id": "r055", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0}, "wrong_claims": ["Section 7 item 4 says 'the describe result does not show case sensitivity' for External_Code__c. It does: sf sobject describe returns caseSensitive=false. That confirms the AskCoworker claim (case-insensitive unique), which is itself correct."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The requirement is split across two automations on the same object and event: a before-save flow for the Remaining_Value__c copy and a before-insert trigger for the code. Apex is needed anyway, so a single one-line assignment in the trigger would mean one fewer component and one place for insert defaults. It is labelled as an assumption. The run reports this as friction.", "skill_gap": "Rule 4 ('prefer flows, then code') does not say what to do when code is already required for part of one requirement. It should say to keep one mechanism per object and event."},
+  {"defect": "An AskCoworker claim (case-insensitive uniqueness) was left as 'reported' and pushed to manual verification, although describe (caseSensitive=false) settles it.", "skill_gap": "none. Existing verify-with-query guidance applies, but the run misread what describe exposes."}
+ ]}

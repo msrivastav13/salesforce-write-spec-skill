@@ -1,0 +1,10 @@
+{
+ "id": "r118",
+ "category": "ui",
+ "requirement": "Rearrange the menu item page layout so price and availability are at the top",
+ "hidden_intent": "Page layout / Lightning record page change for Menu Item.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Declarative layout change; no code."
+ }
+}

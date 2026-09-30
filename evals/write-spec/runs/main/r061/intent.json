@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Delete Case.Product__c, EngineeringReqNumber__c, PotentialLiability__c after dependency check."
+}

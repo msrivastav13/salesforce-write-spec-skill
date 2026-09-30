@@ -1,0 +1,52 @@
+{
+  "id": "r015",
+  "skill_rev": "v13",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r015/storefront-review-ai-summary-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 25},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 36},
+    {"seq": 20, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 36},
+    {"seq": 21, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 58},
+    {"seq": 28, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "org reachable, API version", "command_summary": "sf org display", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Storefront__c/Review__c existence, DurableIds, full field lists (Review_Summary__c exists, types)", "command_summary": "EntityDefinition + FieldDefinition for both objects", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "data shape: storefront count, reviews per storefront, Status__c distribution", "command_summary": "COUNT/COUNT_DISTINCT/GROUP BY on Storefront__c, Review__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "readers of Review_Summary__c (absence claim 'nothing uses it')", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId = field Id", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "existing automation on both objects", "command_summary": "Tooling ApexTrigger, FlowDefinitionView, Tooling ValidationRule", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "what Get_Partner_Quality_Watchlist does with Review_Summary__c", "command_summary": "FlowDefinitionView/FlowDefinition + Tooling Flow.Metadata by ActiveVersionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Review_Summary__c populated or blank (filter not allowed on long text, fetched and counted locally)", "command_summary": "SELECT Review_Summary__c FROM Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Apex readers/writers of Review_Summary__c and Review__c; any LLM calls", "command_summary": "Tooling ApexClass bodies, local search", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "existing prompt templates", "command_summary": "GenAiPromptTemplate standard and Tooling", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "FLS on Review_Summary__c and Review__c.Comments__c", "command_summary": "FieldPermissions by Field", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "editability of permission sets (namespace/type)", "command_summary": "PermissionSet Name IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Storefront record page and layout placement", "command_summary": "Tooling FlexiPage RecordPage list, Layout by TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "agent actions invoking review summary class", "command_summary": "Tooling GenAiFunctionDefinition (LIKE on Id failed once; retried with InvocationTargetType)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Review_Summary__c on page/layout; AgentSummarizeReviewsActions body", "command_summary": "Tooling FlexiPage.Metadata, Layout.Metadata, ApexClass Body by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "child relationship name, field length/updateable", "command_summary": "sf sobject describe Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "generative AI presence and org edition", "command_summary": "BotDefinition, Tooling GenAiPlannerDefinition, Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "R claim: Storefront__c OWD ReadWrite; Review__c sharing", "command_summary": "EntityDefinition InternalSharingModel", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "R claim: no Data 360 streams", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "R claim: master-detail not reparentable", "command_summary": "Tooling CustomField.Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "prompt template user permission set exists", "command_summary": "PermissionSet Name LIKE Prompt/EinsteinGPT", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "object Edit on Storefront__c by permission set", "command_summary": "ObjectPermissions SobjectType = Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "assignees of Agentforce_Reference_App, Pronto, EinsteinGPTPromptTemplateUser", "command_summary": "PermissionSetAssignment GROUP BY PermissionSet.Name", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 19, "question": "Should the review summary be (A) generated on demand by a user from the Storefront record page (Einstein Field Generation prompt template on the existing Review_Summary__c field, user reviews and saves; 2 components, no Apex) or (B) regenerated automatically whenever a review is added or changed (record-triggered flow on Review__c plus a prompt template and likely an Apex invocable)? Evidence: Review_Summary__c exists and is blank on all 21 storefronts; no automation exists on either object. Recommendation: A.", "simulated_answer": "No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 1, "update": 1, "delete": 0},
+  "skill_friction": [
+    "Step 5 says ask only when neither the requirement nor evidence gives a basis; on-demand vs automatic generation changes the component set (flow + Apex vs none) but a recommended default clearly existed, so it is ambiguous whether to ask or decide. I asked; the user had no preference, so the question added nothing.",
+    "No guidance for features whose availability depends on a license/setting that cannot be queried (Prompt Builder / Field Generation; GenAiPromptTemplate is not queryable). I applied the 'Conditional on license' rule from org-verification.md to both rows, but the second row (FlexiPage) is only conditional transitively, and the spec-format rules do not say whether dependent rows must also be Conditional.",
+    "The spec-format 'Module' rule lists no standard folder for GenAiPromptTemplate; I used force-app/main/default/genAiPromptTemplates (the standard source folder), but the rule's examples do not cover it.",
+    "Permission set assignment (EinsteinGPTPromptTemplateUser, platform-owned, 0 assignees) is needed for delivery but is neither metadata nor editable; the skill covers 'undeliverable responsibility' but not setup steps like assignments, so I recorded it as blocking for delivery in Section 8.",
+    "AskCoworker repeatedly tagged facts I sent as '[Verified: prior session]' and invented an OD with a new field; the response table covers this (echoed facts / drop unrequested behavior), which worked as intended.",
+    "AskCoworker D1 reported '92 reviews across 21 storefronts; 2 with 0' (internally inconsistent); org query showed 19 of 21 have reviews. The fix rule handled it."
+  ]
+}

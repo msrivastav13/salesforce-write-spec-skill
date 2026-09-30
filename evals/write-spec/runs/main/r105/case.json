@@ -1,0 +1,4 @@
+{
+ "id": "r105",
+ "requirement": "We need to stop promotions being created where the end date is before the start date."
+}

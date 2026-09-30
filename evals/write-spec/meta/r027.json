@@ -1,0 +1,10 @@
+{
+ "id": "r027",
+ "category": "standard-crm",
+ "requirement": "Leads should require POS system and number of locations before they can be converted.",
+ "hidden_intent": "Block conversion if POS System or Number of Locations blank. The web form writes Number_of_Locations__c.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Lead has BOTH NumberofLocations__c and Number_of_Locations__c \u2014 must pick canonical or ask; validation on IsConverted."
+ }
+}

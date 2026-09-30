@@ -1,0 +1,11 @@
+# Guard: Salesforce CLI / VS Code extension state must never be committed
+.sf/
+.sfdx/
+.forceignore
+
+# aggregate.py bytecode
+**/__pycache__/
+
+# OS / local
+.DS_Store
+.env

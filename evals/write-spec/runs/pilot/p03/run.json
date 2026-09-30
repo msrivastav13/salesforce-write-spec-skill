@@ -1,0 +1,153 @@
+{
+  "id": "p03",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/pilot/p03/storefront-website-url-spec.md",
+  "askcoworker_calls": [
+    {
+      "kind": "discovery",
+      "error": true,
+      "timed_out": true,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 0
+    },
+    {
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 0
+    },
+    {
+      "kind": "followup",
+      "error": true,
+      "timed_out": true,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 0
+    },
+    {
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 0
+    },
+    {
+      "kind": "inventory",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 0
+    },
+    {
+      "kind": "details",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 0
+    }
+  ],
+  "org_queries": [
+    {
+      "purpose": "org reachable",
+      "command_summary": "sf org display",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "Storefront__c field list; no website field; Website_URL__c does not exist; Image_URL__c Text 255; Account__c lookup",
+      "command_summary": "sf sobject describe Storefront__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "zsh word-splitting broke the flag variable; batch of 6 queries failed before reaching the org, rerun under bash",
+      "command_summary": "batch sf data query (shell error)",
+      "ok": false,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "no Apex triggers on Storefront__c",
+      "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId='Storefront__c'",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "no record-triggered flows on Storefront__c",
+      "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId='Storefront__c'",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "DurableId and sharing model (ReadWrite/Private)",
+      "command_summary": "Tooling EntityDefinition",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "which permission sets have FLS on Image_URL__c",
+      "command_summary": "FieldPermissions WHERE Field='Storefront__c.Image_URL__c'",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "Account.Website exists as URL 255",
+      "command_summary": "sf sobject describe Account",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "no validation rules on Storefront__c (AskCoworker said Unknown)",
+      "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "page layouts on Storefront__c",
+      "command_summary": "Tooling Layout WHERE TableEnumOrId",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "classes AskCoworker did not read reference no URL/website field",
+      "command_summary": "Tooling ApexClass Body for 3 classes, regex scan",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "purpose": "object permissions on Storefront__c (Data 360 and FLS design)",
+      "command_summary": "ObjectPermissions WHERE SobjectType='Storefront__c'",
+      "ok": true,
+      "contradicted_askcoworker": false
+    }
+  ],
+  "user_questions": [
+    {
+      "question": "The requirement \"Add a field.\" does not say where or what. Which object should the field go on, and what should it hold (business purpose and data type)?",
+      "simulated_answer": "On Storefront, a text field for the storefront's website URL."
+    }
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 7,
+    "create": 1,
+    "update": 6,
+    "delete": 0
+  },
+  "skill_friction": [
+    "Response-handling table has no row for a response that ends by asking permission to continue ('Would you like me to proceed?') while also missing the end marker; it is both 'incomplete' and 'AskCoworker asks a question'. I treated it as incomplete and answered 'yes, proceed' inside the follow-up.",
+    "Retry rule is stated for the original request, but it is unclear whether a timed-out follow-up gets its own retry and whether that retry counts toward the 3-follow-up limit. I retried the follow-up once and did not count the retry as a follow-up.",
+    "Runner error, not the skill's: I put shared sf flags in a zsh variable, which zsh does not word-split, so one batch of queries failed; rerun under bash. The reference could note that the Bash tool runs zsh on this machine.",
+    "Step 8 says to delete the .tmp after saving, but validate_spec.py --save already removed it, so rm failed. SKILL.md also does not mention the --root flag that RUNNER uses.",
+    "Layout API name format (Object-Layout Name) is not covered by spec-format; AskCoworker returned only 'Storefront Layout'. I used the fully qualified `Storefront__c-Storefront Layout`.",
+    "Scope check guidance does not say whether a user's explicit data type ('text') vs an AskCoworker-recommended alternative (URL type) warrants a question; I kept the user's decision and recorded the alternative as non-blocking in Section 8.",
+    "AskCoworker's first Discovery answer claimed prior verified work ('confirmed via FieldDefinition query') even though every call is sessionless; its [Verified] labels were consistent with my queries here, but the skill could warn that it references 'prior sessions'."
+  ]
+}

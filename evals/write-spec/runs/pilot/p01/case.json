@@ -1,0 +1,4 @@
+{
+ "id": "p01",
+ "requirement": "When a storefront's average rating across its 10 most recent reviews drops below 3.0, flag the storefront for attention and notify its primary contact."
+}

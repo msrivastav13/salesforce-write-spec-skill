@@ -1,0 +1,41 @@
+{
+  "id": "r077",
+  "skill_rev": "v28",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r077/refund-timeline-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50},
+    {"seq": 16, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 19, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 44},
+    {"seq": 20, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Scan full custom object list for refund-like objects", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Refund__c fields, Case__c lookup, Status__c picklist values", "command_summary": "sf sobject describe Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Case child relationship name to Refund__c (AskCoworker said unknown/none)", "command_summary": "sf sobject describe Case childRelationships", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Case record pages that exist", "command_summary": "Tooling FlexiPage WHERE EntityDefinitionId IN (Case, Refund__c)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Existing LWC/Aura bundles (reuse candidates)", "command_summary": "Tooling LightningComponentBundle and AuraDefinitionBundle, no namespace", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Triggers and record-triggered flows on Case/Refund__c", "command_summary": "Tooling ApexTrigger; FlowDefinitionView IN (Case, Refund__c)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Refund data shape", "command_summary": "Refund__c GROUP BY Status__c; COUNT with Case__c != null", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Case_Record_Page layout for placement", "command_summary": "Tooling FlexiPage Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Can refundReceiptRenderer/orderStatusRenderer be reused", "command_summary": "Tooling LightningComponentResource source for both bundles", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Object/field access to Refund__c; history tracking; record types; Path; tab; DurableId", "command_summary": "ObjectPermissions, FieldPermissions, FieldDefinition IsFieldHistoryTracked, RecordType, Tooling PathAssistant, TabDefinition, EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Who can read Case; active user profiles", "command_summary": "ObjectPermissions on Case (parser failed on null Parent); User GROUP BY Profile.Name", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Apex readers of Refund__c", "command_summary": "Tooling ApexClass bodies searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Validation rules on Refund__c", "command_summary": "Tooling ValidationRule by EntityDefinitionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Profile-level FLS on Refund__c", "command_summary": "FieldPermissions WHERE Parent.IsOwnedByProfile = true", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Permission sets assigned to the System Administrator user", "command_summary": "PermissionSetAssignment by Assignee.Profile.Name", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 1, "update": 1, "delete": 0},
+  "skill_friction": [
+    "Jest tests live inside the LWC bundle folder and are excluded from deploy by .forceignore; spec-format says to list every deployable component and the testing guidance covers Apex and Flow Tests only, so it is unclear whether LWC Jest tests should be a separate Section 9 row. I folded them into the LightningComponentBundle row.",
+    "Record page activation cannot be read, but the whole UI responsibility depends on Case_Record_Page being the active page; the skill does not say whether this is a Conditional row, a blocking open item, or a manual check. I used a load-bearing assumption with a blocking-for-delivery manual check and did not mark the FlexiPage row Conditional.",
+    "Rule 3's two-wrong-claims threshold: AskCoworker's R answer made an imprecise platform claim (LDS auto-refresh) and R/T flagged Name FLS as blocking; it is unclear whether an Unknown that a query resolves (D1 child relationship) counts as a wrong claim. I counted one wrong platform claim, so the threshold was not reached.",
+    "The org-verification note says users with View All Data still see fields without FLS grants, which conflicts with documented behavior (FLS applies to admins too; admins normally have profile FLS). I avoided relying on it by checking the admin user's permission set assignments."
+  ]
+}

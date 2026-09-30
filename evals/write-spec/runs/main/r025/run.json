@@ -1,0 +1,18 @@
+{
+  "id": "r025",
+  "skill_rev": "v12",
+  "outcome": "stopped",
+  "stop_reason": "Out of scope for write-spec: the request asks for an implementation (a Python script) that scrapes a third-party site (DoorDash), not a Salesforce business requirement. The skill is specification-only (Rule 1: never implements) and produces Salesforce implementation specs grounded in the org; no Salesforce object, process, or outcome is involved, so there is nothing to discover with AskCoworker or verify with org queries. Scraping DoorDash would also likely conflict with DoorDash's Terms of Service (automated access/scraping prohibited), so a spec designing it would depend on behavior contrary to documented third-party terms (Rule 3 says reject or reshape). Stopped before any AskCoworker call or org query; told the user the skill cannot write this and offered to spec a Salesforce-side requirement instead (e.g., storing/analyzing competitor menu or pricing data obtained through a licensed data source or manual entry).",
+  "spec_path": null,
+  "askcoworker_calls": [],
+  "org_queries": [],
+  "user_questions": [],
+  "validator_first_pass_ok": null,
+  "validator_attempts": 0,
+  "counts": {"total": 0, "create": 0, "update": 0, "delete": 0},
+  "skill_friction": [
+    "SKILL.md has no rule for requests that are not Salesforce requirements at all (non-Salesforce code, third-party scraping). The only entry gate is 'too vague to search -> ask one clarifying question', which does not fit: this request is specific, just out of domain. Had to infer 'stop and explain' from the skill description and Rule 1.",
+    "No guidance on whether an out-of-domain request should get a clarifying question (e.g., 'did you mean storing competitor menu data in Salesforce?') or an outright stop; the choice between outcome 'stopped' and 'asked_and_stopped' is left to judgment.",
+    "Rule 3 covers proposals that contradict documented third-party API behavior, but nothing covers requirements whose core purpose likely violates a third party's Terms of Service; no instruction on whether to reshape (e.g., licensed data feed) or refuse."
+  ]
+}

@@ -1,0 +1,9 @@
+{"id": "r082", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0},
+ "wrong_claims": ["Section 6: 'Users with View All Data or Modify All Data (for example the System Administrator profile) still see the field.' View All Data/Modify All Data do not override FLS, and the System Administrator profile has no FieldPermissions rows on any Storefront__c field; admins see it only via the two permission sets. Test M5 ('without View All Data') repeats the misconception."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "States as fact that View All Data / Modify All Data users (System Administrator) see the new formula field without an FLS grant; wrong on the platform and in this org (admin profile has no Storefront__c FieldPermissions rows).", "skill_gap": "v29 reference/org-verification.md: 'View All Data and Modify All Data do not override field-level security' and 'check profile rows too' (instruction exists, not followed)."},
+  {"defect": "Header-region placement of a Dynamic Forms field section is load-bearing and unverified; handled as a labelled assumption with a fallback, but the primary placement may be rejected by App Builder.", "skill_gap": "None exists (no guidance on FlexiPage region/component compatibility)."}
+ ]}

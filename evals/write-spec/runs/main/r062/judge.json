@@ -1,0 +1,8 @@
+{"id": "r062", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 1, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Asked whether to skip contacts with HasOptedOutOfEmail even though the run had a clear recommended default (skip), and the predicted answer was 'no preference'. The question added a round trip without changing the design.", "skill_gap": "Step 5: predict the answer and skip questions that have a safe default. The run itself noted that the rule is unclear on whether compliance filters count as intent."},
+  {"defect": "Asked which statuses qualify (Active only was recommended). This is defensible as a business-value question because agent actions write Draft/Paused/Ended outside the picklist, but meta.expect says no question was needed, and 'Active only' was the evident default for a 'promotion ends' notice.", "skill_gap": "Step 5 (predictable-answer skip); no more specific instruction exists."}
+ ]}

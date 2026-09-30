@@ -1,0 +1,10 @@
+{
+ "id": "r060",
+ "category": "standard-crm",
+ "requirement": "When a contact's status becomes Former Employee, remove them as primary contact on any storefront.",
+ "hidden_intent": "Clear Storefront Primary Contact where it equals this contact; notify the account owner via task.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Contact.Contact_Status__c and Storefront__c.Primary_Contact__c exist; cross-object after-save update."
+ }
+}

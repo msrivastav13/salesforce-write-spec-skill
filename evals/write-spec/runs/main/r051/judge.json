@@ -1,0 +1,8 @@
+{"id": "r051", "claims": {"correct": 5, "wrong": 0, "unverifiable": 1}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Data model objects and field mappings each data stream needs (storefront, review, refund, gift certificate, orders DMOs plus source-to-DMO maps) are folded into the DataStreamDefinition rows instead of listed in Section 9, so the 7-row change set understates what must be built and deployed. This is disclosed only in Open decision 7.", "skill_gap": "None exists. SKILL.md and org-verification.md do not cover Data 360 metadata composition (a stream needs its DMO and mapping components)."},
+  {"defect": "The whole Orders_Ingestion_API / Orders_DataStream path depends on an external Heroku Orders API that exists only in AskCoworker 'prior session' output and cannot be verified. It is labelled reported-by-AskCoworker and made Conditional, but it still sits in the inventory as two Creates with an assumed schema (order_id, storefront_id, order_date, status).", "skill_gap": "None exists. There is no rule on whether a Create may rest on an external system that only AskCoworker reports."},
+  {"defect": "Field-level Read for the connector permission set on the streamed fields (Rating__c, Status__c, Type__c, Storefront__c) was not queried, although an allowed FieldPermissions SELECT could have settled it. It was deferred to manual verification instead.", "skill_gap": "SKILL.md's verify-with-org-query guidance covers this in general, but nothing tells the run to check FLS for a Data 360 connector user specifically."}
+ ]}

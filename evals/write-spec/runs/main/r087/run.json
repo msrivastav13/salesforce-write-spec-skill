@@ -1,0 +1,43 @@
+{
+  "id": "r087",
+  "skill_rev": "v29",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r087/support-agent-no-delete-case-refund-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 58},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 73},
+    {"seq": 17, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53},
+    {"seq": 19, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 65},
+    {"seq": 20, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Which profiles/roles represent support agents and how many users they have", "command_summary": "Profile LIKE Support/Service/Agent; UserRole LIKE Support/Service; User COUNT GROUP BY Profile.Name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Whether any user holds Custom: Support Profile or a support role", "command_summary": "Active users with profile/role; COUNT users on Custom: Support Profile; users with any role", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Complete list of Delete/ModifyAll grants on Case and Refund__c", "command_summary": "ObjectPermissions WHERE SobjectType IN (Case,Refund__c) AND (Delete OR ModifyAll)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Case/Refund__c rows for support-named profiles (AskCoworker said Support Profile Case Delete=false)", "command_summary": "ObjectPermissions for Custom: Support Profile, guest support profiles, Einstein Agent User", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "Who holds the permission sets with Delete", "command_summary": "PermissionSetAssignment for Pronto_Deep_Dive_Workshop, Agentforce_Reference_App, sfdc_accelerate_dms; PermissionSetGroup list", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Existence of C2C*/ActorCASCPermSet reported with Case Delete", "command_summary": "PermissionSet Name LIKE C2C% or ActorCASCPermSet", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Triggers on Case/Refund__c", "command_summary": "Tooling ApexTrigger TableEnumOrId IN (Case,Refund__c)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Record-triggered flows on Case/Refund__c; org edition; custom permissions", "command_summary": "FlowDefinitionView TriggerObjectOrEventId IN; EntityDefinition; Organization; CustomPermission", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Refund__c fields and Case lookup cascade behaviour", "command_summary": "sf sobject describe Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Support profile Modify/View All Data; who has Modify All Data", "command_summary": "PermissionSet system perms for Custom: Support Profile; PermissionsModifyAllData = true", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Refund__c custom fields and dependents", "command_summary": "Tooling CustomField by TableEnumOrId; MetadataComponentDependency on Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "No Apex deletes Case/Refund__c", "command_summary": "Tooling ApexClass bodies (unmanaged) scanned locally for delete + Case/Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Issue_Refund / Apply_Remediation flows do not delete refunds", "command_summary": "FlowDefinitionView by label; Tooling Flow.Metadata recordDeletes/recordCreates", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Profile editability and metadata fullName", "command_summary": "PermissionSet IsCustom/NamespacePrefix for profile; Tooling Profile FullName", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 16, "question": "Two intent questions. (1) Who are 'support agents'? Options: (a) users on 'Custom: Support Profile' (internal Salesforce license; has Case Delete=true, no Refund__c access; 0 users today) [recommended]; (b) the Agentforce service agent ('Einstein Agent User'; no Case/Refund__c access); (c) the guest support profiles ('Customer Support Profile', 'Merchant Support Profile'; no Case/Refund__c access); (d) all of these. (2) For 'Ever': (a) remove Delete from support-agent profiles and permission sets (standard access control; a later grant could re-enable it) or (b) additionally add a before-delete guard that blocks deletes even if Delete is granted later? Recommendation: (a) plus governance, since no automation deletes these records today.", "simulated_answer": "Remove Delete on Case and Refund from agent profiles/perm sets."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 1, "create": 0, "update": 1, "delete": 0},
+  "skill_friction": [
+    "Profile API naming: spec-format says 'use full metadata API names' but gives no guidance for profiles whose fullName is URL-encoded (Custom%3A Support Profile) vs the label; I used the encoded fullName in Section 4/9 and mentioned the label.",
+    "'Ever' is a strength-of-enforcement cue: SKILL.md step 5 does not say whether enforcement strength (permission removal vs hard before-delete guard) is intent (ask) or implementation (decide). I asked, bundled with the persona question.",
+    "Two-wrong-claims rule triggered after D1/D2 (Support Profile Case Delete reported false, actually true; C2C* sets reported with Case Delete, none found), yet AskCoworker kept labelling stale 'prior session' facts in I/R/T; the rule says verify every kept fact but gives no guidance on whether R/T should still be sent once AskCoworker is known unreliable.",
+    "Persona with zero users: the skill has no case for a design whose target profile has 0 users (requirement effectively preventive); unclear if that is 'already met', a partly false premise, or a normal change. Treated as a normal change plus a load-bearing assumption.",
+    "Answer mapping: the simulated answer ('agent profiles/perm sets') addressed Q2 but not the Q1 options; mapping rule applied (evidence favours Custom: Support Profile), tagged assumption."
+  ]
+}

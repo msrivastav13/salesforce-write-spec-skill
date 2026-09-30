@@ -1,0 +1,56 @@
+{
+  "id": "r075",
+  "skill_rev": "v27",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r075/opportunity-closed-won-onboarding-application-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 37},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 38},
+    {"seq": 29, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 33, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53},
+    {"seq": 34, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "full custom object list; Onboarding_Application__c exists, no other onboarding object", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Onboarding_Application__c fields, Status__c values/default, child relationships", "command_summary": "sf sobject describe Onboarding_Application__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "sharing model of objects", "command_summary": "Tooling EntityDefinition SharingModel (wrong column name)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "sharing model and DurableId", "command_summary": "Tooling EntityDefinition InternalSharingModel, ExternalSharingModel", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Opportunity StageName/Type values, record types, custom fields", "command_summary": "sf sobject describe Opportunity", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Account Type values, record types, merchant fields", "command_summary": "sf sobject describe Account", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "no triggers on the three objects", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "no record-triggered flows on the three objects", "command_summary": "FlowDefinitionView per TriggerObjectOrEventId (3 queries)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Opportunity data shape by StageName/Type", "command_summary": "SELECT StageName, Type, COUNT(Id) FROM Opportunity GROUP BY", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Onboarding_Application__c data shape", "command_summary": "SELECT Status__c, COUNT(Id) GROUP BY", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "record counts (0 and 0)", "command_summary": "SELECT COUNT() FROM Opportunity / Onboarding_Application__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "complete custom field list on Onboarding_Application__c (AskCoworker said only Status__c, no Account lookup)", "command_summary": "Tooling CustomField WHERE TableEnumOrId = 01Iak00000Dx4JU", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 15, "purpose": "same concept elsewhere (onboard/merchant/opportunity/application fields)", "command_summary": "Tooling CustomField DeveloperName LIKE", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "validation rules on Opportunity and Onboarding_Application__c", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "dependencies on the object", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId = 01Iak00000Dx4JU", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "field metadata (Account__c lookup SetNull, required flags)", "command_summary": "Tooling CustomField Metadata by Id (8 queries)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "identify other object with Onboarding_Specialist field", "command_summary": "Tooling EntityDefinition by DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "object permissions on Onboarding_Application__c", "command_summary": "ObjectPermissions WHERE SobjectType", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "field permissions on Onboarding_Application__c", "command_summary": "FieldPermissions WHERE SobjectType", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "any active flow related to onboarding", "command_summary": "FlowDefinitionView WHERE IsActive = true", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "Apex bodies referencing onboarding/opportunity", "command_summary": "Tooling ApexClass Body (unmanaged), local search", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "agent actions about onboarding", "command_summary": "Tooling GenAiFunctionDefinition LIKE nboard", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "dependencies on Account__c", "command_summary": "Tooling MetadataComponentDependency on field Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "layouts on object", "command_summary": "Tooling Layout WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "FlexiPages on object/Opportunity", "command_summary": "Tooling FlexiPage WHERE EntityDefinitionId IN", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 30, "purpose": "relationship name conflict on Opportunity", "command_summary": "sf sobject describe Opportunity childRelationships", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 31, "purpose": "editability of sfdc_* permission sets", "command_summary": "PermissionSet NamespacePrefix, Type", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 32, "purpose": "whether FlexiPages use Dynamic Forms (AskCoworker proposed updating both)", "command_summary": "Tooling FlexiPage Metadata by Id (2 queries)", "ok": true, "contradicted_askcoworker": true}
+  ],
+  "user_questions": [
+    {"seq": 28, "question": "How should 'new merchant' be identified? Options: (A) Opportunity.Type = 'New Business' (only values are New Business / Existing Business) - recommended; (B) the Account has no earlier Onboarding_Application__c; (C) both. Evidence: Opportunity.Type exists with those two values; Onboarding_Application__c.Account__c links applications to accounts; 0 opportunities and 0 applications exist.", "simulated_answer": "No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 4, "create": 2, "update": 2, "delete": 0},
+  "skill_friction": [
+    "Access for a new field: design-rules says name exact permission sets/profiles, and org-verification says admins with View All Data still see fields without explicit grants, yet describe run as admin hid every existing custom field on Onboarding_Application__c. The skill does not say whether to add an Admin profile grant; I added an Update Profile Admin row as a judgment call.",
+    "Step 5 'predict the answer first': for the 'new merchant' fork I could not predict whether the answer would be 'no preference', and the Type = New Business default is reversible, so the rule arguably said decide rather than ask. The boundary between 'org semantics answer it' (picklist value New Business) and 'evidence points both ways' is unclear.",
+    "Testing guidance: a flow whose main outcome is a created related record cannot be asserted by a Flow Test, and 'do not add code only to make something testable' rules out an Apex test; the skill does not state this common case explicitly, so the spec ends up with manual checks only.",
+    "Rule 3 two-wrong-claims threshold: AskCoworker's wrong claims (no Account lookup, Automated Process user) were reached after I, but R and T then made a third platform claim (bulk SOQL per interview) that could not be tested with allowed commands; the skill says fall back to documented behavior, which worked, but it is unclear whether R/T should be resent with the correction (skipped because the inventory did not change)."
+  ]
+}

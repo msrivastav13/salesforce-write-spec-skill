@@ -1,0 +1,4 @@
+{
+ "id": "r013",
+ "requirement": "Storefront lifecycle: new storefronts start as Pending Activation, can't go Active without at least one active menu and hours for all 7 days, suspended ones notify the account owner, and closed ones deactivate menus."
+}

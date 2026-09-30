@@ -1,0 +1,37 @@
+{
+  "id": "r067",
+  "skill_rev": "v24",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r067/promotion-discount-cap-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 10, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 26},
+    {"seq": 12, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 33},
+    {"seq": 14, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 29}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Scan custom objects for promo concept", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Field type/precision/required of Discount_Percentage__c and Status__c values; object DurableId/namespace", "command_summary": "sobject describe Promotion__c; Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No existing validation rules, triggers, record-triggered flows; data shape (count, max, >50, null, <0)", "command_summary": "Tooling ValidationRule/ApexTrigger; FlowDefinitionView by Id and name; aggregate SOQL on Promotion__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Same concept elsewhere; field list; Apex readers/writers of the field", "command_summary": "Tooling CustomField LIKE %Discount%; CustomField by TableEnumOrId; ApexClass bodies scanned locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Field metadata/description; dependencies on field and object; standard promo objects; class body catch behavior", "command_summary": "Tooling CustomField.Metadata by Id; MetadataComponentDependency; sobject list all; ApexClass Body", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Standard Promotion/PromotionTier/PromotionLineItemRule/PromotionTarget discount fields and record counts", "command_summary": "sobject describe + SELECT COUNT() per object", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Agent actions invoking AgentCreatePromotionActions", "command_summary": "Tooling GenAiFunctionDefinition; ApexClass Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "FLS grants on Discount_Percentage__c (AskCoworker sfdc_accelerate_dms claim)", "command_summary": "FieldPermissions WHERE Field = 'Promotion__c.Discount_Percentage__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Data 360 DataStream count (AskCoworker 'prior session' claim)", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Whether Status__c is restricted (agent class defaults 'Draft', affects M9 test)", "command_summary": "sobject describe Promotion__c restrictedPicklist", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 1, "create": 1, "update": 0, "delete": 0},
+  "skill_friction": [
+    "spec-format.md says design choices follow design-rules.md, but no design-rules.md exists under .claude/skills/write-spec/reference/.",
+    "AskCoworker repeatedly labelled facts as '[Verified: ... prior session]' even though D1 was the first call; the table covers 'prior session' facts, but it is unclear whether that counts toward the 'two wrong AskCoworker claims' threshold when the facts turn out correct.",
+    "AskCoworker D1 proposed condition 'Discount_Percentage__c > 50' and R claimed validation rules fire on undelete; both contradict documented platform behavior but no query can test them. The skill does not say whether such platform-behavior errors count as 'wrong AskCoworker claims' for the verify-everything threshold.",
+    "Workflow step 7/8 hard-code design/ paths while RUNNER overrides to out/; fine here but the skill's --root flag usage is only described in RUNNER.md.",
+    "AskCoworker T proposed anonymous-Apex manual verification; Rule 1 forbids the agent running Apex but the skill does not say whether the spec may recommend anonymous Apex for sandbox verification. I replaced it with agent test-mode checks."
+  ]
+}

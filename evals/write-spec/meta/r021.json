@@ -1,0 +1,10 @@
+{
+ "id": "r021",
+ "category": "new-automation",
+ "requirement": "Keep the loyalty tier on the contact up to date based on their points balance.",
+ "hidden_intent": "Tiers by net points (Earn minus Redeem across all Loyalty Transactions): Explorer 0-999, Insider 1000-4999, Pronto Plus 5000-9999, Pronto One 10000-24999, Pronto Elite 25000+. Recalculate on every loyalty transaction insert/update/delete. Tiers can go down.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Contact.Loyalty_Tier__c exists; thresholds are unknown and must be asked; no points balance field exists and Loyalty_Transaction__c.Contact__c is Master-Detail (roll-ups possible; corrected after judge verification) \u2014 needs trigger/flow."
+ }
+}

@@ -1,0 +1,8 @@
+{"id": "r056", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0},
+ "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The run asked whether 'agents' meant human console agents or Agentforce, although it had already recommended A (human agents, reuse menuBrowser) from the word 'component' and the existing LWC. Meta expects no question.", "skill_gap": "Step 5 / Rule 5 'If you would recommend one option anyway, take it and record it in Section 8' covers this but was not followed. The skill could also say whether an ambiguous persona that changes component type (not object) counts as a basis to ask."},
+  {"defect": "Validation rules on the four menu objects were not checked. This is labelled in the spec and does not matter for a read-only component.", "skill_gap": "None; the gap was disclosed."}
+ ]}

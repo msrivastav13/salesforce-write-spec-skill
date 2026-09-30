@@ -1,0 +1,8 @@
+{"id": "r008", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "A rejected review keeps Status__c = 'Submitted', so moderators and reports cannot tell a rejected review from a pending one, and the approval entry criteria (Status__c = 'Submitted') let it be resubmitted. The spec records this only as a proposal to add a 'Rejected' value.", "skill_gap": "None exists."},
+  {"defect": "Unmoderated 1-3 star ratings still count in the Storefront__c.Total_Score__c / Total_Reviews__c roll-ups and in Average_Review_Score__c, which the Partner Quality Watchlist flow reads. So hidden reviews still shape visible scores. This is recorded as a non-blocking proposal rather than raised as a scope question.", "skill_gap": "SKILL.md limits scope questions to one message and has no path for a scope-affecting discovery made after that message (the run reported this friction itself)."},
+  {"defect": "Required backfill of the 92 null-status reviews is left to a separate data task outside the spec. Until it runs, every existing review disappears from the customer read path at deployment.", "skill_gap": "None exists. The spec-only / no-data-change rule makes deferring correct, but no instruction says to make deployment ordering explicit in the change set."}
+ ]}

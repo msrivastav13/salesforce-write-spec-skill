@@ -1,0 +1,39 @@
+{
+  "id": "r062",
+  "skill_rev": "v24",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r062/promotion-ending-heads-up-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 38},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 59},
+    {"seq": 11, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 12, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 13, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 16},
+    {"seq": 14, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 26},
+    {"seq": 16, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 33}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Org reachable; custom object list scan for promotion/storefront/contact/email concepts", "command_summary": "sf org display; sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Field API names, types, picklist values, lookups on Promotion__c and Storefront__c", "command_summary": "sf sobject describe Promotion__c, Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No triggers/flows on objects; no OWEA; no promotion email template; ScheduledEmail/EmailUtil namespaces; data shape; org type", "command_summary": "Tooling EntityDefinition, ApexTrigger; FlowDefinitionView (scheduled; by trigger object); OrgWideEmailAddress; EmailTemplate LIKE; ApexClass namespaces; Promotion__c status group-by and lookup-chain counts; Organization", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Complete Promotion__c custom fields (no sent flag); validation rules; readers of Promotion__c; same-concept fields; WorkflowAlert; Apex bodies for Draft/email", "command_summary": "Tooling CustomField by TableEnumOrId; ValidationRule by EntityDefinitionId; MetadataComponentDependency; CustomField LIKE Notif/Reminder/Sent; WorkflowAlert; ApexClass bodies", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Field descriptions, Contact email/opt-out fields, recipient email present, ObjectPermissions grants", "command_summary": "FieldDefinition on Promotion__c, Storefront__c, Contact; COUNT Storefront__r.Primary_Contact__r.Email; ObjectPermissions non-profile", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Status__c restricted picklist?; email folders; existing promo end date; name collisions for template/flow", "command_summary": "Tooling CustomField.Metadata by Id; Folder Type Email; Promotion__c End_Date__c; EmailTemplate and FlowDefinitionView LIKE Promotion counts (one CustomNotificationType query failed on bad column, not retried)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 15, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 9, "question": "Which promotions should get the heads-up? Status__c values are Active/Expired/Canceled (unrestricted; Agent actions also write 'Draft'). Options: (a) Active only [recommended], (b) any status except Canceled/Expired, (c) all promotions with an end date.", "simulated_answer": "Active only; scheduled path 7 days before End Date; email the Storefront's Primary Contact using an email template; one email per promo."},
+    {"seq": 10, "question": "Should contacts with Email Opt Out (Contact.HasOptedOutOfEmail) be skipped? Options: (a) skip opted-out contacts [recommended], (b) send anyway as an operational notice.", "simulated_answer": "No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 2, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 5 says to predict the answer and skip questions with safe defaults; the opt-out question was predictably 'no preference' but Rule 4 (drop unstated scope filters) and compliance pull opposite ways, so it is unclear whether an opt-out filter is an intent question or an implementation default.",
+    "The R split rule ('a split sends both halves, which together count as one retry') does not say how to log the two halves in run.json kinds; logged both as 'retry'.",
+    "After three wrong AskCoworker claims (scheduled path cannot be offset before a date field, undelete fires flows, Agentforce_Reference_App grant), the skill requires verifying every kept fact, but platform-behavior claims cannot be queried; the skill could say explicitly that these fall back to 'assumption (documented platform behavior)'.",
+    "No guidance for the recurring 'already meets entry criteria' backfill problem with 'only when updated to meet condition' scheduled paths; the data-step rule covers it only generically.",
+    "Spec-format module rules cover reports/dashboards folders but not email template folders; chose unfiled$public since no email folders exist, but the rule about named folders for shared reports might be read as applying."
+  ]
+}

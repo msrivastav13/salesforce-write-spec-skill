@@ -1,0 +1,34 @@
+{
+ "id": "r093",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 3,
+  "implementation": 0,
+  "missing_intent": 1
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 1,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Converting Payment_Methods__c.Contact__c from Master-Detail to Lookup changes Contact deletion for every user (cascade delete becomes Restrict). This effect on other users was decided as an assumption with a recommended default, not asked. It is recorded as a blocking Open item.",
+   "skill_gap": "None. SKILL.md step 5 does not say whether a structural consequence of a user decision that affects other users needs a follow-up question (the run's skill_friction notes this)."
+  },
+  {
+   "defect": "The claim that Shield cannot encrypt picklist or checkbox fields drives which fields get encrypted. It is labelled documented behavior and handed to a sandbox check, but it cannot be verified with the allowed commands.",
+   "skill_gap": "None. org-verification.md gives no guidance for load-bearing platform-capability claims that no query can check."
+  }
+ ]
+}

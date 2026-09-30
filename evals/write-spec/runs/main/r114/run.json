@@ -1,0 +1,41 @@
+{
+  "id": "r114",
+  "skill_rev": "v34",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r114/menu-item-available-price-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 4, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55},
+    {"seq": 14, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"seq": 15, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 56},
+    {"seq": 17, "kind": "t", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 72},
+    {"seq": 18, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 19}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable; context", "command_summary": "sf org display (connectedStatus, alias, id, apiVersion only)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "full custom object list; menu objects exist", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "DurableIds of Menu_Item__c and Menu__c, unmanaged", "command_summary": "Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "field types, defaults, nillability of Available__c and Price__c", "command_summary": "sf sobject describe Menu_Item__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "complete custom field list and descriptions", "command_summary": "Tooling CustomField WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "existing validation rules (AskCoworker said not queryable)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId -> 0", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "triggers, record-triggered flows, workflow rules on Menu_Item__c", "command_summary": "Tooling ApexTrigger, FlowDefinitionView, Tooling WorkflowRule -> all 0", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "readers/writers of object, Price__c, Available__c", "command_summary": "Tooling MetadataComponentDependency x3", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "data shape: existing violations", "command_summary": "5 COUNT() queries on Menu_Item__c -> 206 total, 206 available, 0 blank/<=0 price", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Apex writers, test classes, catch/savepoint behavior, itemsJson description", "command_summary": "Tooling ApexClass bodies (unmanaged), searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "agent actions invoking writer classes; GenAiFunction metadata", "command_summary": "Tooling ApexClass Ids, GenAiFunctionDefinition list and Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13.5, "purpose": "edit grants on Price__c/Available__c; currency", "command_summary": "FieldPermissions; CurrencyType (failed: single-currency org)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream -> 0", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 1, "update": 2, "delete": 0},
+  "skill_friction": [
+    "Design rule 'when the change makes existing descriptions or instructions false, updating them is part of the inventory' forced an ApexClass Update for a description-only string (itemsJson 'Only name is required per item'); in an org with no test classes this adds deployment coverage risk for a cosmetic change. The skill does not say whether description drift in an Apex @InvocableVariable warrants an Apex deploy versus a proposal.",
+    "GenAiFunction input schema (where agent-facing input descriptions are copied) cannot be read with the allowed commands, so the GenAiFunction row can only be Conditional; the skill has no guidance for this specific unreadable-schema case.",
+    "The 'two wrong AskCoworker claims' counter is ambiguous about what counts: D1/D2's 'validation rules are not SOQL-queryable' (same claim twice) and I's over-broad Apex guard proposal were counted as two; T's wrong claims (GenAiFunction may not exist, existing test class) arrived after the threshold.",
+    "No guidance on an existing non-atomic writer (insert parent then children, catch without Savepoint) whose partial-commit behavior becomes more frequent because of the new rule; treated as a proposal per 'defect the requirement does not depend on'.",
+    "run.json seq numbers are integers, but an extra org query inserted between steps needed a fractional seq (13.5)."
+  ]
+}

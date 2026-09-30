@@ -1,0 +1,30 @@
+{
+ "id": "r102",
+ "claims": {
+  "correct": 1,
+  "wrong": 0,
+  "unverifiable": 5
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 1,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "The dashboard is designed as LoggedInUser (dynamic) based on an unverified Developer Edition limit of 3 dynamic dashboards. Only 2 users hold field Read, so most internal viewers the folders are shared with will see empty components. Both points are recorded as open decisions, not resolved.",
+   "skill_gap": "None exists."
+  }
+ ]
+}

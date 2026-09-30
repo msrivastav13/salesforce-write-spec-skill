@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Block a second refund for the same transaction unless the combined refund amount stays within the original transaction amount. Show a clear error to the agent."
+}

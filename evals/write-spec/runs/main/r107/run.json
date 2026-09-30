@@ -1,0 +1,41 @@
+{
+  "id": "r107",
+  "skill_rev": "v33",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r107/refund-manager-approval-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 43},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"seq": 18, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 60}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Refund__c fields, picklist values, restriction, record types", "command_summary": "sf sobject describe Refund__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 4, "purpose": "Refund__c DurableId and namespace", "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName='Refund__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Existing automation on Refund__c (validation rules, approval processes, triggers, workflow rules, record-triggered flows) and complete custom field list", "command_summary": "Tooling ValidationRule/ApexTrigger/WorkflowRule/CustomField; ProcessDefinition (object and org-wide); FlowDefinitionView by trigger object and trigger type", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Writers/readers of Refund__c, Status__c, Amount__c; flow status; record count; org type; managers set", "command_summary": "MetadataComponentDependency by object and field Ids; FlowDefinitionView by ApiName; Refund__c GROUP BY Status__c; Organization; User ManagerId counts", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Organization DefaultCurrencyIsoCode (failed: single-currency org)", "command_summary": "SELECT OrganizationType, IsSandbox, DefaultCurrencyIsoCode FROM Organization", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "What status the writers set; flow inputs/outputs; Apex body of writers and tests", "command_summary": "Tooling Flow.Metadata for 3 active versions; Tooling ApexClass Body for IssueRefundReceiptAction, IssueGiftCardAction, IssueRefundReceiptActionTest", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "Flow descriptions, decisions, messages; Apex class header", "command_summary": "local parse of Flow.Metadata and Apex body", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Agent actions, roles, users/managers, queues, approval-like fields, Status__c FLS and Refund__c object permissions", "command_summary": "Tooling GenAiFunctionDefinition; UserRole count; User; Group Queue; Tooling CustomField LIKE Approv/Manager; FieldPermissions; ObjectPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Callers of flows/Apex, layouts and FlexiPages on Refund__c", "command_summary": "GenAiFunctionDefinition flow targets; FlowDefinition Ids; MetadataComponentDependency by name (failed) and by class Id; Layout; FlexiPage", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Callers of Issue_Refund / Apply_Remediation by Id", "command_summary": "MetadataComponentDependency WHERE RefMetadataComponentId in flow definition/version Ids; ApexClass LIKE Refund/Remediation", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Absence check: other Apex/trigger writers of Refund__c", "command_summary": "Tooling ApexClass and ApexTrigger bodies (unmanaged) searched locally for Refund__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 14, "purpose": "OWD of Refund__c; agent topic links/instructions for refund actions", "command_summary": "EntityDefinition sharing model; GenAiPluginInstructionDef; GenAiPluginFunctionDef (first attempt wrong column)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Describe GenAi link tables for column names", "command_summary": "sf sobject describe GenAiPluginInstructionDef / GenAiPluginFunctionDef --use-tooling-api", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Whether Issue_Refund_Receipt is linked to any topic or planner", "command_summary": "GenAiPluginFunctionDef WHERE Function=<id>; GenAiPlannerFunctionDef WHERE Plugin=<id>", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 17, "question": "Q1 Who is the approving manager? Options: (a) the submitter's manager via User.ManagerId (0 of 4 active users have one set today); (b) manager by role hierarchy (18 roles, no active users assigned); (c) a named user or queue. Recommended: (a). Q2 When the manager rejects, what status should the refund get? Options: Cancelled, Failed, stay Pending. Recommended: Cancelled. Q3 Issue_Refund, Apply_Remediation and IssueRefundReceiptAction (agent action Issue_Refund_Receipt) create refunds directly as Approved. For amounts over $500 should they (a) create as Pending and auto-submit for approval, (b) fail with an error, or (c) be exempt? Recommended: (a).", "simulated_answer": "Q1: the submitter's manager approves (a). Q2: reject -> Cancelled. Q3: No preference; use your recommended default. (Also: block manual status change past Pending without approval.)"}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 14, "create": 8, "update": 6, "delete": 0},
+  "skill_friction": [
+    "Four wrong AskCoworker claims (Status__c 'unrestricted' picklist; approval processes and validation rules 'not SOQL-queryable'; flows 'cannot submit approvals natively'; flow bodies 'not readable') triggered the after-four rule, so R and T were skipped. The skill does not say whether 'claims about what cannot be queried' in D1 and D2 that repeat the same point count once or twice; I counted the duplicated not-queryable claim once.",
+    "Step 5 lists 'a change that alters behavior for other callers' as an ask, but the requirement's 'Any refund' arguably asks for it; it is unclear whether the writer-behavior question should be asked or decided. I asked, and the simulated user had no preference.",
+    "Rule 'Declarative-only changes get manual checks, not new Apex test classes' vs. the approval-process/validation-rule/flow behaviors: I folded their Apex DML tests into the existing test class being updated anyway; the skill does not say whether that is preferred.",
+    "org-verification.md has no note on reading Tooling GenAiPluginFunctionDef/GenAiPlannerFunctionDef column names (PluginId/Function, PlannerId/Plugin); I had to describe them after a failed query.",
+    "The eval note asked for scratch files under {out}/.tmp/ while org-verification.md says design/.tmp/; followed the eval note and deleted it afterwards."
+  ]
+}

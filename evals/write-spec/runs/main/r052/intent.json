@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Before-save flow on Gift Certificate: Remaining = 0 -> Fully Redeemed; 0 < Remaining < Original -> Partially Redeemed; never override Cancelled/Expired/Draft."
+}

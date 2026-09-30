@@ -1,0 +1,10 @@
+{
+ "id": "r099",
+ "category": "nonexistent-concept",
+ "requirement": "Restaurants should be able to run happy-hour pricing on specific menu items during certain hours.",
+ "hidden_intent": "Time-windowed price overrides per item: new 'Menu Item Price Rule' object (item, price, days, start/end time).",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Promotion__c is storefront-level % with dates only \u2014 not per-item/time-of-day; propose Create or extend and ask."
+ }
+}

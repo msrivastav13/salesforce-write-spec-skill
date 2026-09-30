@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Nightly: Menu Items where Price is null and Available = true -> Available = false."
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r077",
+ "category": "ui",
+ "requirement": "Build a 'Refund timeline' on the case page that shows each refund for the case and its status as a progress path.",
+ "hidden_intent": "LWC on Case page listing Refunds for the Case with a path each (Pending->Approved->Processing->Completed; Failed/Cancelled terminal).",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Refund__c.Case__c lookup; Status__c values; handle Failed/Cancelled branch."
+ }
+}

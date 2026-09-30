@@ -1,0 +1,10 @@
+{
+ "id": "r047",
+ "category": "deletion-refactor",
+ "requirement": "We have the same 'cuisine' picklist on Storefront, Account, Lead and Contact. Consolidate into one global value set.",
+ "hidden_intent": "Global value set 'Cuisine' used by Storefront Cuisine, Account Cuisine Type, Lead Cuisine Type, Contact Favorite Cuisine; values = union.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Four local picklists with overlapping values; converting local->global needs migration; preserve data and handle value differences."
+ }
+}

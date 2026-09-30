@@ -1,0 +1,46 @@
+{
+  "id": "r004",
+  "skill_rev": "v5",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r004/merchant-case-management-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 14, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 44},
+    {"seq": 16, "kind": "rt", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 17, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"seq": 19, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 38}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Org reachable, API version", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Case/Storefront__c/Account exist; Case custom fields Storefront__c, Business_Account__c; Storefront__c.Account__c", "command_summary": "Tooling EntityDefinition; FieldDefinition for Case custom fields and Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No existing triggers/record-triggered flows/validation rules; queues and QueueSobject", "command_summary": "Tooling ApexTrigger; FlowDefinitionView by trigger object and full list; Tooling ValidationRule; Group Type=Queue; QueueSobject", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Merchant case identification, assignment rules, entitlement process, business hours, existing LWC, Storefront FlexiPage", "command_summary": "FlowDefinitionView record/scheduled triggers; RecordType; AssignmentRule; SlaProcess; BusinessHours; Tooling LightningComponentBundle; Tooling FlexiPage", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "Case picklists (Type/Status), data shape, milestones, entitlements, escalation rules", "command_summary": "sobject describe Case; COUNT by Type; COUNT Storefront/Business_Account nulls; MilestoneType; Entitlement COUNT; Tooling EscalationRule (failed: not supported)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Whether Route_Merchant_to_Queue / Route_to_Merchant_Support_Agent route Cases; Escalate_Case behavior", "command_summary": "Tooling FlowDefinition ActiveVersionId; Tooling Flow.Metadata for 3 flows", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "Field Ids; Storefront Account__c population; Apex readers/writers of Storefront__c/Business_Account__c", "command_summary": "Tooling CustomField; COUNT Storefront__c Account__c null; Tooling ApexClass bodies scanned locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Dependencies on Case fields; FLS on Case.Storefront__c/Business_Account__c; Merchant Operations case count", "command_summary": "Tooling MetadataComponentDependency by field Id; FieldPermissions; COUNT Type='Merchant Operations'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 11, "purpose": "Automation on EmailMessage/CaseComment; child relationship name; Escalate_Case assignments; other Merchant groups", "command_summary": "Tooling ApexTrigger; FlowDefinitionView; sobject describe Storefront__c childRelationships; Flow.Metadata; Group LIKE Merchant", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Is Merchant_Support a queue; queue members; service channels", "command_summary": "Group by DeveloperName; GroupMember COUNT; ServiceChannel", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Existing Case creators that could violate the new validation rule", "command_summary": "Flow.Metadata Route_Merchant_to_Queue recordCreates; ApexClass bodies AgentCaseCreateActions etc.; FlowDefinitionView managed case-creation flows", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Case OWD for LWC exposure; Data 360 streams", "command_summary": "Organization DefaultCaseAccess; DataStream COUNT", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "Case.Type FLS for Agentforce_Reference_App (AskCoworker OD-2)", "command_summary": "FieldPermissions Field='Case.Type'", "ok": true, "contradicted_askcoworker": true}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "Before I build the inventory, three choices change what gets built: (1) What identifies a 'merchant case'? Options: (a) Case.Type = 'Merchant Operations' (picklist value exists, 0 cases today; no Case record types), (b) any case with Storefront__c set, (c) cases whose Business_Account__c is a Partner_Account record type. (2) Which queue? (a) create a new Case queue 'Merchant Support Queue' (no Case-enabled queue exists; Merchant_Messaging_Queue serves MessagingSession only), or (b) add Case to Merchant_Messaging_Queue. (3) What counts as a 'response' that stops the 2-hour escalation? (a) first outbound agent email or case comment, (b) status change away from New, (c) owner accepting the case. Also confirm all parts of the request (link, auto-fill, route, escalate, LWC) are in scope.", "simulated_answer": "All five parts are in scope. 'Response' = first agent email or comment. Merchant case definition and queue: No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 7, "create": 6, "update": 1, "delete": 0},
+  "skill_friction": [
+    "The askcoworker-calls.md note says R and T can be combined for eight changes or fewer at 500 words; the combined call for a 7-change inventory timed out at ~61s, and the retry had to split R and T. The combined option seems unreliable.",
+    "Rule 3 says reject proposals that contradict documented Salesforce behavior, but provides no allowed way to check documentation; two AskCoworker claims (scheduled paths fire at fixed clock times and cannot be cancelled; before-save flows cannot use Get Records) were rejected based on model knowledge only. The skill does not say how to tag such a rejection.",
+    "org-verification.md implies MetadataComponentDependency finds readers of a field, but it returned 0 rows for Case.Storefront__c and Case.Business_Account__c even though Apex bodies reference them; absence checks must use Apex body scans too, which the guidance could state explicitly.",
+    "Assignment rule entries and escalation rules cannot be read with the allowed commands (Tooling EscalationRule unsupported); the skill has no guidance for automation that can override a proposed change but cannot be inspected.",
+    "Module guidance ('known force-app path or Not specified') is ambiguous when the force-app/main/default subdirectories exist but are empty and the needed subdirectory (flows) does not exist.",
+    "AskCoworker repeatedly tagged facts as 'Verified: prior session' (e.g. DataStreamDefinition = 0) despite the ignore-earlier-conversations header; each needed re-verification, adding query overhead.",
+    "Step 5 lets the scope message carry up to 3 questions, but the simulated user's intent covered only one of the three forks, so two answers fell back to defaults; fine per RUNNER, but the skill does not say whether defaults chosen after a 'no preference' answer are tagged user decision or assumption.",
+    "Runner error on my side: in the I call I tagged '2 calendar hours' as a user decision although it was a default; corrected in the spec (Section 8 item 6 marks it an assumption)."
+  ]
+}

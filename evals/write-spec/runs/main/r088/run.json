@@ -1,0 +1,46 @@
+{
+  "id": "r088",
+  "skill_rev": "v29",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r088/storefront-weekly-hours-editor-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 61},
+    {"seq": 10, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55},
+    {"seq": 15, "kind": "i", "error": false, "timed_out": false, "end_marker": false, "resumed_fragment": false, "seconds": 50},
+    {"seq": 16, "kind": "followup", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 12},
+    {"seq": 18, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 19, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 22},
+    {"seq": 21, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 23, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 44}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "context and full custom object list", "command_summary": "sf org display (filtered); sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "D1 field types, picklist values, master-detail on Storefront_Hours_of_Operation__c; object descriptions", "command_summary": "sobject describe Storefront_Hours_of_Operation__c; Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "complete custom field list on both objects; org-wide same-concept search (Hour/Open/Clos/Day)", "command_summary": "Tooling CustomField by TableEnumOrId and by DeveloperName LIKE", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "existing automation and UI: triggers, validation rules, record-triggered and screen flows, LWC, Aura, FlexiPages", "command_summary": "Tooling ApexTrigger, ValidationRule, LightningComponentBundle, AuraDefinitionBundle, FlexiPage; FlowDefinitionView", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "every reader/writer of the hours object (Apex bodies, dependencies) and data shape per storefront/day", "command_summary": "Tooling ApexClass bodies (unmanaged) searched locally; MetadataComponentDependency on object and field Ids; aggregate COUNT by Storefront__c and Day_of_Week__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "AgentUpdateStorefrontHoursActions body (singleton claim) and stored time format", "command_summary": "ApexClass body read; GROUP BY Opening_Time__c, Closing_Time__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "object/field permissions on hours object; agent actions targeting the class; Experience sites; org type", "command_summary": "ObjectPermissions, FieldPermissions, Tooling GenAiFunctionDefinition by InvocationTarget, Network, Organization, ApexClass name search", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "who the merchant users could be; storefrontSelector dependencies", "command_summary": "User COUNT by license; MetadataComponentDependency for storefrontSelector", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "D1 claims: Name auto-number and child relationship name Storefronts__r", "command_summary": "sobject describe Storefront_Hours_of_Operation__c Name; describe Storefront__c childRelationships", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "D2 claims: sfdc_accelerate_dms namespaced; Storefront__c object permissions", "command_summary": "PermissionSet NamespacePrefix/Type/License; ObjectPermissions on Storefront__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 13, "purpose": "which topics/agents use Update_Storefront_Hours actions", "command_summary": "Tooling GenAiPluginFunctionDef (one failed attempt with wrong column, one retry), GenAiPluginDefinition, BotDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "planned new names do not already exist; recheck agent class before relying on it", "command_summary": "PermissionSet, ApexClass, LightningComponentBundle name LIKE; ApexClass by name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "R claim that Data Cloud ingests the hours object", "command_summary": "SELECT Name FROM DataStream (0 rows)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 22, "purpose": "R claim on sharing models", "command_summary": "EntityDefinition InternalSharingModel/ExternalSharingModel", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 14, "question": "Where should merchants use the weekly-hours editor? Options: (a) a component on the Storefront record page (Storefront_Record_Page exists; only 1 Salesforce-licensed user today); (b) inside the Merchant Support agent conversation, as a custom editor like storefrontSelector over the existing single-day Update_Storefront_Hours action; (c) the Merchant Support Experience site (status UnderConstruction). Evidence: hours are edited today only one day at a time through AgentUpdateStorefrontHoursActions via five agent actions. Recommendation: (a) record page LWC with one all-or-nothing save.", "simulated_answer": "LWC on Storefront page: 7-row editable grid backed by Storefront Hours of Operation records; creates missing days; saves all at once."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 5, "create": 4, "update": 1, "delete": 0},
+  "skill_friction": [
+    "I call returned the full table and alternatives but omitted the 'Sections included' line and end marker and appended chatter; the table says 'No end marker -> send one follow-up for the missing parts', but nothing substantive was missing, so the follow-up was spent only to satisfy the rule. A rule for 'content complete, marker missing' would save a call.",
+    "Wrong-claim counting is ambiguous: an AskCoworker inventory row based on 'FLS unknown' (Update Agentforce_Reference_App) and a minor wrong permission detail (R+C+E vs R+C+E+D) - unclear whether these count toward the 'two wrong claims' threshold that forces verifying every kept fact.",
+    "R split: the skill says a split sends both halves and counts as one retry, but run.json kinds have no way to mark the two halves as one retry; recorded as two 'retry' entries.",
+    "Persona ambiguity ('merchants' with 1 Salesforce-licensed user and an agent-based merchant channel) required a question; the skill's 'which platform, channel, persona' bullet covered it, but gives no guidance on permission set assignment when the target users do not exist in the org (made it blocking for delivery).",
+    "FlexiPage activation is unreadable; spec-format only says the Dynamic Forms field placement becomes Conditional. Applied the same rule to an LWC placement, but the rule is written only for fields."
+  ]
+}

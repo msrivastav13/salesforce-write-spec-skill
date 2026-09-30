@@ -1,0 +1,10 @@
+{
+ "id": "r070",
+ "category": "new-automation",
+ "requirement": "Roll up total refunded amount to each storefront so we can see which restaurants are costing us money.",
+ "hidden_intent": "Sum of Refund Amount where Status = Completed per Storefront, shown on storefront as a new field.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Refund__c.Storefront__c is a lookup -> no native roll-up; flow/trigger recompute (insert/update/delete/reparent); filter Completed; new currency field on Storefront__c."
+ }
+}

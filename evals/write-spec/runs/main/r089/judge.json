@@ -1,0 +1,30 @@
+{
+ "id": "r089",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 1,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Asked about null Expiration_Date__c handling although the field description gave a clear safe default (never expire); the run itself flagged it as borderline. It is a business-policy question, so it is counted as intent and not penalised.",
+   "skill_gap": "Step 5 predict-first guidance exists but does not say whether a business-term question with a safe, reversible, evidence-backed default should be asked."
+  }
+ ]
+}

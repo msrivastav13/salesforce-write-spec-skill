@@ -1,0 +1,10 @@
+{
+ "id": "r044",
+ "category": "new-automation",
+ "requirement": "Contacts' lifetime orders and lifetime value fields are always stale. Fix it.",
+ "hidden_intent": "Recompute Contact Lifetime Orders/Value from order data nightly. They aren't sure where order data lives; the app used to write these fields via integration and stopped.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Lifetime_Orders__c/Lifetime_Value__c exist as plain numbers; order data source is unclear (Transaction__c has no fields) \u2014 must ask; don't create duplicate fields."
+ }
+}

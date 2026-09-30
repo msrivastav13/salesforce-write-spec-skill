@@ -1,0 +1,10 @@
+{"id": "p02", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0},
+ "wrong_claims": ["Section 2: 'Object access on Transaction__c: only sfdc_accelerate_dms' (labelled verified by org query). ObjectPermissions shows sfdc_a360_sfcrm_data_extract and sfdc_slack also have Read on Transaction__c."],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 1, "reuse": 2, "scope_behavior": 2, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The inventory matches the hidden intent (a per-transaction cap at Total_Amount__c, a clear error, enforced in one trigger plus a pre-callout check). It does not stop duplicate agent refunds on its own, though. Transaction__c has 0 records, no order number, and no path gives the agent a Transaction__c Id, and the lookup is optional. The spec itself lists this as blocking Open decision 1 and defers it to another spec, so the stated problem stays unsolved until that spec exists.", "skill_gap": "None exists: SKILL.md has no rule to check that the inventory delivers the requirement end to end, or to flag a spec whose core enforcement depends on out-of-scope data."},
+  {"defect": "Wrong permission fact labelled 'verified by org query': it says only sfdc_accelerate_dms has object access on Transaction__c, but two other permission sets have Read.", "skill_gap": "SKILL.md's provenance labelling rule exists, but nothing requires restating query results exactly (for example, separating Create from Read) before labelling them verified."},
+  {"defect": "Row 5 (Update GenAiFunction Issue_Refund_Receipt) is a conditional change on an unverified input schema. It was never checked, although the bundle could be inspected with a read-only query.", "skill_gap": "None exists: the skill allows conditional rows but does not require exhausting read-only checks before adding one."},
+  {"defect": "Runner hygiene: the run read meta.json (including hidden_intent) from the run directory, so the run is not strictly blind. It was disclosed in skill_friction.", "skill_gap": "RUNNER.md or runner setup issue, not SKILL.md: meta.json should not be placed in the run directory."}
+ ]}

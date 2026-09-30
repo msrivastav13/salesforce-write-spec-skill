@@ -1,0 +1,43 @@
+{
+  "id": "r065",
+  "skill_rev": "v24",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r065/refund-overhaul-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 52},
+    {"seq": 16, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48},
+    {"seq": 17, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 57},
+    {"seq": 19, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "org reachable, target org", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "scan custom objects for refund/order/transaction concepts", "command_summary": "sf sobject list --sobject custom; EntityDefinition DurableId for Refund__c, Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Refund__c field list, types, picklist values, defaults", "command_summary": "Tooling CustomField by TableEnumOrId; sobject describe Refund__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "existing automation and data shape on Refund__c; email templates; OWEA; org type", "command_summary": "Tooling ApexTrigger, ValidationRule; FlowDefinitionView by trigger object; Refund__c GROUP BY Status__c; EmailTemplate LIKE Refund/Receipt; OrgWideEmailAddress; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Apex readers/writers of Refund__c and Order", "command_summary": "Tooling ApexClass bodies (non-namespaced) searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Transaction__c as possible original-order source", "command_summary": "sobject describe Transaction__c (fields hidden by FLS)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "all dependents of Refund__c and its fields; remediation flows; agent action; orders; named credentials", "command_summary": "MetadataComponentDependency on object and Amount/Reason/Status; FlowDefinitionView Remediation; GenAiFunctionDefinition; COUNT Order; NamedCredential; ExternalServiceRegistration", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 10, "purpose": "what Issue_Refund, Apply_Remediation, Validate_Remediation write (Status, Reason)", "command_summary": "Tooling FlowDefinition ActiveVersionId; Flow.Metadata by Id", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 11, "purpose": "Transaction__c fields semantics, standard Refund usage, contacts with email", "command_summary": "Tooling CustomField + Metadata by Id for Transaction__c; EntityDefinition description; COUNT Refund, Transaction__c, Contact with Email", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "existing test assertions on status; approval process; layout; flexipage; object/field permissions", "command_summary": "ApexClass body IssueRefundReceiptActionTest; ProcessDefinition; Tooling Layout, FlexiPage; ObjectPermissions; FieldPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "verify R claim of 0 DataStreams; email folders for template placement", "command_summary": "SELECT COUNT() FROM DataStream; Folder WHERE Type='Email'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "What should 'the original order' be for the over-refund block? Refund__c has no order link; standard Order has 0 records; Transaction__c (Sale/Refund, Total_Amount__c) has 0 records and no link; the agent's order tools say orders live in the external Pronto Orders API (stubbed). Options: A) capture the external order total on the refund at creation (recommended), B) link to Transaction__c Sale records, C) link to standard Order, D) drop the check.", "simulated_answer": "Drop the 'original order' check if there's no order amount."},
+    {"seq": 14, "question": "All three refund creators (Issue_Refund, Apply_Remediation, IssueRefundReceiptAction/agent action) currently create every refund as Approved. For auto-approval: A) refunds over the limit start as Pending for manual approval, overriding these callers (recommended), B) only apply auto-approval to refunds created manually. Also confirm the limit: under $25 or $25 and under?", "simulated_answer": "Auto-approve <= $25. Otherwise no preference; use your recommended default."},
+    {"seq": 15, "question": "How should the receipt be sent? A) email to Refund__c.Contact__c using an email template (recommended), B) another channel (SMS/messaging), C) the existing in-chat receipt card is enough.", "simulated_answer": "Receipt on Completed. No preference on channel; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 5, "create": 4, "update": 1, "delete": 0},
+  "skill_friction": [
+    "Step 5 says to ask only intent questions in one message, but the approval-status-for-over-limit question is both intent (changes behavior of existing agent actions, a listed ask trigger) and arguably implied by the requirement wording; SKILL.md gives no rule for when a requirement's own wording counts as 'the requirement asks for' a shared-caller behavior change.",
+    "Rule 3 says after two wrong AskCoworker claims verify every kept fact, but gives no guidance on counting: AskCoworker's claims about platform behavior (save order, undelete) cannot be verified by query, so it is unclear whether they count toward the two-wrong threshold.",
+    "The simulated answer 'drop the check if there's no order amount' is conditional; SKILL.md's mapping rule covers answers that do not pick an option but not conditional answers whose condition the agent must evaluate from evidence; I tagged the mapping as an assumption.",
+    "spec-format says shared reports/dashboards go in a named folder, not unfiled$public, but is silent on email templates; with 0 email folders, placing a template in unfiled$public vs creating an EmailFolder row was a judgment call.",
+    "sobject describe of Transaction__c returned no custom fields because of FLS, which could have led to wrongly rejecting it as an order source; org-verification.md mentions this for FieldDefinition but the custom-object scan step does not prompt checking Tooling CustomField for every candidate object.",
+    "AskCoworker echoed facts I sent as 'Verified: prior session' and also invented one ('sfdc_accelerate_dms passes Reason__c [Verified: prior session]'); the table's rule treats echoed facts as established, which makes an invented fact labelled the same way easy to accept."
+  ]
+}

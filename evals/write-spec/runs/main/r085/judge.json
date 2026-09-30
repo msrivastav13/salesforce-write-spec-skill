@@ -1,0 +1,9 @@
+{"id": "r085", "claims": {"correct": 5, "wrong": 0, "unverifiable": 1},
+ "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 1},
+ "scores": {"requirement_fit": 1, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Self-contradictory requirement ('required' but 'without a discount for free-delivery offers') was resolved without asking; the run chose a Free_Delivery__c checkbox, whereas the intended design is a Promotion Type picklist (Percentage Discount / Free Delivery) with the discount required only for Percentage Discount.", "skill_gap": "v29 SKILL.md step 5 lists 'a requirement that contradicts itself' as an ask trigger (exists, not followed); the run's friction note shows the reconcile-into-conditional boundary is unclear in v29."},
+  {"defect": "Assumes System Administrator gets Read/Edit on Free_Delivery__c through profile FLS 'in the deployment', but no profile is in the change set and the admin profile has no FLS even on Discount_Percentage__c; no editable permission set gets Edit, so no UI user may be able to set the flag, which undercuts the record page and layout rows.", "skill_gap": "v29 reference/org-verification.md FieldPermissions note ('check profile rows too'); the explicit 'deploying a new field grants no field access to any profile not in the deployment' line is not in v29."}
+ ]}

@@ -1,0 +1,34 @@
+{
+ "id": "r097",
+ "claims": {
+  "correct": 0,
+  "wrong": 0,
+  "unverifiable": 6
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 1,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Grounding could not be spot-checked: the org returned REQUEST_LIMIT_EXCEEDED (TotalRequests) for every query during judging. The six claims checked were Loyalty_Transaction__c fields, the Contact.Pronto_App_Account_Id__c External ID (AskCoworker), the Earn/Order picklist values, writeRequiresMasterRead, the Salesforce Integration license, and the absence of Order_Id__c. None was verified, and no create was confirmed absent. Scores rest on the spec's internal consistency and the eval notes (which confirm Contact.Pronto_App_Account_Id__c exists).",
+   "skill_gap": "None (judge limitation)."
+  },
+  {
+   "defect": "The permission set grants Contact Edit (needed by the master-detail Read/Write setting), which lets the integration user edit standard Contact fields. This is disclosed as a non-blocking risk with a verification case, and no narrower alternative is designed.",
+   "skill_gap": "None."
+  }
+ ]
+}

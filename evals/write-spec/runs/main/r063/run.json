@@ -1,0 +1,39 @@
+{
+  "id": "r063",
+  "skill_rev": "v24",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r063/onboarding-round-robin-assignment-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 79},
+    {"seq": 14, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 80},
+    {"seq": 15, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 78},
+    {"seq": 17, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 59}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Org reachable; custom object list scan for onboarding/assignment concepts", "command_summary": "sf org display; sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Object existence, DurableId, describe fields and picklist", "command_summary": "EntityDefinition; sobject describe Onboarding_Application__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Complete custom field list (AskCoworker said only Status__c exists)", "command_summary": "Tooling CustomField WHERE TableEnumOrId; FieldDefinition with descriptions", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Existing automation: triggers, flows, validation rules on the object", "command_summary": "Tooling ApexTrigger, FlowDefinitionView, Tooling ValidationRule", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Queues, groups, roles representing onboarding team (AskCoworker said roles all null names)", "command_summary": "Group Type IN Queue/Regular; QueueSobject; Group LIKE Onboard; UserRole", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Record count, org type, active users, assignment rules", "command_summary": "COUNT Onboarding_Application__c; Organization; User GROUP BY; AssignmentRule", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Onboarding_Specialist__c metadata and dependencies", "command_summary": "Tooling CustomField.Metadata by Id; MetadataComponentDependency for field/object", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Readers/writers in Apex and flows; reusable round-robin logic", "command_summary": "Tooling ApexClass bodies searched locally; FlowDefinitionView all", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Agent actions, same concept fields elsewhere, access grants, sharing model", "command_summary": "GenAiFunctionDefinition/GenAiPluginDefinition; BotDefinition; CustomField LIKE; ObjectPermissions; FieldPermissions; EntityDefinition sharing", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Region__c.Onboarding_Specialist__c semantics; new-name collisions; triggers framework", "command_summary": "FieldDefinition Region__c; MetadataComponentDependency; CustomObject/ApexClass/Group name checks (one query failed: Region__c field hidden from SOQL)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "Who is the 'onboarding team' whose members should receive the round-robin assignments? No onboarding queue, public group, or role exists in the org. Options: (a) a new queue (for example 'Onboarding Team') whose members you name; (b) an existing queue: Merchant Messaging Queue (MessagingSession) or Unqualified Leads (Lead); (c) a set of named users. Recommendation: (a) a new queue, so membership is managed in Setup.", "simulated_answer": "Round-robin assignment of new Onboarding Applications across members of the Merchant Onboarding queue; skip inactive users."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 6, "create": 6, "update": 0, "delete": 0},
+  "skill_friction": [
+    "The user named a queue ('Merchant Onboarding') that does not exist; SKILL.md has no explicit rule for a user decision that names a non-existent component (treated it as a Create with placeholder members, blocking for delivery).",
+    "Assignment target fork (Onboarding_Specialist__c vs OwnerId) was decided from the field description per step 5; the rule allowing intent questions answered by field descriptions and the 'same-label field' ask trigger can point in opposite directions.",
+    "The '2 wrong AskCoworker claims -> verify every fact' rule fired after D2; AskCoworker then claimed the verified Onboarding_Specialist__c field was absent even though it was sent as established in the I call header (it said 'prior session'), showing the memory/echo rule does not prevent contradiction of sent facts.",
+    "Custom setting FOR UPDATE and before-insert FLS behavior are load-bearing platform assumptions that no allowed query can test; spec-format asks for a verification case, which only a post-deploy test can satisfy."
+  ]
+}

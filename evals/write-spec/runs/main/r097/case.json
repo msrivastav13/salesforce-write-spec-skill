@@ -1,0 +1,4 @@
+{
+ "id": "r097",
+ "requirement": "When the app sends us an order, create loyalty points for the customer. The app will call Salesforce."
+}

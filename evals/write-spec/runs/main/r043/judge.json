@@ -1,0 +1,8 @@
+{"id": "r043", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 3, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The planned FlowTest asserts that the Get Records queue lookup returns a record and depends on a per-org placeholder Storefront__c ID (TEST_STOREFRONT_ID). It does not assert the behavior that matters, which is that a Case is created with the right owner, links, and subject. An after-save FlowTest cannot observe a related-record Create, so the row adds little coverage.", "skill_gap": "None exists: spec-format does not say what a FlowTest can assert for an after-save flow whose only effect is creating a related record."},
+  {"defect": "Section 6 says '80 permission sets and profiles already grant Read on Case (partial list; not all rows name their parent)'. That count is vague and cannot be acted on.", "skill_gap": "None exists: the skill does not say how to summarize large ObjectPermissions result sets."}
+ ]}

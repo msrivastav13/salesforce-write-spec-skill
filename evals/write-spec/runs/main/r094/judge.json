@@ -1,0 +1,30 @@
+{
+ "id": "r094",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 2,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "The whole design rests on the documented-behavior assumption that roll-up recalculation from a Review__c save runs the record-triggered flows on Storefront__c. The eval notes disagree and expect the trigger on Review__c or a scheduled job. The assumption is labelled, and the Apex DML tests would catch a failure, but the spec gives no fallback if the parent flow does not fire.",
+   "skill_gap": "None. design-rules has no rule on where to place automation driven by roll-up or formula values (the run's skill_friction proposes one)."
+  }
+ ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "r115",
+  "skill_rev": "v34",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r115/storefront-health-inspection-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"seq": 10, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50},
+    {"seq": 15, "kind": "i", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 16, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48},
+    {"seq": 17, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 18, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 19, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 16},
+    {"seq": 20, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 23}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Scan full custom object list for an inspection object", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Storefront__c fields, Status__c picklist values (Suspended exists), child relationships", "command_summary": "sf sobject describe Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "DurableId, org-wide concept field search, triggers, record-triggered flows, status distribution, org type", "command_summary": "EntityDefinition; Tooling CustomField LIKE Inspect/Health/Grade/Suspen; Tooling ApexTrigger; FlowDefinitionView; Storefront__c GROUP BY Status__c; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Unmanaged concept fields, complete Storefront__c custom fields, validation rules, workflow, approvals", "command_summary": "Tooling CustomField NamespacePrefix=null; CustomField by TableEnumOrId; ValidationRule; WorkflowRule; ProcessDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Readers and writers of Storefront__c and Status__c", "command_summary": "Tooling MetadataComponentDependency on Status__c field and object; ApexClass bodies search; active unmanaged FlowDefinitionView", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Which Apex writes Status__c and sharing modes", "command_summary": "Tooling ApexClass Body for AgentUpdateStorefrontDetailsActions, StorefrontPickerController, MerchantRiskScoreAction", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Access grants, layouts, record page, tab, duplicate rules", "command_summary": "ObjectPermissions/FieldPermissions Storefront__c; Tooling Layout, FlexiPage; TabDefinition; DuplicateRule", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Standard/other objects meaning inspection", "command_summary": "sf sobject list --sobject all filtered by keyword", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Verify AskCoworker View All/Modify All and OWD claims; flow version ids", "command_summary": "ObjectPermissions ViewAll/ModifyAll; EntityDefinition sharing model; Tooling FlowDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Test AskCoworker claim that flow bodies are unreadable; confirm watchlist is read-only", "command_summary": "Tooling Flow.Metadata for Get_Partner_Quality_Watchlist and Apply_Remediation", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 14, "purpose": "Storefront owner type for Task; record page related list components; project source folders", "command_summary": "Storefront__c GROUP BY Owner.Type; Tooling FlexiPage.Metadata; ls force-app", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "Data 360 claim (AskCoworker prior session) and absence of new components", "command_summary": "SELECT COUNT() FROM DataStream; Tooling CustomObject Health_Inspection; FlowDefinitionView; PermissionSet name", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "What counts as a failing grade that should suspend a storefront? Options: (a) a grade picklist such as A, B, C, Fail where Fail suspends (recommended; no grade field exists in the org today); (b) a numeric score threshold, e.g. score below 70 suspends (please give the number); (c) a letter scale A-F where F suspends. Evidence: the org has no inspection object, grade, or score field; Storefront__c.Status__c already has the value Suspended.", "simulated_answer": "Grade A/B/C/Fail; Fail sets the storefront to Suspended."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 11, "create": 9, "update": 2, "delete": 0},
+  "skill_friction": [
+    "AskCoworker's wrong claims were mostly platform claims (validation rules and flow bodies 'not queryable', workflow master-detail limit, Task object permissions); the 2-wrong/4-wrong thresholds counted these the same as fact errors, and after 4 it was unclear whether skipping T after R had already run was the intent (I skipped T).",
+    "Split-retry accounting: a split sends two calls but counts as one retry; run.json has no kind to distinguish the two halves, so both were recorded as 'retry'.",
+    "Design rule 'include a notification to the record owner when a change leaves records needing human follow-up' conflicts in spirit with 'drop behavior nobody asked for'; it is unclear whether a suspension qualifies. I included a Task.",
+    "Master-detail sharing setting (writeRequiresMasterRead) and required-ness of fields on a brand-new object with no writers are not covered by the 'data shape' rule; decided as assumptions.",
+    "The R/T template says to split R into runtime and security halves only for more than 6 changes; with 11 changes the first combined R call should have been split up front, which I missed and cost a timeout."
+  ]
+}

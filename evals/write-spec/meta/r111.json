@@ -1,0 +1,10 @@
+{
+ "id": "r111",
+ "category": "vague",
+ "requirement": "Fix onboarding.",
+ "hidden_intent": "Onboarding apps get lost; applications in Submitted > 3 days should notify the onboarding manager.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "No problem statement; must ask."
+ }
+}

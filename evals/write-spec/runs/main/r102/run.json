@@ -1,0 +1,157 @@
+{
+  "id": "r102",
+  "skill_rev": "v32",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r102/storefront-reporting-dashboard-spec.md",
+  "askcoworker_calls": [
+    {
+      "seq": 6,
+      "kind": "d1",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 68
+    },
+    {
+      "seq": 7,
+      "kind": "d2",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 53
+    },
+    {
+      "seq": 13,
+      "kind": "i",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 59
+    },
+    {
+      "seq": 14,
+      "kind": "r",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 52
+    },
+    {
+      "seq": 16,
+      "kind": "t",
+      "error": true,
+      "timed_out": true,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 64
+    },
+    {
+      "seq": 17,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 81
+    }
+  ],
+  "org_queries": [
+    {
+      "seq": 1,
+      "purpose": "org context and reachability",
+      "command_summary": "sf org display (connectedStatus, alias, id, apiVersion only)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 2,
+      "purpose": "ground clarifying-question options; full custom object scan",
+      "command_summary": "sf sobject list --sobject custom",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 3,
+      "purpose": "existing reports/dashboards; none on storefronts",
+      "command_summary": "SOQL Report/Dashboard names; COUNT Report LIKE Storefront",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 4,
+      "purpose": "Storefront__c fields and child relationships",
+      "command_summary": "sobject describe Storefront__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 8,
+      "purpose": "Refund__c/Review__c fields, picklists, Average_Review_Score__c formula, relationship types",
+      "command_summary": "sobject describe Refund__c, Review__c, Storefront__c",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 9,
+      "purpose": "data shape (storefront status/cuisine, review nulls, refunds last 90 days) and existing folders",
+      "command_summary": "COUNT/GROUP BY on Storefront__c, Review__c, Refund__c; Folder list",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 10,
+      "purpose": "no storefront-related folders/reports/dashboards; object Read grants",
+      "command_summary": "Folder/Report/Dashboard LIKE filters; ObjectPermissions on 3 objects",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 11,
+      "purpose": "profile names, field Read grants, triggers, record-triggered flows, org edition",
+      "command_summary": "PermissionSet Profile.Name; FieldPermissions on 6 fields; Tooling ApexTrigger; FlowDefinitionView; Organization",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 12,
+      "purpose": "AllInternalUsers group, OWD, review status, zero-review storefronts, cuisine distribution",
+      "command_summary": "Group; EntityDefinition sharing models; GROUP BY queries",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 15,
+      "purpose": "dynamic dashboard count, PS assignment counts, active users, Data 360 streams, existing Storefront PS",
+      "command_summary": "Dashboard GROUP BY Type; PermissionSetAssignment; User COUNT; DataStream COUNT; PermissionSet LIKE",
+      "ok": true,
+      "contradicted_askcoworker": false
+    }
+  ],
+  "user_questions": [
+    {
+      "seq": 5,
+      "question": "Entry clarifying question (requirement too vague: no desired outcome). What should 'better reporting on storefronts' show? Options grounded in Storefront__c and its children: (a) storefront portfolio by Status__c / Type__c / Cuisine__c; (b) review performance (Review__c.Rating__c, Average_Review_Score__c, Total_Reviews__c); (c) financial activity (Refund__c, Gift_Certificate__c, Promotion__c); (d) something else. And should it be individual reports or a dashboard? Evidence: no report or dashboard on storefronts exists today. Recommendation: a dashboard combining (a) and (b).",
+      "simulated_answer": "Dashboard: storefronts by status and cuisine, average rating by cuisine, refunds by storefront last 90 days."
+    }
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 6,
+    "create": 6,
+    "update": 0,
+    "delete": 0
+  },
+  "skill_friction": [
+    "Entry check 'too vague to design' does not say whether a vague outcome ('better reporting') with a clear object counts as vague; I treated missing desired outcome as vague and asked.",
+    "Rule 3's 'after two wrong AskCoworker claims, verify every fact you keep' is hard to apply to platform claims (DE dynamic dashboard limit of 3, auto-created 'with' report types for master-detail) that no allowed command can test; these ended up as documented-platform-behavior assumptions without a clear criterion for which are 'documented'.",
+    "Allow Reports is load-bearing for every row but unreadable; skill says record as assumption, and spec-format says a dominant assumption becomes a blocking prerequisite, but it is unclear whether rows should also be marked Conditional: (I did not).",
+    "Report metadata type naming/Module paths for ReportFolder vs Report (folder row path vs report path) is not specified in spec-format beyond 'reports/<Folder>/'.",
+    "Viewer audience (persona) is an ask-worthy intent fork per step 5, but the predicted answer was 'no preference', so it was decided; the skill could say more explicitly how to handle the case where existing grants cover only a few users."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r048",
+ "category": "standard-crm",
+ "requirement": "Auto-close cases that have been in 'Waiting on Customer' for 7 days.",
+ "hidden_intent": "Scheduled: Cases in 'Waiting on Customer' unchanged 7 days -> Closed. They'd accept adding the status value if missing.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Must verify Case Status has such a value (likely not); Close_Case/CloseCase flows exist to reuse."
+ }
+}

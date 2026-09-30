@@ -1,0 +1,10 @@
+{
+ "id": "r005",
+ "category": "vague",
+ "requirement": "add a field",
+ "hidden_intent": "A 'Delivery Radius (miles)' number field on Storefront.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "No object/field/purpose \u2014 must ask."
+ }
+}

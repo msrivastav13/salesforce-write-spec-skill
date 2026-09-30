@@ -1,0 +1,45 @@
+{
+  "id": "r020",
+  "skill_rev": "v16",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r020/storefront-activation-task-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 33},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 45},
+    {"seq": 20, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 36},
+    {"seq": 21, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 24, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Storefront__c fields, Status__c picklist values, Account__c lookup, Task child relationship; full custom object scan", "command_summary": "sf sobject describe Storefront__c; sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "no triggers on Storefront__c/Account/Task/Onboarding_Application__c", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "no record-triggered flows on these objects; name clash check", "command_summary": "FlowDefinitionView by TriggerObjectOrEventId, and full list", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "DurableIds for Storefront__c and Onboarding_Application__c", "command_summary": "Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "BusinessHours configuration for business-day calculation", "command_summary": "SELECT ... FROM BusinessHours", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "holiday calendar exists", "command_summary": "SELECT COUNT() FROM Holiday", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Status__c data distribution", "command_summary": "Storefront__c GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "blank Account__c count", "command_summary": "COUNT() Storefront__c WHERE Account__c = null", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "inactive account owners", "command_summary": "COUNT() Storefront__c WHERE Account__r.Owner.IsActive = false", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "validation rules on Storefront__c/Task/Account", "command_summary": "Tooling ValidationRule by EntityDefinitionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Onboarding_Application__c as alternative activation concept", "command_summary": "sf sobject describe Onboarding_Application__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Task Subject/Status/Priority values, record types", "command_summary": "sf sobject describe Task", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Apex readers/writers of Storefront__c.Status__c, Task creation, BusinessHours usage", "command_summary": "Tooling ApexClass Body (unmanaged), local search", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 17, "purpose": "full custom field list on Storefront__c", "command_summary": "Tooling CustomField WHERE TableEnumOrId = DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "workflow rules on Storefront__c/Account", "command_summary": "Tooling WorkflowRule", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "existing activation-related fields anywhere", "command_summary": "Tooling CustomField DeveloperName LIKE '%Activation%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "who has access to Storefront__c", "command_summary": "ObjectPermissions WHERE SobjectType = 'Storefront__c'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 1, "create": 1, "update": 0, "delete": 0},
+  "skill_friction": [
+    "AskCoworker I proposed a wrong business-day formula (+3 then weekend shift gives wrong dates for Thu/Fri) and R/T made wrong platform claims (record-triggered 'updated to meet condition' not firing on create; Task creatable for inactive owner; orphaned Tasks on delete). SKILL.md says fix from evidence, but these are platform-behavior claims no allowed query can test, so they rest on the author's own documented-behavior knowledge; the skill gives no way to ground such corrections beyond tagging them assumption (documented platform behavior).",
+    "Rule 3 and the response table say facts from a 'prior session' must be verified; AskCoworker labelled nearly every claim '[Verified: prior session]' even for facts I sent in the same message, which makes the echoed-fact exemption hard to apply mechanically.",
+    "Section 7 requires tests from the inventory mapped to behaviors, but for a flow-only design the skill does not say whether a FlowTest component should be in the inventory by default or whether recommended verification is enough; I chose recommended verification and noted Flow Test as a conditional deployment need.",
+    "Org verification guidance has no note on BusinessHours semantics (00:00-00:00 = 24 hours) or Holiday, which mattered for a business-days requirement."
+  ]
+}

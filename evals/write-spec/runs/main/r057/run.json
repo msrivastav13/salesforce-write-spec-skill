@@ -1,0 +1,42 @@
+{
+  "id": "r057",
+  "skill_rev": "v23",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r057/lead-merchant-conversion-mapping-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 51},
+    {"seq": 15, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41},
+    {"seq": 16, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50},
+    {"seq": 18, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 43}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Field types, precision, picklist values and restriction on Lead and Account (D1 claims)", "command_summary": "sf sobject describe Lead, Account", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Complete custom field list and IDs on Lead and Account (FLS-independent)", "command_summary": "Tooling CustomField WHERE TableEnumOrId IN (Lead, Account)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Same concept elsewhere: POS/Cuisine/Location/Storefront fields org-wide; full custom object scan", "command_summary": "Tooling CustomField DeveloperName LIKE filters; sf sobject list custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Resolve object DurableIds; check Storefront__c and Onboarding_Application__c for POS/cuisine fields", "command_summary": "EntityDefinition by DurableId; describe Storefront__c, Onboarding_Application__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Data shape of merchant fields; triggers, record-triggered flows, validation rules on Lead/Account (D2 claims)", "command_summary": "Aggregate Lead/Account counts; Tooling ApexTrigger; FlowDefinitionView; Tooling ValidationRule", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Readers of the merchant fields and the two Lead locations fields", "command_summary": "Tooling MetadataComponentDependency by field Id (15 and 18 char)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Apex readers/writers and convertLead callers; AccountRule hidden body; CreateSalesLead flow ownership", "command_summary": "Tooling ApexClass Body scan; ApexClass Name LIKE; FlowDefinitionView CreateSalesLead", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 10, "purpose": "Value set type (local vs global) and restriction of cuisine/POS fields; existing global value sets", "command_summary": "Tooling CustomField Metadata by Id; Tooling GlobalValueSet", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Labels/precision of locations fields; FLS grants on merchant fields", "command_summary": "Tooling CustomField Metadata by Id; FieldPermissions by Field", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Editability and assignees of permission sets; object permissions", "command_summary": "PermissionSet Name/Namespace/Type; PermissionSetAssignment GROUP BY; ObjectPermissions; User by assignment", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Record pages and layouts for placement (Dynamic Forms check)", "command_summary": "Tooling FlexiPage and Layout for Account, Lead", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Data 360 streams; new test class name free; converted lead status", "command_summary": "SELECT COUNT() FROM DataStream; Tooling ApexClass by name; LeadStatus", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 14, "question": "Which fields should 'locations' map between? (A, recommended) Lead.Number_of_Locations__c Number(5,0), the merchant field created with Cuisine/POS -> Account.NumberofLocations__c (widened to 5 digits); (B) Lead.NumberofLocations__c Number(3,0), the sample field on the Lead Sales/Marketing layouts -> Account.NumberofLocations__c; (C) either Lead field -> Account.Total_Storefronts__c Number(18,0). Evidence: both Lead fields are labelled 'Number of Locations' and hold no data on any of the 5 Leads.", "simulated_answer": "Number of Locations -> Account NumberofLocations."}
+  ],
+  "validator_first_pass_ok": false,
+  "validator_attempts": 2,
+  "counts": {"total": 8, "create": 3, "update": 5, "delete": 0},
+  "skill_friction": [
+    "The simulated answer fixed the target (Account.NumberofLocations__c) but named the source only by label, which both Lead fields share. The 'map to the option its words match' rule matched two options; I tagged the choice as an assumption, but SKILL.md does not say what to do when an answer matches more than one option.",
+    "LeadConvertSettings cannot be read, so the core row had to be Conditional (retrieve and merge). The skill makes a Settings Update Conditional but gives no guidance on whether 'already met' can be claimed or ruled out, although DE sample orgs often ship with Lead.NumberofLocations__c already mapped.",
+    "Rule 4 (share picklist values through a global value set) conflicts with minimal design here: promoting Lead.POS_System__c to a global value set makes it restricted, which changes behavior for other callers (a DMS integration has Edit). Step 5 lists a 'change that alters behavior for other callers' as an ask trigger, but the predict-the-answer rule says to decide when the data is empty. The skill does not say which rule wins.",
+    "No allowed query can confirm whether lead conversion enforces the converting user's FLS on mapped target fields. AskCoworker asserted it does. The skill has no rule for a platform behavior that is uncertain rather than documented, so it became a load-bearing assumption with a test case.",
+    "The validator requires every Conditional row to be named in Section 8 by API name. Referring to a dependent row by number ('row 8') failed the first pass. spec-format.md says to name it but does not say that a row-number reference is not enough.",
+    "Step 1 says to read .sf/config.json, but the RUNNER supplied the org alias. Both agreed (TestWriteSpecDE), so there was no conflict."
+  ]
+}

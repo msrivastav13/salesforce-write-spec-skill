@@ -1,0 +1,9 @@
+{"id": "r049", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0},
+ "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 1, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Asked whether to backfill the 198 blank tiers even though the run had a safe recommended default (leave blank) and the requirement did not ask for data. This is an implementation question with a clear default. The label-mismatch question (Pronto Plus/One/Elite vs Plus/One/Elite) was a legitimate intent question, because the org values really differ from the requirement, contrary to meta.notes.", "skill_gap": "SKILL.md step 5 ('predict the answer before asking') covers this; the run did not apply it to the backfill question."},
+  {"defect": "The Tooling CustomField search for Tier/Loyalty returns 106 rows, including platform Loyalty Management entity fields that are not accessible in this org. The spec says it returns 'only Contact.Loyalty_Tier__c' and does not state the filter it used. The conclusion is right, but the evidence statement is imprecise.", "skill_gap": "None specific. Reporting the exact filter used would have prevented it."}
+ ]}

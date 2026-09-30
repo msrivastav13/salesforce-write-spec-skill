@@ -1,0 +1,10 @@
+{"id": "r019",
+ "claims": {"correct": 6, "wrong": 0, "unverifiable": 0},
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "scores": {"requirement_fit": 1, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The default filter is Expiration_Date__c <= today, so certificates expire on the morning of their expiration date. The hidden intent is < today, and the org's own field description ('The date after which the gift certificate can no longer be redeemed') supports that. As written, certificates become unredeemable on their last valid day. The conflict is recorded as Open item 1 with the fix, but the default contradicts verified org metadata in favour of a loose reading of 'on'.", "skill_gap": "None exists: SKILL.md has no rule that verified org semantics (field descriptions) outrank a loose reading of the requirement wording when choosing a default. The run flagged this gap itself in skill_friction."},
+  {"defect": "Minor: a few platform-behaviour statements carry only the assumption label. These are that schedule-triggered flow start conditions cannot use $Flow.CurrentDate, that there is a 10,000-row single-transaction limit, and that flow tests cannot cover scheduled flows. They are honestly labelled, but the design (no start object, a filtered Update Records element) depends on them.", "skill_gap": "None; the labelling rule was followed."}
+ ]}

@@ -1,0 +1,8 @@
+{"id": "r078", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "D2 AskCoworker call was skipped (protocol deviation) because D1 over-delivered.", "skill_gap": "SKILL.md says 'Send D1 then D2'; instruction exists but was not followed, and there is no rule for when D2 may be skipped."},
+  {"defect": "StorefrontSelector.getById selects the union of fields for all 7 ownership callers, so 6 callers read 5 more fields than today; harmless in memory but a small behavior drift in a behavior-preserving refactor (disclosed in Section 6).", "skill_gap": "None exists; design-rules.md has no guidance on how far a consolidation refactor may widen shared queries."}
+ ]}

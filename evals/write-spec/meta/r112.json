@@ -1,0 +1,10 @@
+{
+ "id": "r112",
+ "category": "already-met",
+ "requirement": "I'd like each restaurant record to show how many reviews it has.",
+ "hidden_intent": "Just wants a visible count of reviews on the Storefront page.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Already met: Storefront__c.Total_Reviews__c is a roll-up COUNT of Review__c. At most ensure it's on the page layout; no new field."
+ }
+}

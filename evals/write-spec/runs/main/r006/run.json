@@ -1,0 +1,50 @@
+{
+  "id": "r006",
+  "skill_rev": "v5",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r006/refund-processed-date-stamp-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28},
+    {"seq": 19, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 23},
+    {"seq": 22, "kind": "rt", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 23, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 15},
+    {"seq": 24, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 20}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Refund__c fields, types, Status__c picklist values, Processed_Date__c exists and is updateable", "command_summary": "sf sobject describe --sobject Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "No Apex triggers on Refund__c", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId='Refund__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No record-triggered flows on Refund__c", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId='Refund__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Refund__c DurableId and namespace (editability)", "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName='Refund__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Full custom field list and descriptions (missed fields, Processed_Date__c semantics)", "command_summary": "Tooling CustomField WHERE TableEnumOrId=DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Validation rules on Refund__c (AskCoworker said Unknown)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId=DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Data shape by Status__c and Processed_Date__c nulls (backfill need)", "command_summary": "Refund__c GROUP BY Status__c with COUNT(Processed_Date__c)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Readers/writers of Processed_Date__c", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId=Processed_Date__c field Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Components referencing Status__c (what sets Completed)", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId=Status__c field Id", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 12, "purpose": "Components referencing Refund__c (AskCoworker claimed only IssueRefundReceiptAction writes it)", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId=Refund__c DurableId", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 13, "purpose": "Record count on Refund__c", "command_summary": "SELECT COUNT() FROM Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Find flow definitions for Issue Refund / Apply Remediation", "command_summary": "Tooling FlowDefinition DeveloperName LIKE Refund/Remediation", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Type and active state of Issue_Refund and Apply_Remediation", "command_summary": "FlowDefinitionView WHERE Label IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "What the two flows write to Refund__c (Status, Processed_Date__c)", "command_summary": "Tooling Flow.Metadata by ActiveVersionId (x2)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "IssueRefundReceiptAction writes Approved and not Processed_Date__c", "command_summary": "Tooling ApexClass Body for IssueRefundReceiptAction and test", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "New flow API name does not already exist; local flows folder", "command_summary": "Tooling FlowDefinition DeveloperName LIKE 'Refund%'; ls force-app/main/default", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "FLS on Processed_Date__c", "command_summary": "FieldPermissions WHERE Field='Refund__c.Processed_Date__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "Data 360 data streams on Refund__c (AskCoworker prior-session claim)", "command_summary": "SELECT COUNT() FROM DataStreamDefinition", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "Who can edit Status__c (who can move to Completed)", "command_summary": "FieldPermissions WHERE Field='Refund__c.Status__c'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 18, "question": "Scope check (2 questions). (1) Which status should stamp Refund__c.Processed_Date__c? Evidence: all three creators (IssueRefundReceiptAction, Issue_Refund, Apply_Remediation) already insert refunds as Status__c = 'Approved' with Issue_Date__c = today, and the field description says 'The date the refund was processed/completed'. Options: (a) Approved, as written (the stamp would equal Issue_Date__c on every new refund); (b) Completed, matching the field description; (c) keep Processed_Date__c for Completed and add a new Approved_Date__c for approval. (2) If Processed_Date__c already has a value, should it be overwritten or only set when blank?", "simulated_answer": "(b) Completed - when the money has gone out, not Approved. Only set it if it is blank."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 1, "create": 1, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Combined R+T call (500 words) timed out at 60s even with a 1-item inventory; the template allows combining for <=8 changes, but the combined call was too large. Splitting R and T into two 250-word calls worked. Unclear whether the split counts as one retry (SKILL says 'A split counts as one retry') - recorded as two retry-kind calls.",
+    "run.json 'kind' enum has no way to mark a split retry that is effectively R and T separately; used 'retry' for both halves.",
+    "Module rule 'Do not invent paths' vs. new metadata type with no existing folder (force-app/main/default/flows does not exist): unclear whether the standard source-format path counts as known or should be 'Not specified'. Used the standard path and listed it as an assumption.",
+    "AskCoworker D2 claimed IssueRefundReceiptAction is the only writer of Refund__c; MetadataComponentDependency found two active autolaunched flows. The skill's missed-components guidance caught it, which worked as intended.",
+    "AskCoworker T marked an Apex test class as blocking for 75% coverage on a flow-only inventory; Rule 3 (reject proposals contradicting documented behavior) handled it, but the skill has no explicit guidance on flow test coverage/Flow Tests as inventory items.",
+    "AskCoworker R/T answers cited 'prior session' facts (Data Stream count, creators) despite the ignore-earlier-conversations header; the Data 360 claim could not be tested because DataStreamDefinition is not queryable with the allowed commands."
+  ]
+}

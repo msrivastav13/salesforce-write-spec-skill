@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Cases Priority High, not Closed, no modification for 4 hours -> escalate (IsEscalated, reassign to Escalations queue). Business hours not required."
+}

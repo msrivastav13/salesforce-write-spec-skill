@@ -1,0 +1,4 @@
+{
+ "id": "r029",
+ "requirement": "Account has Total_Storefronts and Total_Orders fields that are never populated. Either make them work or delete them."
+}

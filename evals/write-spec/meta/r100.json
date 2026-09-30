@@ -1,0 +1,10 @@
+{
+ "id": "r100",
+ "category": "nonexistent-concept",
+ "requirement": "We need to track our delivery drivers, which vehicle they use, and which orders they delivered.",
+ "hidden_intent": "New Driver object (name, phone, vehicle type, plate, active) and a link from each delivery/order to the driver. Drivers are contractors, not Users.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "No Driver object; no usable order object (Transaction__c has no fields) \u2014 must propose Create and ask how drivers/orders are modelled."
+ }
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r066",
+ "category": "standard-crm",
+ "requirement": "lead conversion probability should be calculated automaticaly from years in business, locations and delivery capability",
+ "hidden_intent": "Score: base 10, +20 if Delivery Capability, +5 per location up to 30, +2 per year up to 20, +20 if Marketing Opt-in; capped at 100.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Lead.Lead_Conversion_Probability__c exists; weights unspecified \u2014 must ask; formula field vs flow."
+ }
+}

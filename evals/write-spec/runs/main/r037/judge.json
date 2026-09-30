@@ -1,0 +1,8 @@
+{"id": "r037", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Asked the user two scope messages (mechanism PE vs CDC, subscriber permission set; then OAuth client deferral) although meta.expect says should_ask_user=false and every question had a recommended default the user simply accepted. The PE-vs-CDC trade-off should have been weighed in the spec with a default, not asked.", "skill_gap": "None precise: SKILL.md step 5 lists scope triggers (conflicting alternatives, end-to-end gaps) but has no rule saying 'if you can state a recommended default grounded in evidence, take it and record it in Open decisions instead of asking'."},
+  {"defect": "The OAuth client / integration-user gap surfaced only after the Inventory call, forcing a second scope message.", "skill_gap": "D2 template asks about integrations reading the objects but not about external subscribers/credentials for a new outbound channel (run's own friction note); no instruction exists."},
+  {"defect": "AskCoworker's D1 'platform event named like Storefront_Status may exist' and its Apex-trigger proposal were both wrong; the spec correctly contradicted/reshaped them. Not a spec defect, noted for AskCoworker reliability.", "skill_gap": "Rule 3/Rule 4 handled it; none missing."}
+ ]}

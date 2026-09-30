@@ -1,0 +1,42 @@
+{
+  "id": "r117",
+  "skill_rev": "v35",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r117/case-refund-quick-action-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 18, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 61}
+  ],
+  "org_queries": [
+    {"seq": 2, "purpose": "Org connectivity and API version", "command_summary": "sf org display (connectedStatus, alias, id, apiVersion only)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Full custom object scan; same concept elsewhere (Refund/Credit/Reimburs fields)", "command_summary": "sf sobject list --sobject custom; Tooling CustomField DeveloperName LIKE Refund/Credit/Reimburs", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Existence of refund Apex classes and refund/remediation flows", "command_summary": "EntityDefinition DurableIds; Tooling ApexClass LIKE Refund/Wallet/Remediation; FlowDefinitionView LIKE Refund/Remediation", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Refund__c field list, types, picklists", "command_summary": "Tooling CustomField by TableEnumOrId; sobject describe Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "IssueRefundReceiptAction and ProntoWalletPassService behavior", "command_summary": "Tooling ApexClass Body", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Issue_Refund, Apply_Remediation, Validate_Remediation logic and run mode", "command_summary": "Tooling FlowDefinition ActiveVersionId; Flow.Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Case quick actions, FlexiPages, GenAiFunctions, triggers, record-triggered flows, VRs, LWC", "command_summary": "QuickActionDefinition (standard failed, Tooling ok); Tooling FlexiPage, GenAiFunctionDefinition, ApexTrigger, ValidationRule, LightningComponentBundle; FlowDefinitionView by trigger object", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "Case_Record_Page action source (highlights panel actionNames)", "command_summary": "Tooling FlexiPage.Metadata by Id", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 10, "purpose": "Case fields (Storefront__c existence) and Refunds__r child relationship; Case layouts", "command_summary": "sobject describe Case; Tooling CustomField on Case; Tooling Layout on Case", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 11, "purpose": "Case layout actions/related lists and profile assignment", "command_summary": "Tooling Layout.Metadata by Id x4; Tooling ProfileLayout", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Who can access Refund__c (object and field)", "command_summary": "ObjectPermissions and FieldPermissions on Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Personas, active users, refund data shape, tab, profile licenses", "command_summary": "PermissionSet name search; User counts by profile; Refund__c GROUP BY Status__c; TabDefinition; Profile license", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Topic linkage for Issue_Refund_Receipt; creators of Refund__c; permset assignments", "command_summary": "GenAiPluginFunctionDef (first try wrong column); MetadataComponentDependency on Refund__c; PermissionSetAssignment; active standard users", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Callers of Issue_Refund/Apply_Remediation/IssueRefundReceiptAction", "command_summary": "MetadataComponentDependency by flow, class, GenAiFunction Ids; describe GenAiPluginFunctionDef", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Issue_Refund_Receipt linked to any topic", "command_summary": "Tooling GenAiPluginFunctionDef Function list filtered locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "Refund__c layout, Storefront__c access, Support profile access to related objects, new names free, org edition", "command_summary": "Tooling Layout on Refund__c; ObjectPermissions Storefront__c and Custom: Support Profile; FlowDefinitionView/PermissionSet name checks; Organization", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 17, "question": "(1) Who should issue refunds from a case: A) human service agents via a button on the Case record page (recommended; nothing exposes a refund path on the Case page today and Issue_Refund's description names support agents), B) the Agentforce service agent by assigning the existing Issue_Refund_Receipt action to a topic, or C) both? (2) Should refunds created this way be Approved immediately (as the existing Issue_Refund flow does), or created Pending and routed for approval above an amount limit, and if so what amount?", "simulated_answer": "(1) Service agents want to issue a refund linked to a case from the case page. (2) No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 5, "create": 3, "update": 2, "delete": 0},
+  "skill_friction": [
+    "Seq numbering in run.json: the org query at seq 19 happened after the I call (seq 18) but the user question happened between queries; the protocol forces batching many queries into one seq entry per Bash call, which blurs 'one query' granularity.",
+    "Step 2 says skip D2 only if D1 and org queries already answered its questions, but step 3 (verify) comes after step 2 in the workflow; deciding to skip D2 required running step-3 queries first, so the order is effectively D1 -> verify -> decide D2.",
+    "The 'after four wrong AskCoworker claims, you may skip R and T' rule is counted across fact errors and design errors of differing severity (e.g. an omitted FLS Edit field vs a wrong existence claim); it is unclear whether a minor mapping slip (Case.AccountId vs Case.Business_Account__c) counts, which decided whether R/T were skipped.",
+    "Whether a related list on the Case layout (seeing issued refunds) is a 'nearby enhancement' to drop or part of 'issue a refund from a case' is not settled by design-rules; I dropped it as a proposal.",
+    "Step 5 says money-consequence choices should be asked even when the default is safe; the simulated user had no preference, so the approval/limit became an assumption — the skill does not say whether an unanswered money-related policy (not a numeric value) should be blocking."
+  ]
+}

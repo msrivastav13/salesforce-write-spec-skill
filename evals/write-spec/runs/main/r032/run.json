@@ -1,0 +1,42 @@
+{
+  "id": "r032",
+  "skill_rev": "v19",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r032/average-rating-excludes-submitted-reviews-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 43},
+    {"seq": 16, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41},
+    {"seq": 20, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 57},
+    {"seq": 22, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50}
+  ],
+  "org_queries": [
+    {"seq": 0, "purpose": "org reachable", "command_summary": "sf org display", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "custom object scan; field list, picklist values, formula of Review__c and Storefront__c", "command_summary": "sf sobject list custom; sobject describe Review__c, Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Status__c data shape (AskCoworker: all 92 blank)", "command_summary": "EntityDefinition DurableIds; COUNT Review__c GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "roll-up definitions, filters, formula blank handling, picklist restriction", "command_summary": "Tooling CustomField ids per object; CustomField.Metadata by Id for Total_Reviews, Total_Score, Average_Review_Score, Status, Rating", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Apex readers/writers of reviews and average; triggers, record-triggered flows, validation rules", "command_summary": "Tooling ApexClass bodies search; ApexTrigger; FlowDefinitionView; ValidationRule", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "AgentSummarizeReviewsActions has no Status filter; AgentReviewActions sets Submitted", "command_summary": "Tooling ApexClass Body excerpts for 6 classes", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "dependencies of Total_Reviews, Total_Score, Average_Review_Score, Status", "command_summary": "Tooling MetadataComponentDependency by field Id (18 and 15 char)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Partner Quality Watchlist flow use of Total_Reviews__c", "command_summary": "FlowDefinition, FlowDefinitionView, Tooling Flow.Metadata of active version", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "zero-review storefront average value (AskCoworker later claimed current formula returns 0)", "command_summary": "COUNT Storefront__c; Storefront__c WHERE Total_Reviews__c = 0; COUNT Review__c WHERE Rating__c = null", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 11, "purpose": "same concept elsewhere; FLS grants on storefront score fields", "command_summary": "Tooling CustomField LIKE Published/Rating/Average/Review; FieldPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "existing test classes referencing the action or average", "command_summary": "Tooling ApexClass Name LIKE %Test% body search; local force-app listing", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "org edition; test class name absent; new field names absent; action body details", "command_summary": "Organization; ApexClass LIKE AgentSummarizeReviews%; CustomField Eligible%; field count; class body", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "callers of AgentSummarizeReviewsActions", "command_summary": "Tooling GenAiFunctionDefinition by InvocationTarget; MetadataComponentDependency on class Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "Data 360 DataStream count (AskCoworker cited prior session)", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "All 92 existing reviews have a blank Status__c (none are Submitted or Published). Which rule should the average use? (a) Count only Status = Published, and backfill the 92 legacy reviews to Published as a data step; (b) Count only Published and leave legacy reviews out (all storefront averages go blank until reviews are published); (c) Exclude only Submitted, so blank-status legacy reviews and Published reviews count and no backfill is needed. Recommendation: (a). Also: which average — only Storefront__c.Average_Review_Score__c, or also the averageRating computed by AgentSummarizeReviewsActions (recommended: both)? And should the existing Total_Score__c / Total_Reviews__c roll-ups be filtered in place (changes 'Total Reviews' on the layout and in Get_Partner_Quality_Watchlist) or kept with new filtered roll-ups (recommended: new roll-ups)?", "simulated_answer": "Average should exclude Submitted reviews. (For which average and the roll-up approach: No preference; use your recommended default.)"}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 5, "create": 3, "update": 2, "delete": 0},
+  "skill_friction": [
+    "The simulated answer 'exclude Submitted' did not pick among the offered options for blank-status legacy reviews; I interpreted it as option (c) (filter Status != Submitted), which departs from the literal requirement wording 'only count Published'. SKILL.md has no guidance for an answer that restates the requirement rather than choosing an option.",
+    "The askcoworker call kind list has no way to record that the single scope message bundled three questions; recorded as one user_question.",
+    "AskCoworker repeatedly cited 'prior session' facts (DataStreams, auto-publish flow) and asserted wrong platform behavior (formula returns blank without FLS on referenced fields; current formula returns 0; bulk roll-up deferral) with blocking labels; the skill's rule to fix without follow-ups worked but these made R/T open-decision lists mostly unusable.",
+    "RUNNER seq numbering: org queries were batched in multi-command Bash calls, so one seq covers several queries; the protocol does not say whether each sf command needs its own seq."
+  ]
+}

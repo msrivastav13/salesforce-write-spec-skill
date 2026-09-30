@@ -1,0 +1,34 @@
+{
+  "id": "r112",
+  "skill_rev": "v34",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r112/storefront-review-count-spec.md",
+  "askcoworker_calls": [{"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32}],
+  "org_queries": [
+    {"seq": 2, "purpose": "Full custom object list: no Restaurant object; Storefront__c and Review__c exist", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Storefront__c fields, Total_Reviews__c calculated, child relationship Reviews__r", "command_summary": "sf sobject describe Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "DurableIds of Storefront__c and Review__c", "command_summary": "Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Complete custom field list on Storefront__c", "command_summary": "Tooling CustomField WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Same concept elsewhere (fields named %Review%)", "command_summary": "Tooling CustomField DeveloperName LIKE '%Review%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Total_Reviews__c roll-up definition (COUNT, no filter)", "command_summary": "Tooling CustomField Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Roll-up populated and consistent (min/max/sum vs review count)", "command_summary": "aggregate SELECT on Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Review__c record count 92", "command_summary": "SELECT COUNT() FROM Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Layouts on Storefront__c", "command_summary": "Tooling Layout WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "FlexiPages on Storefront__c", "command_summary": "Tooling FlexiPage WHERE EntityDefinitionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "FLS on Total_Reviews__c", "command_summary": "FieldPermissions WHERE Field", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Field placed on layout", "command_summary": "Tooling Layout Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Field placed on record page (Dynamic Forms)", "command_summary": "Tooling FlexiPage Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Compare FLS of Total_Reviews__c with other Storefront fields; object permissions", "command_summary": "FieldPermissions by SobjectType/Field IN; ObjectPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Review__c master-detail and Status__c values / data shape (filter question)", "command_summary": "describe Review__c; GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 0, "create": 0, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 2 says send D2 unless D1 and org queries answered its questions, while step 4/6 say an already-met requirement skips I/R/T; it does not say explicitly whether D2 is also skipped once verification shows the requirement is met. I skipped D2 and stated it in Section 2.",
+    "Step 3 says 'find every writer of the objects in scope before I'; for an already-met requirement where I is skipped, it is unclear whether a writer scan is still required. Roll-up recalculation made it irrelevant here, so I did not run it.",
+    "FieldPermissions returned no profile rows (not even System Administrator, which has object Read); the skill says 'no row means that profile grants nothing' but gives no guidance on whether that visibility gap for profile-only users is in scope for an already-met 'show on record' requirement. I treated it as met because the field has the same grants as every other Storefront field."
+  ]
+}

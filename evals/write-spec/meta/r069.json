@@ -1,0 +1,10 @@
+{
+ "id": "r069",
+ "category": "new-automation",
+ "requirement": "Ratings on reviews must be between 1 and 5, whole numbers only.",
+ "hidden_intent": "Validation rule on Review: Rating required, 1-5, no decimals.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Rating__c is a Number field; validation checks range and integer-ness; should not change the field type (roll-ups depend on it)."
+ }
+}

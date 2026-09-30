@@ -1,0 +1,30 @@
+{
+ "id": "r098",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 1,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Allergen value set restricted to exactly the four named values; a single 'Nuts' value conflates peanuts and tree nuts, and other major allergens (egg, soy, fish, sesame) are excluded. This is labelled as an assumption, but hidden intent was 'the major allergens'.",
+   "skill_gap": "None exists (no SKILL.md guidance on extending an example list in a requirement to the domain-standard set)."
+  }
+ ]
+}

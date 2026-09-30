@@ -1,0 +1,4 @@
+{
+ "id": "r004",
+ "requirement": "Case management for merchants: link every merchant case to the storefront, auto-fill the business account, route to the merchant support queue, and escalate if no response in 2 hours. Also build an LWC showing the storefront's last 5 cases on the storefront page."
+}

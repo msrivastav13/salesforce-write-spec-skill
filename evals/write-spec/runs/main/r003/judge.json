@@ -1,0 +1,7 @@
+{"id": "r003", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "List view column given as `Owner`; ListView metadata uses column tokens such as CORE.USERS.ALIAS/OWNER, so the implementer must translate. Minor precision gap.", "skill_gap": "None exists (spec-format has no guidance on ListView column naming)."},
+  {"defect": "Adds a dedicated permission set not in the hidden intent; justified (new field has no FLS after Metadata API deploy) and labelled, but it is one extra component to assign.", "skill_gap": "None exists: SKILL.md does not say whether a new dedicated permission set or an existing one is the least-access default for FLS on a new field (run itself flagged this in skill_friction)."}
+ ]}

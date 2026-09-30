@@ -1,0 +1,10 @@
+{
+ "id": "r043",
+ "category": "new-automation",
+ "requirement": "Reviews with a rating of 1 or 2 should automatically open a case for the merchant success team.",
+ "hidden_intent": "Record-triggered flow on Review create: if Rating <= 2, create a Case linked to the Storefront and the reviewing Contact, assigned to the Merchant Success queue, subject including the storefront name. Only on create, not on edits.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "After-save flow on Review__c; Case already has Storefront__c lookup to reuse; avoid duplicate cases on edits; route to an existing queue rather than inventing one."
+ }
+}

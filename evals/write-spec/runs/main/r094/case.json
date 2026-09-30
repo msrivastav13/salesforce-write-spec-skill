@@ -1,0 +1,4 @@
+{
+ "id": "r094",
+ "requirement": "Storefront status should go to Suspended automatically if the average review score drops below 2.5 with at least 10 reviews."
+}

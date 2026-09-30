@@ -1,0 +1,48 @@
+{
+  "id": "r028",
+  "skill_rev": "v12",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r028/refund-processing-overdue-alert-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 54},
+    {"seq": 24, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 77},
+    {"seq": 25, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 57},
+    {"seq": 26, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable, API version", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Refund__c fields, Status__c picklist, Case__c lookup", "command_summary": "sf sobject describe Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "data shape of Status__c", "command_summary": "SELECT Status__c, COUNT(Id) FROM Refund__c GROUP BY Status__c (0 rows)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "no triggers on Refund__c/Case", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (Refund__c, Case)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no record-triggered flows on Refund__c/Case", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "refund-related Case values in use", "command_summary": "Case GROUP BY Type, Reason for refund values", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "sharing model and editability of Refund__c", "command_summary": "Tooling EntityDefinition Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "existing custom notification types", "command_summary": "Tooling CustomNotificationType", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Case owner types (User vs Queue)", "command_summary": "Case GROUP BY Owner.Type", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "history tracking on Status__c", "command_summary": "FieldDefinition IsFieldHistoryTracked", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "missed refund flows", "command_summary": "FlowDefinitionView WHERE ApiName LIKE '%Refund%'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 15, "purpose": "same concept elsewhere (processing date/SLA fields)", "command_summary": "Tooling CustomField DeveloperName LIKE Processing/Refund/SLA/Overdue/Stuck", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "org edition", "command_summary": "Organization OrganizationType, IsSandbox", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Issue_Refund active version", "command_summary": "Tooling FlowDefinition Issue_Refund", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Apex writers of Refund__c and Status__c values", "command_summary": "Tooling ApexClass bodies (70) searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "Issue_Refund writes Status__c", "command_summary": "Tooling Flow.Metadata by Id", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 20, "purpose": "validation rules on Refund__c", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "all references to Refund__c", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId = Refund__c DurableId", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 22, "purpose": "Apply_Remediation flow identity", "command_summary": "FlowDefinitionView WHERE Label = 'Apply Remediation'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "Apply_Remediation writes Status__c", "command_summary": "Tooling Flow.Metadata by Id", "ok": true, "contradicted_askcoworker": true}
+  ],
+  "user_questions": [
+    {"seq": 9, "question": "The requirement does not say what outcome you want, and the org supports several: Refund__c (Status__c Pending/Approved/Processing/Completed/Failed/Cancelled, linked to Case via Case__c) has no automation, and every writer inserts refunds as Approved. Which should the spec deliver? (a) Alert when refunds stay too long in a status (for example Processing) - recommended, since nothing tracks refund delays today; (b) automate the refund status lifecycle; (c) reporting/visibility on refund complaints (Case Type 'Refund / Compensation'). If (a), which status, how long, and who is alerted?", "simulated_answer": "Refunds sit in Processing too long; alert the case owner when a refund is Processing > 5 days."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 1, "create": 1, "update": 0, "delete": 0},
+  "skill_friction": [
+    "The pre-D1 vagueness rule only fires when no object, process, or outcome can be identified. 'Do something about refunds' names a process but no outcome, so D1 and D2 ran before the obviously blocking scope question; the rule could say 'no outcome' alone is enough to ask, or explicitly allow asking right after D1.",
+    "The I call took 77 s, over the stated ~60 s timeout, yet returned complete; the timeout guidance is approximate and the runner schema has no way to mark 'slow but not timed out'.",
+    "AskCoworker R/T made platform-behavior claims (scheduled paths not cancelled when record stops matching; inserts never trigger 'updated to meet condition' flows; DE scheduled-path capacity blocking) that contradict documented behavior; Rule 3 covers this but no query can test it, so the corrections rest on my own platform knowledge tagged as assumption. Whether pending scheduled paths run after record delete remained unverified.",
+    "AskCoworker D2 said IssueRefundReceiptAction is the only Refund__c writer; MetadataComponentDependency found two more flows. The 'missed components' check was essential here."
+  ]
+}

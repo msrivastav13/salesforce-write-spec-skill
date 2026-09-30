@@ -1,0 +1,4 @@
+{
+ "id": "r032",
+ "requirement": "The average rating should only count Published reviews, not ones still Submitted."
+}

@@ -1,0 +1,9 @@
+{"id": "r072", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 1, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Storefront__c granted Read+Create only; hidden intent wants Create/Read/Edit. Without object Edit the team cannot fix a storefront it just created (typo, missing field), which a reasonable reading of 'create storefronts' needs. 'Nothing else' was read as literally excluding Edit.", "skill_gap": "None exists; SKILL.md has no guidance on interpreting verb-scoped access ('create X') in permission-set requests, e.g. that create normally implies edit-own-record and excludes delete."},
+  {"defect": "Onboarding_Application__c Delete withheld although 'manage' in the hidden intent means full CRUD; decided silently as an assumption rather than as a labelled scope fork.", "skill_gap": "None exists; no rule maps 'manage' to CRUD, nor says a least-privilege narrowing of an explicit verb should be surfaced as an Open decision."},
+  {"defect": "Account Read omitted even though both objects have Account__c lookups the team must populate; left as Open item 1 with default 'keep out', so the lookups fail with a minimum-access profile (as the spec's own test predicts).", "skill_gap": "None exists; SKILL.md does not say that access needed for a delivered responsibility to work (lookup targets) should default in rather than be deferred."},
+  {"defect": "Creates a new CustomTab under a request that names only a permission set; defensible and labelled, but slightly beyond the stated scope.", "skill_gap": "Rule 5 default covers it; skill_friction already notes no explicit guidance on tabs for 'nothing else' requests."}
+ ]}

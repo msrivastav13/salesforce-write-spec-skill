@@ -1,0 +1,14 @@
+{
+  "name": "salesforce-write-spec",
+  "owner": {
+    "name": "Mohith Shrivastava"
+  },
+  "description": "Unofficial (not a Salesforce product). Salesforce write-spec skill: grounded implementation specs from business requirements.",
+  "plugins": [
+    {
+      "name": "salesforce-write-spec",
+      "source": "./",
+      "description": "Unofficial. Grounded Salesforce implementation specs from business requirements (spec only, never deploys)."
+    }
+  ]
+}

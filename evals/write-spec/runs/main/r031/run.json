@@ -1,0 +1,274 @@
+{
+ "id": "r031",
+ "skill_rev": "v18",
+ "outcome": "saved",
+ "stop_reason": null,
+ "spec_path": "evals/write-spec/runs/main/r031/menu-item-ai-description-spec.md",
+ "askcoworker_calls": [
+  {
+   "seq": 3,
+   "kind": "d1",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 29
+  },
+  {
+   "seq": 4,
+   "kind": "d2",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 49
+  },
+  {
+   "seq": 32,
+   "kind": "i",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 48
+  },
+  {
+   "seq": 33,
+   "kind": "r",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 52
+  },
+  {
+   "seq": 34,
+   "kind": "t",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 41
+  }
+ ],
+ "org_queries": [
+  {
+   "seq": 2,
+   "purpose": "Org reachable and API version",
+   "command_summary": "sf org display",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 5,
+   "purpose": "Scan all custom objects for menu concepts",
+   "command_summary": "sf sobject list --sobject custom",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 6,
+   "purpose": "Org edition",
+   "command_summary": "SELECT OrganizationType, IsSandbox FROM Organization",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 7,
+   "purpose": "Menu_Item__c field types, nillable, lookups",
+   "command_summary": "sf sobject describe Menu_Item__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 8,
+   "purpose": "No Apex triggers on menu objects",
+   "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (4 objects)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 9,
+   "purpose": "No record-triggered flows on menu objects",
+   "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (3 objects)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 10,
+   "purpose": "DurableIds for menu objects",
+   "command_summary": "EntityDefinition WHERE QualifiedApiName IN (...)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 11,
+   "purpose": "Data shape: blank Description__c count",
+   "command_summary": "SELECT COUNT(Id) FROM Menu_Item__c WHERE Description__c = null",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 12,
+   "purpose": "Data shape: total Menu_Item__c count",
+   "command_summary": "SELECT COUNT(Id) FROM Menu_Item__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 13,
+   "purpose": "Same concept elsewhere (AI/generated/description fields)",
+   "command_summary": "Tooling CustomField DeveloperName LIKE Descr/AI/Generat",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 14,
+   "purpose": "Complete custom field list on Menu_Item__c",
+   "command_summary": "Tooling CustomField WHERE TableEnumOrId = Menu_Item__c DurableId",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 15,
+   "purpose": "No validation rules on Menu_Item__c",
+   "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId = ...",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 16,
+   "purpose": "Existing prompt templates",
+   "command_summary": "Tooling SELECT FROM GenAiPromptTemplate",
+   "ok": false,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 17,
+   "purpose": "Agent actions touching menu items",
+   "command_summary": "Tooling GenAiFunctionDefinition",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 18,
+   "purpose": "Agents in org",
+   "command_summary": "SELECT DeveloperName FROM BotDefinition",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 19,
+   "purpose": "Active unmanaged flows",
+   "command_summary": "FlowDefinitionView WHERE IsActive = true AND NamespacePrefix = null",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 20,
+   "purpose": "Readers/writers of Menu_Item__c and any LLM/prompt calls in Apex",
+   "command_summary": "Tooling ApexClass Body (unmanaged), searched locally",
+   "ok": true,
+   "contradicted_askcoworker": true
+  },
+  {
+   "seq": 21,
+   "purpose": "References to MenuDescriptionPromptGrounding",
+   "command_summary": "Tooling MetadataComponentDependency by class Id",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 22,
+   "purpose": "References to Menu_Item__c.Description__c",
+   "command_summary": "Tooling MetadataComponentDependency by field Id",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 23,
+   "purpose": "References to Menu_Item__c",
+   "command_summary": "Tooling MetadataComponentDependency by object DurableId",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 24,
+   "purpose": "Object permissions on Menu_Item__c",
+   "command_summary": "ObjectPermissions WHERE SobjectType = Menu_Item__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 25,
+   "purpose": "FLS on Menu_Item__c.Description__c",
+   "command_summary": "FieldPermissions WHERE Field = Menu_Item__c.Description__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 26,
+   "purpose": "Prompt template license active",
+   "command_summary": "PermissionSetLicense LIKE Einstein/GenAi/Prompt",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 27,
+   "purpose": "Prompt template permission sets and editability",
+   "command_summary": "PermissionSet Name LIKE Einstein/Prompt/GenAI with NamespacePrefix",
+   "ok": true,
+   "contradicted_askcoworker": true
+  },
+  {
+   "seq": 28,
+   "purpose": "Record pages for menu objects",
+   "command_summary": "Tooling FlexiPage by EntityDefinitionId",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 29,
+   "purpose": "Layouts for menu objects",
+   "command_summary": "Tooling Layout by TableEnumOrId",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 30,
+   "purpose": "Storefront__c.Cuisine__c exists",
+   "command_summary": "Tooling CustomField WHERE TableEnumOrId = Storefront__c DurableId",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 31,
+   "purpose": "Existing LWC bundles",
+   "command_summary": "Tooling LightningComponentBundle unmanaged",
+   "ok": true,
+   "contradicted_askcoworker": false
+  }
+ ],
+ "user_questions": [
+  {
+   "seq": 1,
+   "question": "What does 'the menu' refer to, and what should 'smarter' mean? For example: (a) a Salesforce object or record list that stores a menu (such as a restaurant or product menu) that should rank, filter or recommend items; (b) the Lightning app navigation menu or App Launcher, which should show items based on user or profile; (c) a quick-action or record-page action menu that should show different actions by record state. Please name the object or app and the behavior you want.",
+   "simulated_answer": "I mean the menu items: when a menu item's description is blank, I want an AI-generated description."
+  }
+ ],
+ "validator_first_pass_ok": true,
+ "validator_attempts": 1,
+ "counts": {
+  "total": 2,
+  "create": 2,
+  "update": 0,
+  "delete": 0
+ },
+ "skill_friction": [
+  "The vague-requirement rule says to ask one clarifying question before calling AskCoworker, but it also blocks grounding the question's options in the org (no D1 or custom-object scan first). Here the org has Menu__c/Menu_Item__c, so a quick object scan would have given better options.",
+  "Rule 5 and step 5 give no guidance for the choice between automatic generation (flow plus Flex template) and on-demand generation (Field Generation template plus record page). They are different components, so under the 'ask' criteria it could count as blocking, but the wording 'when blank' was taken as evidence. The line between the two is subjective.",
+  "org-verification.md has no note on how to check prompt templates. GenAiPromptTemplate is not queryable ('Creates of types that cannot be queried' covers duplicates only), and nothing covers a proposal whose platform behavior (relationship merge-field depth, prompt-action permission for the running user of the async path) cannot be tested with the allowed commands.",
+  "AskCoworker reported facts from its own queries as '[Verified: prior session]' when they were actually established facts that I had sent. The 'echoed facts' row in the response-handling table covers this, but the label is misleading.",
+  "spec-format says to use Flow Tests for flow-only changes, but FlowTest cannot exercise asynchronous paths or generative AI actions. The skill does not say that manual verification is the fallback in that case, although the 'label cases without a planned test' rule implies it."
+ ]
+}

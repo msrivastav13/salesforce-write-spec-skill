@@ -1,0 +1,10 @@
+{
+ "id": "r028",
+ "category": "vague",
+ "requirement": "Customers are complaining. Do something about refunds.",
+ "hidden_intent": "Refunds sit in Processing too long; alert the case owner when a refund is Processing > 5 days.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Vague; ask what the complaint is."
+ }
+}

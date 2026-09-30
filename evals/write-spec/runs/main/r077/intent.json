@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "LWC on Case page listing Refunds for the Case with a path each (Pending->Approved->Processing->Completed; Failed/Cancelled terminal)."
+}

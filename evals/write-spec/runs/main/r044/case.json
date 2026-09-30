@@ -1,0 +1,4 @@
+{
+ "id": "r044",
+ "requirement": "Contacts' lifetime orders and lifetime value fields are always stale. Fix it."
+}

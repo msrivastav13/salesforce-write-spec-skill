@@ -1,0 +1,10 @@
+{
+ "id": "r098",
+ "category": "nonexistent-concept",
+ "requirement": "Add allergen info to menu items so customers can filter out nuts, gluten, dairy, shellfish.",
+ "hidden_intent": "Multi-select picklist Allergens on Menu Item with the major allergens.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "No allergen field on Menu_Item__c; propose Create (multi-select picklist) \u2014 sensible default."
+ }
+}

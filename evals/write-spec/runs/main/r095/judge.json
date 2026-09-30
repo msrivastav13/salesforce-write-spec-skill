@@ -1,0 +1,34 @@
+{
+ "id": "r095",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 3,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 1,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Section 4 says Refund__c.Storefront_Account__c gets 'field access only through the permission set below (read-only) and for System Administrator'. This contradicts the permission set row ('No field access on Refund__c.Storefront_Account__c') and Section 6. It also contradicts platform behavior: deploying a field grants no FLS, and no inventory item grants System Administrator access (View All/Modify All Data do not override FLS).",
+   "skill_gap": "Partial. The rule that deploying a field grants no FLS exists and is applied in Section 6. No instruction requires the field-access statement in a Create row to match the permission set rows."
+  },
+  {
+   "defect": "The eval notes say Review__c is a lookup. The spec correctly found Review__c.Storefront__c is Master-Detail (verified by query), so this is not a defect of the run. The meta note is inaccurate.",
+   "skill_gap": "None (meta issue)."
+  }
+ ]
+}

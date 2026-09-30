@@ -1,0 +1,19 @@
+{"id": "r001",
+ "claims": {"correct": 6, "wrong": 0, "unverifiable": 0},
+ "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Section 8 item 7 (deployment sequence) says 'then the tab and layouts', but the custom tab was removed from the inventory and appears only as a proposal in Section 8 item 10. The deployment steps now refer to a component that is not in the change set.", "skill_gap": "None exists. The skill has no instruction to re-check Sections 3-8 against the final Section 9 after an inventory row is dropped (the drop here was forced by the validator's same-API-name rule, which the run logged as friction)."},
+  {"defect": "Section 6 says 'Undeleting the master restores the cascade-deleted junction rows (documented Salesforce behavior)' without the junction caveat: if both masters are deleted, the junction row is deleted permanently and cannot be restored. This is stated as fact but is only partly true.", "skill_gap": "Rule 3 covers rejecting AskCoworker proposals that contradict documented behavior. No instruction says that platform-behavior claims the run writes itself must be stated precisely or marked as unverified when no query can test them."},
+  {"defect": "Section 2 lists the tooling objects queried but does not name the Tooling Layout query filter. The first obvious query (TableEnumOrId='Storefront__c') returns 0 rows because the filter needs the DurableId. This does not affect correctness; the claim held when filtered by DurableId 01Iak00000Dx4JV.", "skill_gap": "None exists (minor reproducibility point only)."}
+ ],
+ "verification_notes": [
+  "correct: Storefront__c has 21 records, all Status__c=Active, and all 21 have Address__PostalCode__s populated.",
+  "correct: Region__c has 0 records, and its only custom field is Onboarding_Specialist__c (Lookup(User)).",
+  "correct: Transaction__c has only Contact__c, Payment_Method__c, Refund_Reason__c, Total_Amount__c, Transaction_Date__c, Transaction_Type__c. No Storefront lookup exists, and no zone/delivery/order/cart custom object exists (sobject list).",
+  "correct (the spec's correction of AskCoworker): three permission sets grant Delete on Storefront__c: Agentforce_Reference_App, sfdc_accelerate_dms, and one profile-owned set.",
+  "correct (reported by AskCoworker): the Storefront Apex classes (AgentStorefrontActions, AgentUpdateStorefrontDetailsActions, etc.) do not mention zone, deliver, zip, or fee (body scan).",
+  "correct: Storefront__c has no Apex trigger, record-triggered flow, or validation rule. Its only layout is 'Storefront Layout' with no namespace. The Pronto_Orders_API NamedCredential exists.",
+  "creates checked: Delivery_Zone__c, Storefront_Zone__c, and the Delivery_Zone_Management permission set do not exist. The new-object layouts cannot pre-exist. Update target Storefront__c-Storefront Layout exists."
+ ]}

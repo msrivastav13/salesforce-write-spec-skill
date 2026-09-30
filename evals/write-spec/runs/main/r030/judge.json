@@ -1,0 +1,7 @@
+{"id": "r030", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Row 7 updates Review__c-Review Layout even though Review_Record_Page uses Dynamic Forms and already covers the fields. The spec says the page's activation was not verified, which partly justifies it, but it may be an extra inventory item.", "skill_gap": "None exists. spec-format gives no rule for placement when both a Dynamic Forms FlexiPage and a page layout exist (run.json raises the same point)."},
+  {"defect": "Minor: 'publicly' is handled only as same-visibility-as-Comments plus the email. Surfacing the response through the Agentforce review actions is deferred to Open item 3 and not designed.", "skill_gap": "None needed. It is recorded as an open decision with a default, which is correct behavior."}
+ ]}

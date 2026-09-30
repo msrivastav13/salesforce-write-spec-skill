@@ -1,0 +1,41 @@
+{
+  "id": "r109",
+  "skill_rev": "v33",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r109/catering-order-deposit-headcount-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 127},
+    {"seq": 9, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 58},
+    {"seq": 11, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 125},
+    {"seq": 12, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 70},
+    {"seq": 14, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 72},
+    {"seq": 17, "kind": "t", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 78},
+    {"seq": 18, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 24}
+  ],
+  "org_queries": [
+    {"seq": 2, "purpose": "Same concept elsewhere: fields named Cater/Deposit/Headcount/Guest/Attend/Order on any object; DurableIds of candidate objects", "command_summary": "Tooling CustomField DeveloperName LIKE ...; EntityDefinition by QualifiedApiName", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Identify Order_Date object; record counts of Order, Opportunity, Marketing_Event__c; Type distributions", "command_summary": "EntityDefinition by DurableId; COUNT() and GROUP BY Type queries", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "D1 field/picklist claims on Marketing_Event__c; Order and Opportunity picklists; Transaction__c fields", "command_summary": "sobject describe Marketing_Event__c, Order, Opportunity, Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Automation and dependencies on Marketing_Event__c, Order, Event_Storefront__c", "command_summary": "Tooling ApexTrigger; FlowDefinitionView; Tooling ValidationRule; MetadataComponentDependency", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Permission sets granting Storefront__c/Marketing_Event__c; unmanaged permission sets; Storefront__c fields and child relationships", "command_summary": "ObjectPermissions; PermissionSet; COUNT Storefront__c; describe Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Project source layout", "command_summary": "ls force-app/main/default", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Verify D2: triggers/flows on Storefront__c and Account, OWD, catering classes, View All/Modify All, name collisions for new PS/tab", "command_summary": "Tooling ApexTrigger; FlowDefinitionView; EntityDefinition sharing; Tooling ApexClass; ObjectPermissions; PermissionSet; Tooling CustomTab", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Data 360 involvement (AskCoworker prior-session DataStream claim)", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Verify R-security claims: Account grants of broad PSs, profiles with View/Modify All Data, profile names", "command_summary": "ObjectPermissions on Account; PermissionSet IsOwnedByProfile with ViewAllData/ModifyAllData; Profile LIKE 'Custom%'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 16, "purpose": "Verify existence of Apex classes AskCoworker named in D2; Create_OS flow namespace", "command_summary": "Tooling ApexClass Name IN (...); FlowDefinitionView ApiName = 'Create_OS'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 8, "question": "1) Where should catering orders live? (A) new Catering_Order__c object related to Storefront__c and Account (recommended; nothing in the org represents catering, Marketing_Event__c.Type__c has no Catering value, Order has 0 records); (B) Marketing_Event__c with a new Catering Type__c value using Expected_Attendance__c; (C) standard Order. 2) What does 'need a deposit' mean? (A) a deposit amount > 0 must be entered on save, with a separate Deposit Paid flag tracked (recommended); (B) the deposit must be marked paid before save; (C) both.", "simulated_answer": "1) A new Catering Order object with headcount, event date, deposit amount and deposit paid; headcount must be at least 20; related to Storefront and the customer Account. 2) Track a deposit amount and whether it is paid; enforcement not specified (no preference; use your recommended default)."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 12, "create": 12, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Two wrong AskCoworker claims (new object 'inherits' parent OWD; no non-admin profile has View All Data) triggered the verify-everything rule late in the run; SKILL.md does not say whether AskCoworker proposals that are really platform-behavior statements (e.g. OWD inheritance) count as 'wrong claims' toward the threshold.",
+    "The T template for a 12-row inventory timed out at 300 words; the '>8 changes -> API names only, split R' guidance covers R but not T, so T needed a narrowed retry.",
+    "Step 2 allows skipping D2 only if D1 answered it; for a brand-new object the D2 template's focus (behavior on existing objects) is only loosely relevant, and it is unclear whether D2 should target the parent objects.",
+    "The user answer covered which fields exist (deposit amount/paid) but not which is enforced; SKILL.md's rule for partially answered questions (map to matching option, tagged assumption) was applicable but it is ambiguous whether the chosen enforcement is a user decision or an assumption.",
+    "Validation-rule blank handling for number comparisons is not documented in the reference files; spec-format requires stating blank results for formulas, but validation rules have no BlankAsZero setting, forcing a hedge."
+  ]
+}

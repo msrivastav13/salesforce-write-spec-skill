@@ -1,0 +1,8 @@
+{"id": "r034", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "FlowTest row claims it will 'assert the flow path passes the entry condition and reaches the Update Records elements'; Flow Test assertions evaluate resources/$Record values, not which elements were reached, so the planned test adds little value and its API name format (Flow.Test dotted) is unverified.", "skill_gap": "None exists: spec-format requires a FlowTest or manual checks for flow-only changes but gives no rule on when a FlowTest is meaningful for a flow whose effects are on other records, nor on FlowTest naming."},
+  {"defect": "Singleton behavior of AgentUpdateMenuActions left as reported by AskCoworker although the class body was already read and could have been verified.", "skill_gap": "None exists specifically; the general verify-before-relying rule covers it only loosely."}
+ ]}

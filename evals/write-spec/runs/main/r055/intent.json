@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Before-insert: Remaining = Original if blank; External Code = random 12-char alphanumeric, unique across all certificates."
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r010",
+ "category": "already-met",
+ "requirement": "We need to track a sum of all review scores per storefront for our ranking algorithm",
+ "hidden_intent": "Sum of ratings per storefront.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Already met: Total_Score__c is roll-up SUM of Review__c.Rating__c."
+ }
+}

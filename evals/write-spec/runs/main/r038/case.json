@@ -1,0 +1,4 @@
+{
+ "id": "r038",
+ "requirement": "Redeem transactions should never put a customer's loyalty balance below zero."
+}

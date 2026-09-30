@@ -1,0 +1,4 @@
+{
+ "id": "r092",
+ "requirement": "Set the refund Issue Date to today whenever a refund record is created and it's blank."
+}

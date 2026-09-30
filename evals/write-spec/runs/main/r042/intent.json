@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Prevent a second Active promotion for the same storefront when date ranges overlap; non-overlapping future-dated active promos are fine. Block with an error rather than auto-expiring the old one."
+}

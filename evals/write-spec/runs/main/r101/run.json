@@ -1,0 +1,40 @@
+{
+  "id": "r101",
+  "skill_rev": "v32",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r101/promotion-auto-expiry-spec.md",
+  "askcoworker_calls": [
+    {"seq": 5, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 6, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 13, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28},
+    {"seq": 14, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 15, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 19},
+    {"seq": 17, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 26}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Context: org reachable, alias, id, apiVersion", "command_summary": "sf org display --json (printed connectedStatus, alias, id, apiVersion only)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "Entry check: ground clarifying question; full custom object scan", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Promotion__c fields and Status__c picklist values", "command_summary": "sf sobject describe --sobject Promotion__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Absence of automation on Promotion__c (triggers, flows, scheduled flows, workflow, cron jobs) and DurableId", "command_summary": "Tooling EntityDefinition, ApexTrigger, WorkflowRule; FlowDefinitionView by TriggerObjectOrEventId and TriggerType='Scheduled'; CronTrigger", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Data shape: status distribution, overdue Active count, blank End_Date__c count, total", "command_summary": "SELECT Status__c, COUNT(Id) GROUP BY; COUNT() with End_Date__c < TODAY; COUNT() End_Date__c = null; COUNT()", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Validation rules, complete custom field list, object dependencies, approval processes", "command_summary": "Tooling ValidationRule by EntityDefinitionId; Tooling CustomField by TableEnumOrId; MetadataComponentDependency on object; ProcessDefinition", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 10, "purpose": "All Apex readers/writers of Promotion__c and how they set Status__c", "command_summary": "Tooling ApexClass Name, Body (unmanaged), searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Status__c restricted/default; End_Date__c required; field-level dependencies; org type/time zone; flows named Promo; same-concept Expir fields; GenAi promotion actions", "command_summary": "Tooling CustomField Metadata by Id (x2); MetadataComponentDependency on 2 fields; Organization; FlowDefinitionView LIKE Promo; CustomField LIKE Expir; GenAiFunctionDefinition LIKE Promotion", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 16, "purpose": "Security half not covered by narrowed R retry: object grants, Data 360 streams, Automated Process user", "command_summary": "ObjectPermissions WHERE SobjectType='Promotion__c'; SELECT COUNT() FROM DataStream; User WHERE Name='Automated Process'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 4, "question": "Your request is broad, so I need to know what you want automated. Promotion__c has Status__c (Active, Expired, Canceled), Start_Date__c, End_Date__c, Promotion_Code__c, Discount_Percentage__c, and a Storefront__c lookup. Which outcome do you want? (a) Promotions automatically move to Expired when their End_Date__c passes (recommended: the Expired value and End_Date__c already exist); (b) promotion codes generated automatically on create; (c) notifications to the storefront owner when a promotion starts or ends; (d) something else, please describe.", "simulated_answer": "Only: promotions auto-expire on end date."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Entry check says 'Too vague to design ... ask one clarifying question' but does not say whether the answer's hidden scope limits ('Only: ...') should be recorded as a clarified requirement; I used the askcoworker-calls.md 'Clarified requirement (user decision)' line, which worked but the linkage is implicit.",
+    "The two-wrong-claims rule counted AskCoworker's platform claim that validation rules are 'not queryable via SOQL' and its claim that 'Draft' is an invalid picklist value (picklist is unrestricted). The skill does not say whether a claim that is partly right (Draft is off-list but savable) counts as 'wrong'; I counted it.",
+    "AskCoworker repeatedly labelled facts '[Verified: prior session]' including facts I supplied in the message (echoes) and facts I did not (e.g., Storefront__c.Status__c values, Gift_Certificate__c automation). The rule for untraceable 'prior session' facts is clear, but marking every call's output line by line is heavy; I dropped the untraceable ones the design did not need.",
+    "AskCoworker marked the scheduled-flow run time as a blocking open decision. SKILL.md step 5 says implementation choices are decided, which settled it, but spec-format.md has no guidance on recording an AskCoworker 'blocking' label that the skill overrides; I put it in Resolved.",
+    "spec-format.md Section 7 says 'Add one Flow Test row for the main outcome' but the requirement's main outcome here is the scheduled path (no test allowed); it is unclear whether a FlowTest for the secondary before-save flow is wanted or is extra scope. I added one for the before-save flow.",
+    "The R timeout retry was split to runtime-only; the table says to cover what a narrowed retry left out with another narrow call or org queries, but does not say which to prefer. I used org queries for the security half."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r096",
+ "category": "nonexistent-concept",
+ "requirement": "Build tipping \u2014 customers tip drivers, and we need to report tips per driver per week.",
+ "hidden_intent": "Tips on orders attributed to drivers; weekly report.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Neither drivers nor orders with amounts exist; depends on driver/order model \u2014 must ask."
+ }
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r106",
+ "category": "deletion-refactor",
+ "requirement": "Lead has two 'number of locations' fields. Get rid of one.",
+ "hidden_intent": "Keep Number_of_Locations__c (used by web form), migrate data from NumberofLocations__c, then delete it.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Both fields exist; ask which is canonical; check references (conversion mapping, flows, reports); plan migration before deletion. Spec only."
+ }
+}

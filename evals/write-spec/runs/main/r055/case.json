@@ -1,0 +1,4 @@
+{
+ "id": "r055",
+ "requirement": "When a new gift certificate is issued, default the remaining value to the original value and generate a unique code."
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r083",
+ "category": "nonexistent-concept",
+ "requirement": "Each storefront should have a prep-time SLA and we should record actual prep time per order to measure it.",
+ "hidden_intent": "Target prep minutes on Storefront; actual prep time per order; breach-rate report.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "No order object with timestamps (Transaction__c empty); target field is easy but actuals need an order model \u2014 ask."
+ }
+}

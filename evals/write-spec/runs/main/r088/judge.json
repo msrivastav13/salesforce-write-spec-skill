@@ -1,0 +1,38 @@
+{
+ "id": "r088",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 1,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Section 6 says the master-detail sharing setting of Storefront_Hours_of_Operation__c.Storefront__c 'cannot be read'; Tooling CustomField.Metadata returns writeRequiresMasterRead=false (Read/Write on the parent record required, satisfied by Storefront__c internal ReadWrite). A readable fact was left as an assumption.",
+   "skill_gap": "None explicit; org-verification guidance could list CustomField.Metadata (writeRequiresMasterRead, deleteConstraint) as the way to read relationship settings before declaring them unreadable."
+  },
+  {
+   "defect": "Day-matching upsert logic now exists in both AgentUpdateStorefrontHoursActions and the new controller (acknowledged, deferred as a proposal) instead of extracting a shared service both call.",
+   "skill_gap": "None; the spec records the duplication honestly, and changing the agent class would widen scope."
+  },
+  {
+   "defect": "Asked a placement question although meta expected none; judged legitimate here because the org shows an agent channel and an Experience site as plausible merchant surfaces, so no score reduction.",
+   "skill_gap": "None"
+  }
+ ]
+}

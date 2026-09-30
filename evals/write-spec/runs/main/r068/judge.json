@@ -1,0 +1,9 @@
+{"id": "r068", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0}, "wrong_claims": ["Section 8 'Corrected AskCoworker claims': says AskCoworker was wrong that Agentforce_Reference_App has Edit on Review__c. ObjectPermissions shows Agentforce_Reference_App PermissionsEdit = true on Review__c; the AskCoworker claim was correct and the 'correction' is false (the spec itself admits Edit was not checked)."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "An AskCoworker claim is listed as corrected although the query run did not check the relevant permission and the claim is actually true.", "skill_gap": "None explicit: SKILL.md should say a claim may be recorded as a correction only when a query actually contradicts it."},
+  {"defect": "Section 2 access list omits Edit grants (Agentforce_Reference_App, sfdc_accelerate_dms, profile-owned permission set) on Review__c; not load-bearing for CDC but incomplete as 'Access to Review__c'.", "skill_gap": "None."},
+  {"defect": "Asked the delivery-mechanism question although meta expected no question; acceptable as a platform/integration-channel intent question, and it had a recommended default.", "skill_gap": "Step 5 'predict the answer first' vs 'ask which platform' conflict, noted by the run."}
+ ]}

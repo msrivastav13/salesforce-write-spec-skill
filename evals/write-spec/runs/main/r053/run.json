@@ -1,0 +1,40 @@
+{
+  "id": "r053",
+  "skill_rev": "v22",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r053/gift-certificate-remaining-value-bounds-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 44},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 43},
+    {"seq": 14, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 15, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42},
+    {"seq": 19, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 64}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Gift_Certificate__c field types, nillability, formula/roll-up status, children", "command_summary": "sf sobject describe Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Object DurableId and namespace (editability)", "command_summary": "EntityDefinition WHERE QualifiedApiName='Gift_Certificate__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Existing validation rules (AskCoworker said not queryable / unknown)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId='01Iak00000Dx4JX'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Complete custom field list and descriptions (Original vs Value semantics)", "command_summary": "Tooling CustomField WHERE TableEnumOrId='01Iak00000Dx4JX'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "No Apex triggers on object", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId='Gift_Certificate__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "No flows on object", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId='01Iak00000Dx4JX'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Data shape: existing records and null counts; any violating record", "command_summary": "Gift_Certificate__c COUNT aggregates + LIMIT 10 value rows", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Readers/writers of object and value fields", "command_summary": "Tooling MetadataComponentDependency by field and object Ids", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Apex writers of Remaining/Original_Value__c (all unmanaged class bodies)", "command_summary": "Tooling ApexClass Body search", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Same concept elsewhere (Remaining/Balance/Gift fields)", "command_summary": "Tooling CustomField DeveloperName LIKE Remaining/Balance/Gift", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Action class input validation and exception handling; FLS Edit grants on Remaining_Value__c", "command_summary": "Tooling ApexClass Body for 2 classes; FieldPermissions WHERE Field='Gift_Certificate__c.Remaining_Value__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Existing gift-related Apex/test classes", "command_summary": "ApexClass WHERE Name LIKE '%Gift%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Existing tests would not violate new rules", "command_summary": "Tooling ApexClass Body for IssueGiftCardActionTest, RenderGiftCardActionTest", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 2, "update": 0, "delete": 0},
+  "skill_friction": [
+    "AskCoworker I and T invented a Gift_Certificate_Status_Sync before-save flow ('from the status-sync requirement') despite the header saying ignore earlier conversations and stating 0 flows; the memory-bleed row covers facts not traceable to the message, but it is unclear whether echoing a nonexistent component into open decisions needs a correction resend or just a drop (I dropped it).",
+    "Many AskCoworker [Verified] labels cite 'prior session', confirming cross-call memory; the skill handles this but it inflates verification work.",
+    "Section 7 guidance on whether a validation-rule-only change should include an Apex test in the inventory is not explicit; 'drop speculative components' vs 'tests in the inventory mapped to behaviors' pull in different directions. I left the test class as a Section 8 proposal.",
+    "Step 5 'whether a value is required follows the data shape' is ambiguous for a 1-record org where both fields are populated; I did not add required-ness since the requirement is about bounds, and listed it as a proposal."
+  ]
+}

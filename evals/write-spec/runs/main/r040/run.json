@@ -1,0 +1,37 @@
+{
+  "id": "r040",
+  "skill_rev": "v20",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r040/storefront-tags-spec.md",
+  "askcoworker_calls": [
+    {"seq": 6, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 7, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 35},
+    {"seq": 12, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 13, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 44},
+    {"seq": 14, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Entry check: scan custom objects to ground clarifying question", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "Storefront_Tag__c fields for question options", "command_summary": "sobject describe Storefront_Tag__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Storefront_Tag__c record count (backfill need)", "command_summary": "SELECT COUNT(Id) FROM Storefront_Tag__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Org context", "command_summary": "sf org display; Organization type", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Object DurableIds; full custom field lists; same-concept fields org-wide (Tag, Diet, Vegan, Halal); global value sets; triggers; record-triggered flows; validation rules; DAL_Tag namespace; dependencies on Storefront_Tag__c", "command_summary": "Tooling EntityDefinition, CustomField, GlobalValueSet, ApexTrigger, ValidationRule, MetadataComponentDependency; FlowDefinitionView; ApexClass", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "Tabs, layouts, FlexiPages, list views, object and field permissions, permission set editability, reports, DataStreams", "command_summary": "TabDefinition, Tooling Layout/FlexiPage, ListView, ObjectPermissions, FieldPermissions, PermissionSet, Report, DataStream count", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Name field type/label, child relationship, Cuisine picklist values, PS assignments, profile identities, LWC bundles", "command_summary": "sobject describe both objects; PermissionSetAssignment group by; PermissionSet.Profile; Tooling LightningComponentBundle", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Layout related lists and fields, FlexiPage Tags related list, Apex body search for Storefront_Tag__c, Allow Reports setting, report folders", "command_summary": "Tooling Layout.Metadata, FlexiPage.Metadata by Id; ApexClass Body scan; CustomObject.Metadata (failed: no Metadata column); Folder", "ok": false, "contradicted_askcoworker": true}
+  ],
+  "user_questions": [
+    {"seq": 3, "question": "What should 'make them useful' mean for Storefront tags? Today Storefront_Tag__c has only a free-text Name (label 'Tag') and a Storefront__c lookup, with 0 records. Options: (a) a controlled tag vocabulary (picklist) on Storefront_Tag__c; (b) a way to filter/find storefronts by tag; (c) show tags on the storefront record page; (d) something else. If (a), which tag values? Recommendation: (a)+(b).", "simulated_answer": "Tag picklist (Vegan, Late Night, Family Friendly, Halal, Kosher) on Storefront Tag and ability to filter storefronts by tag."}
+  ],
+  "validator_first_pass_ok": false,
+  "validator_attempts": 2,
+  "counts": {"total": 6, "create": 3, "update": 3, "delete": 0},
+  "skill_friction": [
+    "Entry check says ask a clarifying question before AskCoworker for vague requirements, while step 5 says ask only after D1 and allows up to one more message only for new intent forks. It is unclear whether the entry clarification consumes the single step-5 question message; I treated it as the one allowed message and decided the filter mechanism (report vs list view vs LWC) myself.",
+    "The org-verification reference says object settings like Allow Reports are readable via Tooling CustomObject.Metadata queried by Id, but this org rejected the Metadata column on CustomObject; the report row had to become Conditional with a blocking item.",
+    "The validator's Section 4 bullet regex rejects a parenthetical type after the bolded API name (e.g. '**Create `X`** (ReportFolder) —'), which spec-format.md does not document.",
+    "spec-format says folder-scoped reports go under reports/<Folder>/ but does not say what Module path a ReportFolder uses; I used the same reports/<Folder> path.",
+    "Guidance on whether a new picklist should be universally required conflicts with least-privilege FLS guidance (universally required fields cannot be FLS-restricted); the skill does not address this trade-off."
+  ]
+}

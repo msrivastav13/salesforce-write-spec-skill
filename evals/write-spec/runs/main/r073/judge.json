@@ -1,0 +1,40 @@
+{
+ "id": "r073",
+ "claims": {
+  "correct": 5,
+  "wrong": 1,
+  "unverifiable": 0
+ },
+ "wrong_claims": [
+  "Section 6: 'Users with View All Data or Modify All Data (for example System Administrator) can still see it.' View All Data and Modify All Data do not override field-level security. With no FLS grant, no user, including admins, can see Unique_Review_Key__c in the UI or API."
+ ],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 1,
+  "implementation": 1,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 1,
+  "honesty": 1,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Wrong security claim: says VAD/MAD users can see a field that has no FLS grant.",
+   "skill_gap": "The SKILL.md org-verification note says View All Data users see fields without FLS grants. It is wrong and caused this."
+  },
+  {
+   "defect": "The question bundled 'confirm block with an error vs a warning'. The requirement ('can only leave one') already implies blocking, so this implementation choice had a clear default. The missing-value exemption part was a reasonable intent question because it decides whether agent-created reviews are covered.",
+   "skill_gap": "SKILL.md step 5's 'predict the answer first' guidance exists but does not stop sub-questions whose answer the requirement already gives from riding along in a legitimate question."
+  },
+  {
+   "defect": "Reviews created through AgentReviewActions never set Order_Date__c, so the only code channel is exempt from the rule. This is disclosed as an open item, but it partly defeats the requirement for that channel.",
+   "skill_gap": "None; handled as a disclosed open decision."
+  }
+ ]
+}

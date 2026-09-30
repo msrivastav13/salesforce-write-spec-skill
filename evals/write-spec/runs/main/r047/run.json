@@ -1,0 +1,45 @@
+{
+  "id": "r047",
+  "skill_rev": "v21",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r047/cuisine-global-value-set-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50},
+    {"seq": 9, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 57},
+    {"seq": 14, "kind": "i", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 15, "kind": "retry", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 16, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 17, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 43},
+    {"seq": 19, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30},
+    {"seq": 20, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41}
+  ],
+  "org_queries": [
+    {"seq": 2, "purpose": "Existence, type, restriction, and values of the four cuisine fields; record types", "command_summary": "sf sobject describe Storefront__c, Account, Lead, Contact", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 3, "purpose": "Other Cuisine fields org-wide; whether any GlobalValueSet exists; Storefront DurableId", "command_summary": "Tooling CustomField DeveloperName LIKE '%Cuisine%'; Tooling GlobalValueSet; EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Field metadata: required, restricted, valueSetName, controlling field, description", "command_summary": "Tooling CustomField Metadata by Id (x4)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Data shape: value distribution and off-list values per field", "command_summary": "GROUP BY counts on the four fields", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Dependencies on each field", "command_summary": "Tooling MetadataComponentDependency by field Id (15 and 18 char)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Apex and trigger references including dynamic reads", "command_summary": "Tooling ApexClass/ApexTrigger bodies, local grep for cuisine", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Local project metadata for cuisine", "command_summary": "grep force-app (project file check)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Field access on the four fields; flow reader identity", "command_summary": "FieldPermissions by Field; FlowDefinitionView Partner Quality Watchlist", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Validation rules on the four objects; how the flow uses Cuisine__c", "command_summary": "Tooling ValidationRule; Tooling Flow.Metadata by ActiveVersionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Editability of permission sets; name collisions for new fields; org edition", "command_summary": "PermissionSet NamespacePrefix/Type; Tooling CustomField DeveloperName IN; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Data 360 data streams exist", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "AgentCustomerActions candidate list and query mode (AskCoworker R claimed FavoriteCuisine__c absent and FLS enforced)", "command_summary": "Read AgentCustomerActions body lines 150-220 from ApexClass query result", "ok": true, "contradicted_askcoworker": true}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "Q1: Which values should the global value set hold? (a) the union of all current definitions, 103 values (Storefront/Contact's 102 plus 'Other' from Account/Lead), keeping near-duplicates like BBQ/Barbecue and Boba Tea/Bubble Tea as they are [recommended]; (b) the union with synonyms merged plus a data remap; (c) only Account/Lead's 38 values. Q2: Salesforce can promote only one existing local picklist into a global value set in place; the other fields must be replaced by new picklist fields bound to the set, with data copied and old fields deleted, which changes API names seen by Account Layout and the non-editable integration permission sets (sfdc_accelerate_dms has Edit). Options: (a) promote Storefront__c.Cuisine__c (6 Apex/flow readers keep working) and replace the Account, Lead, and Contact fields [recommended]; (b) promote only the Storefront field and leave the others local; (c) replace all four fields.", "simulated_answer": "Global value set 'Cuisine' used by Storefront Cuisine, Account Cuisine Type, Lead Cuisine Type, Contact Favorite Cuisine; values = union."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 12, "create": 4, "update": 5, "delete": 3},
+  "skill_friction": [
+    "The whole design hinges on a platform behavior no allowed command can test (an existing local picklist cannot be re-pointed to an existing GlobalValueSet; only one field can be promoted). SKILL.md says to state such behavior as an assumption, but gives no guidance for when the assumption drives most of the inventory (3 creates, 3 deletes, layout, PS, settings); I made it load-bearing with a sandbox validate-only check.",
+    "'Promote to Global Value Set' is a Setup action, not a deployable change. The spec format only allows Create/Update/Delete rows of metadata types, so the GVS Create and the Storefront field Update are rows whose delivery mechanism is a manual Setup step; the skill does not say how to represent UI-only operations.",
+    "The I call timed out twice; the second retry (data-model rows only) was the last allowed, so layout, permission set, and LeadConvertSettings rows came from my own org queries. The rule 'a split counts as one retry' plus 'up to 2 retries' leaves no room to cover the other half of a split with AskCoworker without it looking like a third retry.",
+    "Answer mapping: the hidden intent named the four fields by label but did not choose between promote-plus-replace and other options; the skill's mapping rule worked, but it is unclear whether mapping an answer that names components (not options) should be a user decision or an assumption.",
+    "Off-list data values (15 Storefront records with values in no definition) sit between 'missing business values' (ask) and 'existing data that breaks a new rule' (decide, list clean-up). I chose the latter without asking; the boundary is not explicit.",
+    "The R split rule (>8 changes: split into runtime and security halves) produces two calls of kind 'r'; the run.json kind enum has no separate code for the second half."
+  ]
+}

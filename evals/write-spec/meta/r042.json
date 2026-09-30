@@ -1,0 +1,10 @@
+{
+ "id": "r042",
+ "category": "new-automation",
+ "requirement": "Only one active promotion per storefront at a time pls",
+ "hidden_intent": "Prevent a second Active promotion for the same storefront when date ranges overlap; non-overlapping future-dated active promos are fine. Block with an error rather than auto-expiring the old one.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Material fork: block vs auto-deactivate the older promo, and whether 'at a time' means overlapping dates or any Active status. Not doable with a plain validation rule \u2014 needs trigger/flow with a query."
+ }
+}

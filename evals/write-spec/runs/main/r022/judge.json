@@ -1,0 +1,7 @@
+{"id": "r022", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Adding a Status__c != Inactive filter to the only list view, 'All', makes its label misleading and leaves no list view from which users can find archived storefronts; a separate 'Archived Storefronts' view (or renaming) was not considered. Lightning's default Recently Viewed view is also not covered (acknowledged only in Section 6).", "skill_gap": "none exists"},
+  {"defect": "Retention mechanism in Resolved is tagged _assumption_ although the user explicitly accepted the recommended default; it should be tagged as a user decision.", "skill_gap": "none exists"}
+ ]}

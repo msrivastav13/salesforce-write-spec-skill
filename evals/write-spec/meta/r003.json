@@ -1,0 +1,10 @@
+{
+ "id": "r003",
+ "category": "standard-crm",
+ "requirement": "Flag accounts whose SLA expires in the next 30 days so account managers can renew.",
+ "hidden_intent": "Formula checkbox 'SLA Expiring Soon' plus a list view. No emails.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Account.SLAExpirationDate__c exists; formula field simplest; could be report-only."
+ }
+}

@@ -1,0 +1,7 @@
+{"id": "r060", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 1, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Hidden intent wants the account owner notified via a Task when a storefront loses its primary contact; the spec identified the orphaned-storefront consequence (Open item 4) but proposed only a report, outside the inventory, and did not add a Create Records (Task) step or offer it as the recommended default.", "skill_gap": "None exists: no SKILL.md instruction asks the run to propose follow-up for the owner of records the change orphans or clears."}
+ ]}

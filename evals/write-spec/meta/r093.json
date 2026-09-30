@@ -1,0 +1,10 @@
+{
+ "id": "r093",
+ "category": "security",
+ "requirement": "Payment methods are PII. Lock them down so only the finance team can see them, and encrypt them.",
+ "hidden_intent": "Payment Methods OWD Private, finance perm set only; Shield Platform Encryption on sensitive fields.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Payment_Methods__c has only a Contact__c lookup \u2014 nothing to encrypt yet; OWD/perm set; Shield perm sets exist in org. Never store raw card numbers."
+ }
+}

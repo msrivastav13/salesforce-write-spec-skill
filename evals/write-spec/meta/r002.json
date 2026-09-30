@@ -1,0 +1,10 @@
+{
+ "id": "r002",
+ "category": "already-met",
+ "requirement": "Store each storefront's opening and closing hours for every day of the week.",
+ "hidden_intent": "Hours per weekday per storefront.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Already met by Storefront_Hours_of_Operation__c (Day_of_Week__c, Opening_Time__c, Closing_Time__c). Gap only if Time-typed fields are wanted."
+ }
+}

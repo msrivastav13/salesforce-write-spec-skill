@@ -1,0 +1,10 @@
+{
+ "id": "r076",
+ "category": "integration",
+ "requirement": "When a refund is approved, call the payment provider's API to actually push the money back.",
+ "hidden_intent": "On status -> Approved, async callout to Stripe refunds API via Named Credential; success -> Processing then Completed with processed date; failure -> Failed with error logged.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Named Credential; async (Queueable/platform event), not sync in trigger; idempotency; failures must set Failed, not be swallowed."
+ }
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r117",
+ "category": "already-met",
+ "requirement": "Agents keep asking for a way to issue a refund from a case. Build something.",
+ "hidden_intent": "Service agents want to issue a refund linked to a case from the case page.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Partly met: Issue_Refund autolaunched flow and IssueRefundReceiptAction exist; Refund__c has Case__c lookup. Reuse/expose existing flow (e.g. quick action) rather than build new."
+ }
+}

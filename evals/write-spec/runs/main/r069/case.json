@@ -1,0 +1,4 @@
+{
+ "id": "r069",
+ "requirement": "Ratings on reviews must be between 1 and 5, whole numbers only."
+}

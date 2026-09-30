@@ -1,0 +1,10 @@
+{
+ "id": "r050",
+ "category": "standard-crm",
+ "requirement": "Cases about a storefront should auto-populate the business account from the storefront.",
+ "hidden_intent": "If Storefront set and Business Account blank, copy Storefront's Account into Business Account on create and update.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Case.Storefront__c and Case.Business_Account__c exist; before-save flow; don't overwrite if already set."
+ }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "r041",
+  "skill_rev": "v20",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r041/merchant-code-unique-8-char-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 23, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53},
+    {"seq": 24, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50},
+    {"seq": 30, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable, org ID, API version", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Merchant_Code__c type, length, unique, nillable; other code-like fields on Account", "command_summary": "sf sobject describe Account, filter merchant/code fields", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "same concept elsewhere: any custom field named like Merchant", "command_summary": "Tooling CustomField WHERE DeveloperName LIKE '%Merchant%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "field label and description on Account", "command_summary": "FieldDefinition on Account WHERE Label LIKE '%Merchant%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "scan full custom object list for a merchant object", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "identify object owning Merchant_Business_Name", "command_summary": "EntityDefinition WHERE DurableId = '01Iak00000Dx4JUEAZ'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "existing validation rules on Account (with ErrorConditionFormula)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId='Account' selecting ErrorConditionFormula", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "existing validation rules on Account (retry without formula)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId='Account'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "no Apex triggers on Account", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId='Account'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "no record-triggered flows on Account", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId='Account'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "AccountRule class origin (AskCoworker said hidden, may enforce rule)", "command_summary": "Tooling ApexClass WHERE Name='AccountRule' (NamespacePrefix)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 14, "purpose": "existing values: duplicates and lengths", "command_summary": "Account GROUP BY Merchant_Code__c WHERE not null", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Account total count", "command_summary": "SELECT COUNT() FROM Account", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "field metadata: unique, caseSensitive, required, length", "command_summary": "Tooling CustomField Metadata by Id 00Nak00004nK0SqEAK", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "dependencies on Merchant_Code__c", "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId='00Nak00004nK0Sq'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "field-level access on Merchant_Code__c", "command_summary": "FieldPermissions WHERE Field='Account.Merchant_Code__c'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 19, "purpose": "unmanaged Apex bodies referencing Merchant_Code__c", "command_summary": "Tooling ApexClass Body WHERE NamespacePrefix=null, searched locally; plus grep of force-app", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "profile FLS rows for Merchant_Code__c", "command_summary": "FieldPermissions WHERE Field=... AND Parent.IsOwnedByProfile=true", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "System Administrator profile permissions", "command_summary": "Profile WHERE Name='System Administrator'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 28, "purpose": "org edition", "command_summary": "SELECT OrganizationType, IsSandbox FROM Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 29, "purpose": "Onboarding_Application__c fields for a merchant code equivalent", "command_summary": "Tooling CustomField WHERE TableEnumOrId='01Iak00000Dx4JUEAZ'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 20, "question": "The 10 accounts that have a Merchant Code today all have 10-character values, so none meets 'exactly 8'. How should the rule treat them? (a) enforce only on create or when the code changes, clean up separately (recommended); (b) enforce on every save, blocking those 10 accounts until fixed; (c) truncate existing values to 8.", "simulated_answer": "No preference; use your recommended default."},
+    {"seq": 21, "question": "Does every account need a Merchant Code? (a) No, optional, validated only when present (recommended; 190 of 200 accounts have none); (b) Yes, make it required.", "simulated_answer": "Not required on customer accounts (option a)."},
+    {"seq": 22, "question": "Which characters are allowed in the 8? (a) any characters; (b) letters and digits only; (c) digits only.", "simulated_answer": "Alphanumeric (option b)."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 1, "update": 1, "delete": 0},
+  "skill_friction": [
+    "Step 5 says to ask after D1, but the key intent fork here (all 10 existing codes are 10 characters, so they violate the new rule) only surfaced from my own data-shape query after D2; the skill does not say whether asking after D2/verification is still the 'one message' or uses up the 'one more message' allowance. I asked once, after verification.",
+    "Grandfathering existing non-conforming data vs blocking all saves is a recurring intent-vs-implementation fork that SKILL.md does not classify; it changes the validation formula (inventory detail) but not the row count, so it is unclear whether it must be asked or decided.",
+    "org-verification.md does not warn that Tooling ValidationRule rejects ErrorConditionFormula in multi-row queries (needs Metadata by Id); the first VR query failed and the D2 answer also reported VRs as 'not queryable'.",
+    "Spec-format content rule 'every new field ... includes its access and placement' does not say how to treat an Update that only changes a constraint (unique) on an existing field; I treated access and placement as unchanged.",
+    "AskCoworker repeatedly labeled facts from this message as '[Verified: prior session]'; the table rule covers this ('facts you sent that come back echoed are already established') but the wording 'prior session' made it look like cross-call memory."
+  ]
+}

@@ -1,0 +1,6 @@
+{"id": "r005", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Section 2 and Section 8 refer to 'two profiles (one with Edit)' without naming them (System Administrator has Read/Edit; Analytics Cloud Integration User has Read); the System Administrator profile gets no FLS on the new field, covered in practice only because the single admin user holds Agentforce_Reference_App, which the spec does not state.", "skill_gap": "None exists: SKILL.md gives no guidance on choosing FLS targets for a new field when several profiles/permission sets can edit the object (run flagged this in skill_friction)."}
+ ]}

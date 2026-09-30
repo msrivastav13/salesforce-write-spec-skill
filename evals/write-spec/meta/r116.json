@@ -1,0 +1,10 @@
+{
+ "id": "r116",
+ "category": "contradictory",
+ "requirement": "Refunds should be auto-approved instantly to delight customers, with a manager approval required on everything over $100.",
+ "hidden_intent": "Auto-approve <= $100; approval required > $100.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Apparent conflict resolvable as a threshold; spec may state assumption or confirm."
+ }
+}

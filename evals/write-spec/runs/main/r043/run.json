@@ -1,0 +1,40 @@
+{
+  "id": "r043",
+  "skill_rev": "v20",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r043/low-rating-review-case-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48},
+    {"seq": 4, "kind": "d2", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 5, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 26},
+    {"seq": 12, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 56},
+    {"seq": 14, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 15, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41},
+    {"seq": 17, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 44}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable, API version", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "scan custom objects for review/case concepts", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Review__c fields, types, picklists, Case child relationship; rating and status distribution", "command_summary": "sobject describe Review__c; COUNT by Rating__c ranges and Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no triggers/record-triggered flows on Review__c or Case; Merchant Success queue/group/role absence; assignment rules", "command_summary": "Tooling ApexTrigger; FlowDefinitionView; Group; QueueSobject; AssignmentRule; UserRole", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Case fields, picklist values (Type, Origin, Status, Priority), record types; Storefront__c fields", "command_summary": "sobject describe Case and Storefront__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "same-concept fields, CaseRule namespace, other case flows, regular groups", "command_summary": "Tooling CustomField LIKE Review; EntityDefinition; ApexClass namespaces; Group Regular; FlowDefinitionView names", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Case custom fields, validation rules, Review__c dependencies, users, permission sets", "command_summary": "Tooling CustomField Case; ValidationRule; MetadataComponentDependency; User; PermissionSet", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "null customers, integer ratings, AgentReviewActions body", "command_summary": "COUNT queries on Review__c; Tooling ApexClass Body", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 16, "purpose": "Case OWD, org edition, Case and Review__c object permissions", "command_summary": "Organization; ObjectPermissions Case and Review__c", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "1) Who is the merchant success team that should own the case? Options: (a) a new 'Merchant Success' Case queue (recommended; no queue, public group, or role for it exists), (b) the existing Merchant_Messaging_Queue (it supports only MessagingSession today), (c) leave ownership to the active 'Standard' Case assignment rule (entries unreadable), (d) the storefront owner. 2) Should a case open only when a review is created, or also when an existing review's rating is edited down to 1 or 2 (recommended: create only)? Should the 29 existing low-rated reviews be backfilled (recommended: no)?", "simulated_answer": "New Merchant Success queue; case linked to the Storefront and the reviewing Contact, subject including the storefront name. Only on create, not on edits. Backfill: no preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 5 says to ask after D1 and step 3 but before I; the user question was formed after verification and answered from intent.json before I was sent, which fits, but seq ordering shows it right before I rather than as a separate stage, so it is unclear whether asking before D2 is preferred.",
+    "The retry rule says 'split it' counts as one retry; for D2 and R I narrowed the question and dropped topics (permission sets, integrations; runtime ordering) rather than sending the second half, then covered those by org queries. The skill does not say whether the dropped half must still be sent as another retry.",
+    "AskCoworker repeatedly labels facts '[Verified: prior session]' that were facts I sent or never checked (for example '0 existing Review records' when 92 exist); the table covers this, but a clear instruction on whether such wrong 'prior session' facts count as a 'fact you sent was wrong' follow-up would help.",
+    "AskCoworker claimed FlowTest is not deployable for record-triggered flows and that flow Get Records is not bulkified; these are platform-behavior claims no allowed query can test, so they are tagged 'assumption (documented platform behavior)'. The skill could say more explicitly that such corrections do not need a follow-up call.",
+    "spec-format asks for queue member placement/access for people who use a component, but when no team users exist in the org, the only option is a named placeholder; the skill does not say whether queue membership is metadata (inventory row detail) or non-metadata setup."
+  ]
+}

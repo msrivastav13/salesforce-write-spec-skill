@@ -1,0 +1,10 @@
+{
+ "id": "r015",
+ "category": "already-met",
+ "requirement": "Can we get a short AI summary of each storefront's reviews on the storefront record?",
+ "hidden_intent": "Summary text of reviews visible on storefront.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Largely met: Storefront__c.Review_Summary__c field and AgentSummarizeReviewsActions Apex exist. Gap may only be when/how it's populated \u2014 reuse, don't rebuild."
+ }
+}

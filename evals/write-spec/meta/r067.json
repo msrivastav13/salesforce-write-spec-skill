@@ -1,0 +1,10 @@
+{
+ "id": "r067",
+ "category": "new-automation",
+ "requirement": "Discount percentage on a promo should never be over 50%. Finance got burned last quarter.",
+ "hidden_intent": "Validation rule blocking Discount Percentage > 50% on Promotion. Applies to new and edited records. Admins do not need a bypass.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Validation rule on Promotion__c.Discount_Percentage__c; percent fields evaluate as 0.5 in formulas, so the rule must compare to 0.5 (or 50%)."
+ }
+}

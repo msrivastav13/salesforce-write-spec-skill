@@ -1,0 +1,10 @@
+{
+ "id": "r057",
+ "category": "standard-crm",
+ "requirement": "Map the merchant info on the lead into the account when converting \u2014 cuisine, POS, locations.",
+ "hidden_intent": "Lead field mapping: Cuisine Type -> Account Cuisine Type, Number of Locations -> Account NumberofLocations; POS has no Account field -> create one.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Lead conversion field mapping (Setup, no code); Account.Cuisine_Type__c and NumberofLocations__c exist; no POS field on Account; duplicate locations fields on Lead."
+ }
+}

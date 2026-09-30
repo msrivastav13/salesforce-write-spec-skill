@@ -1,0 +1,47 @@
+{
+  "id": "r050",
+  "skill_rev": "v22",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r050/case-business-account-from-storefront-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"seq": 19, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 20, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50},
+    {"seq": 23, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 33}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "org reachable", "command_summary": "sf org display", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "scan custom objects for storefront/account concepts", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Case.Storefront__c, Case.Business_Account__c, Storefront__c.Account__c exist, types, nillable", "command_summary": "sf sobject describe Case and Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "no Apex triggers on Case/Storefront__c/Account (any namespace)", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no flows triggered on Case/Storefront__c", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN ('Case','Storefront__c')", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "same concept elsewhere; field descriptions; field Ids", "command_summary": "Tooling CustomField WHERE DeveloperName IN ('Business_Account','Storefront','Account')", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Case assignment rules", "command_summary": "AssignmentRule WHERE SobjectType='Case'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "all triggered flows in org (confirm none on Case)", "command_summary": "FlowDefinitionView WHERE TriggerType != null", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "no Case validation rules", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId='Case'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "readers of Case.Business_Account__c / Case.Storefront__c / Storefront__c.Account__c", "command_summary": "Tooling MetadataComponentDependency by field Ids", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "data shape: Cases with storefront and blank business account", "command_summary": "COUNT() on Case with filters (one GROUP BY attempt failed on syntax)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "storefronts lacking Account__c", "command_summary": "COUNT() Storefront__c total and WHERE Account__c = null", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Apex writers/readers of Business_Account__c", "command_summary": "Tooling ApexClass Body (non-namespaced) searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "AgentCaseCreateActions behavior; CaseRule namespace", "command_summary": "Tooling ApexClass Body for AgentCaseCreateActions; ApexClass Name/NamespacePrefix for CaseRule, CaseCommentRule", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 18, "purpose": "new flow name unused; org edition", "command_summary": "FlowDefinitionView ApiName LIKE; Organization OrganizationType", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "FLS grants on the two Case fields", "command_summary": "FieldPermissions WHERE Field IN (Case.Business_Account__c, Case.Storefront__c)", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 17, "question": "When a Case has a storefront, how should Business Account be filled? (A) Only when Business Account is blank, on create and on update, never overwriting an existing value [recommended]; (B) Always sync from the storefront on create and whenever the storefront changes, overwriting manual or caller-supplied values (AgentCaseCreateActions passes businessAccountId); (C) Only on create when blank. Evidence: no automation on Case today; 4 existing Cases have a storefront and blank business account.", "simulated_answer": "If Storefront set and Business Account blank, copy Storefront's Account into Business Account on create and update. (Maps to option A.)"}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 2, "update": 0, "delete": 0},
+  "skill_friction": [
+    "AskCoworker D2 marked hidden CaseRule/CaseCommentRule as a blocking open decision; SKILL.md has no explicit guidance for managed-package class names that coincidentally match the object, resolved by namespace + trigger checks.",
+    "AskCoworker R and T repeated a platform claim (before-save Get Records costs one SOQL per record) that contradicts flow bulkification; the 'wrong details' row says fix and send corrected inventory to R and T, but R/T still re-asserted it; no guidance on whether to spend a follow-up when R/T repeat a corrected error.",
+    "AskCoworker I claimed before-save flows cannot use $Record.Parent__r.Field__c cross-object references; required judgment on documented platform behavior with no query able to test it.",
+    "spec-format says a planned Flow Test is an inventory row, while Rule 4 drops speculative components; unclear whether a FlowTest should be added by default for a flow-only change.",
+    "FlowDefinitionView with OR returned status 0 and an empty result instead of an error, which could produce a false absence claim; org-verification.md notes OR is unsupported but not that it fails silently.",
+    "AskCoworker labelled several facts 'prior session' even though every call says to ignore earlier conversations; all were re-verified."
+  ]
+}

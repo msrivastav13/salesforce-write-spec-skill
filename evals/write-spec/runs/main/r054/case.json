@@ -1,0 +1,4 @@
+{
+ "id": "r054",
+ "requirement": "When a promotion's end date passes, it should automatically flip to Expired so customers stop seeing it."
+}

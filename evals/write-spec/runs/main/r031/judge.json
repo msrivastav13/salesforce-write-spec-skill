@@ -1,0 +1,8 @@
+{"id": "r031", "claims": {"correct": 6, "wrong": 0, "unverifiable": 1}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 1, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The run found the existing MenuDescriptionPromptGrounding class (verified: @InvocableMethod with a Menu__c RelatedEntity input that returns menu, storefront, cuisine, and item context), but did not reuse it. It dropped cuisine and storefront context instead. The Flex template could take a second input (the item's Menu__c) and call the existing class for menu-level grounding. The expectation for this case was to reuse that class.", "skill_gap": "Rule 4 (minimal design) was applied without weighing the reuse-first instruction. The skill does not say that an existing grounding class which gives partial context should be reused through an extra template input before it is rejected."},
+  {"defect": "The clarifying question was asked before any org scan, so its options were generic (app navigation menu, action menus) even though Menu__c and Menu_Item__c exist.", "skill_gap": "The vague-requirement rule does not allow a quick read-only object scan to ground the options before asking (run.json raises the same point)."},
+  {"defect": "A duplicate prompt template cannot be ruled out, because GenAiPromptTemplate is not queryable. This is labelled correctly as unverifiable (Open item 7).", "skill_gap": "org-verification.md has no guidance for checking prompt templates."}
+ ]}

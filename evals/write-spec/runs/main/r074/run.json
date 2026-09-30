@@ -1,0 +1,49 @@
+{
+  "id": "r074",
+  "skill_rev": "v27",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r074/review-lifecycle-automation-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 51},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 56},
+    {"seq": 18, "kind": "i", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 19, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 54},
+    {"seq": 20, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 44},
+    {"seq": 21, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 59},
+    {"seq": 23, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48},
+    {"seq": 24, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 54}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Full custom object list; Review__c and Storefront__c exist", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Review__c fields, types, picklist values, relationships (Name autonumber, Status__c Submitted/Published)", "command_summary": "sf sobject describe Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Storefront__c fields incl. Review_Summary__c, roll-ups, Account__c", "command_summary": "sf sobject describe Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Existing triggers, record-triggered and scheduled flows on Review__c/Storefront__c/Case; EntityDefinition DurableIds", "command_summary": "Tooling ApexTrigger; FlowDefinitionView per object and TriggerType=Scheduled; ApiName LIKE %Review%; EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Validation rules, duplicate/matching rules, full custom field lists, same-concept fields org-wide, Case custom fields", "command_summary": "Tooling ValidationRule by EntityDefinitionId; DuplicateRule; MatchingRule (failed); Tooling CustomField by TableEnumOrId and LIKE", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Apex readers/writers of Review fields; dependencies on Review__c, Review_Summary__c, Status__c, Rating__c; bodies of AgentReviewActions, AgentSummarizeReviewsActions, AgentCaseCreateActions", "command_summary": "Tooling ApexClass Body scan; MetadataComponentDependency by Id (15 and 18 char)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Get_Partner_Quality_Watchlist reads Review_Summary__c; prompt templates; scheduled jobs; data shape", "command_summary": "FlowDefinitionView by Label; Tooling/standard GenAiPromptTemplate (unsupported); CronTrigger; Review__c aggregates (GROUP BY Rating failed)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Rating/status distribution, null customers, summary blanks", "command_summary": "COUNT queries on Review__c by rating ranges and status; Storefront__c Review_Summary__c values", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Duplicate pairs excluding null customer; non-integer ratings; field descriptions and roll-up metadata; Flow metadata of watchlist; Case assignment rules, record types", "command_summary": "GROUP BY Customer__c, Storefront__c HAVING; Tooling CustomField Metadata by Id; Tooling Flow Metadata; AssignmentRule; RecordType", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Case picklists (Origin, Type, Status), Storefront Account__c nulls, Order_Date__c window, Einstein/Agentforce presence, existing Review/Merchant permission sets and classes", "command_summary": "describe Case/Storefront__c; COUNT/MIN/MAX on Review__c; GenAiPlannerDefinition; PermissionSet LIKE; ApexClass name LIKE", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 13, "purpose": "Object and field permissions for Review__c, Case, Case.Storefront__c, Review_Summary__c", "command_summary": "ObjectPermissions; FieldPermissions (non-profile)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Existing queues (Merchant Success absent)", "command_summary": "Group Type=Queue; QueueSobject; Group LIKE Merchant; UserRole", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "Case layouts and Case_Record_Page Dynamic Forms for field placement; EinsteinGPTPromptTemplateUser assignments", "command_summary": "Tooling Layout, FlexiPage (Metadata by Id); PermissionSetAssignment", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 15, "question": "What counts as a duplicate review? Options: (a) same customer (Customer__c) + same storefront (Storefront__c) — one review per customer per storefront; (b) same customer + storefront + Order_Date__c — one per order. Evidence: 13 Customer+Storefront pairs already repeat (27 records), 0 repeat when Order_Date__c is added; AgentReviewActions never sets Order_Date__c. Recommendation: (a).", "simulated_answer": "No preference; use your recommended default."},
+    {"seq": 16, "question": "Which reviews should the nightly AI summary draw on? Options: (a) reuse the existing AgentSummarizeReviewsActions action (all statuses, windowed by Order_Date__c); (b) only Published reviews via a new query; (c) all reviews regardless of date. Evidence: AgentSummarizeReviewsActions exists, returns stats + review list but writes nothing; default 30-day window returns 0 reviews today. Recommendation: (a) with a wider window.", "simulated_answer": "Nightly summary via existing summarize action."},
+    {"seq": 17, "question": "Who should work the cases opened for 1-2 star reviews? Options: (a) default Case assignment rule 'Standard' (entries unreadable); (b) Merchant_Messaging_Queue (currently MessagingSession only); (c) a new dedicated queue. Evidence: only two queues exist, neither for Case. Recommendation: (c) a dedicated queue.", "simulated_answer": "Cases to Merchant Success queue."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 11, "create": 10, "update": 1, "delete": 0},
+  "skill_friction": [
+    "Rule 3 says after two wrong AskCoworker claims verify every fact kept; this run hit eight corrections (validation rules 'not queryable', VLOOKUP composite key, scheduled Apex as Automated Process user, undelete not restoring Set Null lookups, unique field deploy failing on existing data, non-AI stats string, broad FLS grants, nonexistent Origin value). The skill gives no guidance on whether to keep spending R/T calls once AskCoworker is this unreliable.",
+    "The I-call retry rule ('split I by responsibility; both halves count as one retry') produces two partial inventory tables; SKILL.md does not say how to merge them or whether the merged result must be resent as one I before R/T.",
+    "The 'more than 8 changes: split R into runtime and security' rule forced two R calls; askcoworker-calls.md has no distinct kind label for the halves (both recorded as 'r').",
+    "Backfill guidance ('existing data that breaks a new rule: enforce on create and change, list clean-up as data step') does not address a unique-key backfill where existing duplicates would make the backfill itself fail; I had to design a partial backfill (key only on the newest record per pair) myself.",
+    "No read-only way to confirm Einstein generative AI / Prompt Builder is enabled; org-verification.md covers licenses but not generative AI feature enablement, so the prompt template and dependent Apex rows became Conditional by judgement.",
+    "Aggregate GROUP BY on a Number (double) field fails in SOQL; org-verification.md suggests GROUP BY for value distribution without noting this restriction."
+  ]
+}

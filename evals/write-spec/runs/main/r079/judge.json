@@ -1,0 +1,9 @@
+{"id": "r079", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0},
+ "wrong_claims": ["Section 6: 'Users with View All Data (for example System Administrator) see the fields regardless.' View All Data does not override FLS; FieldPermissions on Review__c.Rating__c/Status__c show no profile rows, so a System Administrator without one of the five permission sets would see those columns hidden."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "States that View All Data users see the column fields regardless of FLS; wrong platform behavior presented as fact, which hides a real gap (no profile grants Read on the four column fields).", "skill_gap": "v28 reference/org-verification.md FieldPermissions note says Modify All Data / View All Data users still see the field (wrong; corrected in v29.1). The skill caused this defect."},
+  {"defect": "Says a user without Read FLS 'sees that column empty'; the platform omits columns the user cannot read. Minor inaccuracy in the security section.", "skill_gap": "None exists."}
+ ]}

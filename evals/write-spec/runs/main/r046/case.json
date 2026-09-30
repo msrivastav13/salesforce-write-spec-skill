@@ -1,0 +1,4 @@
+{
+ "id": "r046",
+ "requirement": "The Agentforce agent is updating menu prices for any merchant who asks. Make sure it can only update menus for the merchant it's verified as."
+}

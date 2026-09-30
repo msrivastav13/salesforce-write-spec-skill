@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Validation rule on Promotion: End Date must be on or after Start Date when both populated. Same-day promos are allowed."
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r088",
+ "category": "ui",
+ "requirement": "Merchants want a weekly-hours editor \u2014 a grid of Mon-Sun with open/close times they can edit in one go.",
+ "hidden_intent": "LWC on Storefront page: 7-row editable grid backed by Storefront Hours of Operation records; creates missing days; saves all at once.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Reuse Storefront_Hours_of_Operation__c and AgentUpdateStorefrontHoursActions logic; times are Text fields."
+ }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "r096",
+  "skill_rev": "v31",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r096/driver-tipping-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 8, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 12, "kind": "i", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 13, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"seq": 14, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"seq": 16, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50},
+    {"seq": 17, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 56},
+    {"seq": 18, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Full custom object list; any Driver/Tip/Order/Delivery object", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Same concept elsewhere: fields named Tip/Driver/Gratuity/Courier/Deliver; standard objects by keyword", "command_summary": "Tooling CustomField DeveloperName LIKE; sf sobject list --sobject all filtered", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Order/WorkOrder/ServiceResource/Transaction__c record counts; Contact/Account record types; org edition", "command_summary": "COUNT() queries; RecordType; Contact GROUP BY RecordType; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Transaction__c custom fields and metadata; Apex bodies for driver/tip/Transaction__c; triggers; dependencies", "command_summary": "Tooling CustomField by TableEnumOrId and Metadata by Id; ApexClass Body scan; ApexTrigger; MetadataComponentDependency", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Where orders live: Named/External credentials; Order Apex source", "command_summary": "Tooling NamedCredential, ExternalCredential, ExternalServiceRegistration; OrderPicker* bodies", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Automation and readers on Transaction__c/Contact fields", "command_summary": "FlowDefinitionView; Tooling ValidationRule; MetadataComponentDependency on 6 field Ids; Report list", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Object/field access on Transaction__c; unmanaged permission sets; active users", "command_summary": "ObjectPermissions, FieldPermissions, PermissionSet, User GROUP BY (EntityDefinition SharingModel failed)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 11, "purpose": "Layouts, FlexiPages, Contact fields, tabs, report folders, Data 360 streams", "command_summary": "Tooling Layout, FlexiPage, CustomField, ValidationRule; TabDefinition; Folder; DataStream COUNT", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "OWD of Transaction__c and Contact; profile names behind profile-owned permission sets; public groups", "command_summary": "Tooling EntityDefinition InternalSharingModel; PermissionSet Profile.Name; Group Type Regular", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 10, "question": "Should each tip be recorded against the specific order it was given on (orders live in the external Pronto Orders API, so we would store the order number on the tip), or is driver + date + amount enough? Options: (a) tie each tip to an order number and a driver [recommended]; (b) standalone tip with driver, date, and amount only.", "simulated_answer": "Tips on orders attributed to drivers; weekly report. (mapped to option a)"}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 9, "create": 7, "update": 2, "delete": 0},
+  "skill_friction": [
+    "Driver identity (Contact record type vs User vs ServiceResource vs new object) is both 'data structure' (decide) and 'which persona' (ask); SKILL.md step 5 does not say which bucket a missing core entity falls into. I decided it.",
+    "Who writes tips (app integration vs staff) is an intent/channel question, but predicting 'no preference' pushed it to a decision; it ends up as a blocking-for-delivery open item, which feels like it should have been asked.",
+    "Retry of a split I call: the table lists one kind 'retry' but a split sends two calls; unclear whether both halves are recorded as separate 'retry' entries (I did).",
+    "Report folder sharing: design rules do not cover who a new shared report folder is shared with; AskCoworker proposed an unsupported target (permission set holders).",
+    "Allow Reports object setting is unreadable yet load-bearing for the only reporting row; the skill says 'record as assumption' but does not say whether the dependent Report row should be Conditional."
+  ]
+}

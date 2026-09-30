@@ -1,0 +1,10 @@
+{
+ "id": "r053",
+ "category": "new-automation",
+ "requirement": "Remaining value on a gift certificate can't be more than the original value or go negative.",
+ "hidden_intent": "Validation rule: Remaining Value between 0 and Original Value.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Validation rule on Gift_Certificate__c; handle null Original_Value__c."
+ }
+}

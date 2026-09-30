@@ -1,0 +1,51 @@
+{
+  "id": "p02",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/pilot/p02/prevent-duplicate-refunds-spec.md",
+  "askcoworker_calls": [
+    {"kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49},
+    {"kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 65},
+    {"kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49},
+    {"kind": "followup", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 70},
+    {"kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 70},
+    {"kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 67}
+  ],
+  "org_queries": [
+    {"purpose": "Org reachable, API version", "command_summary": "sf org display", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Refund__c fields; no order/transaction/unique field", "command_summary": "sf sobject describe Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Find missed objects (transaction/payment/order)", "command_summary": "sf sobject list custom, filtered", "ok": true, "contradicted_askcoworker": true},
+    {"purpose": "Transaction__c fields (describe hid them due to FLS)", "command_summary": "sf sobject describe Transaction__c; FieldDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Transaction__c actually has 6 custom fields", "command_summary": "Tooling CustomField WHERE TableEnumOrId + per-field Metadata; FieldPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Data shape / existing duplicates", "command_summary": "COUNT Refund__c, Transaction__c; GROUP BY Case__c HAVING >1; GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "No triggers on Refund__c/Transaction__c/Case", "command_summary": "Tooling ApexTrigger by TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Record-triggered flows on Refund__c", "command_summary": "FlowDefinitionView by TriggerObjectOrEventId (first attempt with OR failed: disjunctions not supported; split)", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "No validation rules on Refund__c", "command_summary": "Tooling ValidationRule by EntityDefinitionId", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "All Refund__c creators (found Issue_Refund flow AskCoworker missed)", "command_summary": "Tooling MetadataComponentDependency on Refund__c and Transaction__c", "ok": true, "contradicted_askcoworker": true},
+    {"purpose": "IssueRefundReceiptAction behavior (unconditional insert, callout before DML, catch message)", "command_summary": "Tooling ApexClass Body", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Order total available; IssueGiftCardAction 24h guard claim", "command_summary": "Tooling ApexClass Body grep for OrderPickerAction/Controller/IssueGiftCardAction", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Flow inputs, create elements, fault paths, runInMode", "command_summary": "Tooling FlowDefinition ActiveVersionId + Flow Metadata for Issue_Refund, Apply_Remediation", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Permission sets with Create on Refund__c / access to Transaction__c", "command_summary": "ObjectPermissions WHERE SobjectType IN (...) AND PermissionsCreate", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "GenAiFunction Issue_Refund_Receipt exists; new class names free", "command_summary": "Tooling GenAiFunctionDefinition; ApexClass by Name", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "OWD of Refund__c and Transaction__c", "command_summary": "Tooling EntityDefinition InternalSharingModel", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Case / Payment_Methods__c order fields", "command_summary": "sf sobject describe Case, Payment_Methods__c", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"question": "Refund__c has no link to an order or transaction today. Transaction__c exists (Total_Amount__c, Transaction_Type__c Sale/Refund, Contact__c) but Refund__c does not reference it; orders otherwise live only in the external Orders API. What should count as a duplicate refund? (A) block any second active refund for the same order/transaction; (B) allow more refunds against the same transaction only while the combined active refund amount stays within the original Transaction__c.Total_Amount__c, and block anything over; (C) key on Case__c instead (one refund per case).", "simulated_answer": "B. Block a second refund for the same transaction unless the combined refund amount stays within the original transaction amount. Show a clear error to the agent."},
+    {"question": "Transaction__c has 0 records and no order number, and the agent only has the external orderNumber/total from OrderPickerAction. Should this spec also cover creating Transaction__c sale records from the Orders API (and passing their Id to the agent), or keep that out of scope and enforce the cap whenever a refund is linked to a transaction?", "simulated_answer": "No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 10, "create": 4, "update": 6, "delete": 0},
+  "skill_friction": [
+    "sf sobject describe respects the running user's FLS: Transaction__c showed zero custom fields while Tooling CustomField showed six. org-verification.md presents describe as the way to scan field lists for missed components; it should warn that describe hides FLS-restricted fields and recommend Tooling CustomField/FieldDefinition as a cross-check. I passed a wrong 'no custom fields' fact into the I call and had to spend a follow-up re-sending I with a correction.",
+    "The I template has no way to correct an 'Established so far' fact already sent; the skill does not say whether a corrected re-run of I counts as a follow-up or a retry.",
+    "Step 5 says ask 'one question', but here two scope-changing gaps existed (dedupe semantics, and who populates Transaction__c). Unclear whether a second question is allowed; I asked it and recorded the default.",
+    "The R+T combine rule (<=5 changes) forced separate R and T calls for a 10-row inventory; fine, but both still came in under the time limit.",
+    "AskCoworker asserted Salesforce platform behavior that is wrong (Apex SOQL in a with-sharing class returning 0 rows for users without object CRUD). The skill's conflict rule covers org-query contradictions only; it does not say how to handle an AskCoworker claim that contradicts documented platform behavior and cannot be tested with a read-only query. I recorded it in Section 8 as a conflict.",
+    "AskCoworker inventory rows had broken cross-references (Detail pointed at 'row 4' for the trigger that was row 5) and proposed a Unique External ID that contradicted its own allowance for re-issuing after Failed/Cancelled; the skill gives no guidance on rejecting or reshaping AskCoworker rows beyond 'clarify missing fields', so I reshaped the inventory myself (dropped the separate handler and exception classes, dropped the broad sfdc_accelerate_dms grant).",
+    "Validator --save deleted the .tmp itself (fine) but SKILL.md step 8 still tells the agent to delete it.",
+    "Runner hygiene: meta.json in the run directory contained the hidden_intent and I read it unintentionally while reading case.json via a directory listing/cat; it was later absent from the directory. The design was not changed by it, since the user question was asked before deciding semantics, but the run is not strictly blind.",
+    "AskCoworker call timings for the I-followup, R, and T calls are approximate (+/- 5s) because read-only queries ran between the end of one call and the next date stamp."
+  ]
+}

@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Record-triggered flow on Storefront status change to Closed: Menu Active=false for its menus and Available=false for their items. Not reversed on reopen."
+}

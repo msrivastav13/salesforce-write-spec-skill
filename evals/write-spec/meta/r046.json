@@ -1,0 +1,10 @@
+{
+ "id": "r046",
+ "category": "security",
+ "requirement": "The Agentforce agent is updating menu prices for any merchant who asks. Make sure it can only update menus for the merchant it's verified as.",
+ "hidden_intent": "Menu price action must verify the Menu Item belongs to a storefront on the verified contact's account; fail loudly otherwise.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Fix authorization in existing AgentUpdateMenuItemPriceActions/AgentUpdateMenuItemActions, not a new action; tie to verified contact."
+ }
+}

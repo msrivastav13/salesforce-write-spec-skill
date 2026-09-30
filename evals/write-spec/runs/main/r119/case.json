@@ -1,0 +1,4 @@
+{
+ "id": "r119",
+ "requirement": "Retire the Transaction object, nobody uses it."
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r037",
+ "category": "integration",
+ "requirement": "Publish an event whenever a storefront's status changes so the mobile app can hide closed restaurants instantly.",
+ "hidden_intent": "Event with storefront id, old/new status consumed by the mobile backend.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Custom platform event from a flow, or Change Data Capture on Storefront__c (simpler, existing feature) \u2014 spec should weigh both."
+ }
+}

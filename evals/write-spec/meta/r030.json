@@ -1,0 +1,10 @@
+{
+ "id": "r030",
+ "category": "vague",
+ "requirement": "make reviews better",
+ "hidden_intent": "Merchants should be able to respond publicly to reviews \u2014 add Merchant Response text + Response Date on Review, and notify the reviewer.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Hopelessly vague \u2014 must ask what 'better' means."
+ }
+}

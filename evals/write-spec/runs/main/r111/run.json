@@ -1,0 +1,37 @@
+{
+  "id": "r111",
+  "skill_rev": "v34",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r111/onboarding-application-stale-alert-spec.md",
+  "askcoworker_calls": [
+    {"seq": 5, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 52},
+    {"seq": 12, "kind": "i", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 83},
+    {"seq": 13, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Ground the entry clarifying question: full custom object list", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "Onboarding_Application__c fields and Status__c values", "command_summary": "sf sobject describe Onboarding_Application__c (custom fields; FLS hid all but Status__c)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Record counts by status; triggers on object; flows by label", "command_summary": "COUNT GROUP BY Status__c; Tooling ApexTrigger; Tooling FlowDefinitionView (failed: not a Tooling object)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Existing automation, recipients, notification types, org type", "command_summary": "EntityDefinition DurableId; FlowDefinitionView by trigger object/label/scheduled; UserRole; Group; User titles; ProcessDefinition; WorkflowRule; CustomNotificationType; OrgWideEmailAddress; QueueSobject; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Complete custom field list and same-concept fields; VRs; dependencies; access; Apex references", "command_summary": "Tooling CustomField by TableEnumOrId and by name LIKE Onboard/Submitted/Manager; ValidationRule; MetadataComponentDependency; ObjectPermissions; FieldDefinition history; TabDefinition; BusinessHours; EmailTemplate; LWC; FlexiPage; Apex bodies search", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Field semantics (type, reference, description, picklist default/restricted)", "command_summary": "Tooling CustomField.Metadata by Id for 6 fields; EntityDefinition for Region__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "Writers of fields (flows, agent actions), field permissions, managers set on users, Region link", "command_summary": "FlowDefinitionView unmanaged; GenAiFunctionDefinition; BotDefinition; MetadataComponentDependency on fields; FieldPermissions; User ManagerId count; CustomField Region", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Sharing model; names to create are free; active users; project files", "command_summary": "EntityDefinition sharing model; Group/PermissionSet/FlowDefinitionView LIKE Onboard; User list; grep force-app", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Profile names behind profile-owned permsets; notification type name free", "command_summary": "PermissionSet Profile.Name; CustomNotificationType LIKE Onboard", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 4, "question": "\"Fix onboarding\" does not say what is broken or what the outcome should be. The org has an Onboarding_Application__c object (Status__c: Submitted, Under Review, Approved, Onboarded). What should change: (a) applications getting stuck or lost in a status (alerts/escalation), (b) data captured on the application (fields/validation), (c) assignment of the application to a person, (d) something else? Please describe the desired outcome.", "simulated_answer": "Onboarding apps get lost; applications in Submitted > 3 days should notify the onboarding manager."},
+    {"seq": 11, "question": "Who is the 'onboarding manager' to notify? Options: (a) the user in Onboarding_Application__c.Onboarding_Specialist__c (Lookup User, 'assigned by the Agent'); (b) a new public group 'Onboarding Managers' whose members you name (no role, queue, or group for this exists; 0 users have a Manager set); (c) the record owner. Recommendation: (b), because lost applications are likely the ones no specialist picked up.", "simulated_answer": "No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 4, "create": 4, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Entry check 'too vague' says ask when there is 'no desired outcome, or no identifiable business object'; 'Fix onboarding.' has an identifiable object (Onboarding_Application__c) but no outcome. The OR made this clear, but it is unclear whether the entry clarifying answer, which fixed the outcome but not the recipient persona, still leaves room for the one step-5 message (assumed yes, since the entry question 'does not use up the step 5 message').",
+    "Step 5 says to predict the answer and decide instead if 'no preference' is expected and the default is safe; with a simulated user whose intent is silent on the recipient, the prediction is always 'no preference', yet persona is an explicit Ask category. Guidance on which rule wins would help.",
+    "The narrowed I retry (required by the timeout rule) dropped established facts, and AskCoworker then proposed creating a field that exists; the skill does not say which facts must survive a narrowed retry.",
+    "AskCoworker wrong-claim counting: D1 made three wrong claims in one answer (only one custom field, no submitted-date field, no identity field) that all stem from one FLS-hidden describe; unclear whether that counts as one or three toward the 2/4 thresholds. Counted separately, which reached four with the I retry and allowed skipping R and T.",
+    "Tooling FlowDefinitionView fails (it is standard-API only, as the reference says), but the entry-check scan happens before the reference files are read, so the first attempt used the wrong API."
+  ]
+}

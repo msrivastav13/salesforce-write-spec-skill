@@ -1,0 +1,44 @@
+{
+  "id": "r091",
+  "skill_rev": "v30",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r091/account-storefront-count-rollup-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 38},
+    {"seq": 10, "kind": "d2", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 11, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 29},
+    {"seq": 15, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 52},
+    {"seq": 16, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 17, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 22},
+    {"seq": 18, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 26},
+    {"seq": 20, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable; context", "command_summary": "sf org display (connectedStatus, alias, id, apiVersion only)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "full custom object list", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Storefront__c.Account__c is Lookup; Account count fields are plain Number; child relationship", "command_summary": "sf sobject describe Storefront__c and Account", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "same concept elsewhere; field IDs; data shape vs actual counts", "command_summary": "Tooling CustomField by name/LIKE Storefront/Location; aggregate COUNT on Storefront__c and Account; GROUP BY Account__c; Account values of Total_Storefronts__c/NumberofLocations__c; Status__c distribution", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "writers/readers of the fields: triggers, record-triggered flows, dependencies", "command_summary": "Tooling ApexTrigger on Storefront__c/Account; FlowDefinitionView; MetadataComponentDependency (18 and 15 char IDs)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Apex body references; all triggers; all active flows", "command_summary": "Tooling ApexClass bodies (unmanaged) searched locally; all ApexTrigger; active FlowDefinitionView", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Total_Storefronts__c dependencies alone; Account__c metadata (deleteConstraint); FLS; history tracking; creation dates", "command_summary": "MetadataComponentDependency by Id; Tooling CustomField.Metadata by Id; FieldPermissions; FieldDefinition; MAX/MIN dates", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "new component names do not exist; project source", "command_summary": "local ApexClass name filter; ls/grep force-app", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "verify D2 retry claims: validation rules, cron jobs, object perms, org type", "command_summary": "EntityDefinition DurableId; Tooling ValidationRule (18 then 15 char); CronTrigger; ObjectPermissions on Storefront__c; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "profile behind profile-owned permission set with Storefront__c CED", "command_summary": "PermissionSet Profile.Name (one User semi-join query failed and was not retried)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "new trigger/handler names absent", "command_summary": "ApexClass and Tooling ApexTrigger by name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "Data 360 involvement; profile FLS on Total_Storefronts__c (tests R claim that System Administrator has FLS by default)", "command_summary": "COUNT DataStream; DataStream LIKE Account; FieldPermissions profile rows", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 21, "purpose": "visibility of target field; editability of NumberofLocations__c; perm set assignees", "command_summary": "PermissionSetAssignment GROUP BY; FieldPermissions on NumberofLocations__c; COUNT profile edit rows", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 5 field-choice fork: Total_Storefronts__c matches the requirement's words but NumberofLocations__c is the user-visible field (on layouts, LWC, editable by 46 profiles) and has identical values; the skill's 'decide when wording answers it' vs 'ask when evidence points both ways' leaves this borderline. I decided without asking.",
+    "Mechanism rule 'standard, then flow, then code' has no explicit guidance on whether undelete coverage alone justifies Apex over two record-triggered flows; I chose Apex and recorded it as documented platform behavior.",
+    "Account merge (reparented children fire no triggers) is a correctness gap for any Lookup roll-up; design-rules says 'cover records that start or stop matching' but does not say whether a second trigger on a shared object (Account) is in scope. Kept as a non-blocking proposal.",
+    "The 'two wrong AskCoworker claims' threshold was crossed during R/T (SetNull semantics, merge trigger firing, FLS defaults, DML limits); rule says verify every kept fact, but untestable platform claims can only fall back to documented behavior, which is still tagged 'assumption' — no distinct tag for 'documented behavior contradicting AskCoworker'.",
+    "R split rule: SKILL says a split sends both halves and counts as one retry, but run.json kinds have no 'split' marker; I logged both halves as kind 'retry'.",
+    "RUNNER says scratch files under {out}/.tmp/ while org-verification.md says design/.tmp/; followed the eval note."
+  ]
+}

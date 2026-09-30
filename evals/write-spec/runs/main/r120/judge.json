@@ -1,0 +1,34 @@
+{
+ "id": "r120",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 0,
+  "implementation": 1,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 1,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "The run asked whether 'a competitor listed' means MainCompetitors__c or OpportunityCompetitor records. It already had a clear recommended default, and the justification was implementation effort (validation rule vs flow). OpportunityCompetitor has 0 records and no automation. meta.expect says no question was needed, so this counts as an implementation question.",
+   "skill_gap": "SKILL.md Step 5 does not say that when the run's own recommendation rests on implementation simplicity and the org shows no use of the alternative, it should decide and record the choice as an assumption instead of asking."
+  },
+  {
+   "defect": "Section 6 says 'Every profile grants Read and Edit' on MainCompetitors__c. The org has 48 profiles and 46 FieldPermissions rows; 'Minimum Access - Salesforce' and 'Minimum Access - API Only Integrations' have none. Section 2 states the row count correctly, so this is a minor overstatement.",
+   "skill_gap": "none"
+  }
+ ]
+}

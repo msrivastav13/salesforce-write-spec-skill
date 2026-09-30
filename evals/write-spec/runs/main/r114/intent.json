@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Validation rule: if Available is true, Price must be > 0."
+}

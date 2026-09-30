@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Validation: Amount > 50000 and Stage = Negotiation/Review -> Main Competitors required."
+}

@@ -1,0 +1,47 @@
+{
+  "id": "r045",
+  "skill_rev": "v21",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r045/storefront-suspended-slack-notify-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 37},
+    {"seq": 4, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"seq": 19, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53},
+    {"seq": 20, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48},
+    {"seq": 25, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 43}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable, API version", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "scan custom objects for storefront/Slack/escalation concepts", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Storefront__c fields, Status__c picklist includes Suspended, Account__c lookup", "command_summary": "sf sobject describe Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "no triggers on Storefront__c", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId='Storefront__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no flows triggered on Storefront__c", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId='Storefront__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "no Slack named credential", "command_summary": "Tooling NamedCredential", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "no Slack external credential", "command_summary": "Tooling ExternalCredential", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "installed packages (any Slack package)", "command_summary": "Tooling InstalledSubscriberPackage", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Slack permission sets exist", "command_summary": "PermissionSet WHERE Name/Label LIKE '%slack%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "no Apex sends Slack; which Apex writes Status__c", "command_summary": "Tooling ApexClass Name, Body; local search for slack/status__c/suspend", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "all flows in org (any Slack/storefront flow missed)", "command_summary": "FlowDefinitionView all", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "same concept fields elsewhere (Suspen/Escalat/Slack)", "command_summary": "Tooling CustomField WHERE DeveloperName LIKE ...", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Storefront__c DurableId", "command_summary": "Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Status__c data distribution", "command_summary": "Storefront__c GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "AgentUpdateStorefrontDetailsActions writes Status__c, sharing mode", "command_summary": "Tooling ApexClass Body by Name, grep", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "who can edit Storefront__c (AskCoworker prior-session grants)", "command_summary": "ObjectPermissions WHERE SobjectType='Storefront__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "blank Account__c count", "command_summary": "COUNT() Storefront__c WHERE Account__c = null", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "org edition", "command_summary": "Organization OrganizationType, IsSandbox", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 18, "question": "(Q1) How is this org connected to Slack? A) Salesforce-for-Slack app connection (org has sfdc_slack 'Slack Integration User', SlackElevateUser, SlackServiceUser permission sets) using the standard flow 'Send Message' Slack action - recommended; B) a Slack incoming webhook through a new named credential (no Slack credential exists today). (Q2) What should the message contain and when should it fire? A) storefront name and account name when Status__c becomes Suspended - recommended; B) also include owner, primary contact, and a record link.", "simulated_answer": "Q1: No preference; use your recommended default. Q2: Message with storefront name and account on status -> Suspended."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 1, "create": 1, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Unclear whether 'which Slack connection mechanism' (native Slack app vs webhook named credential) is an intent question (external platform) or an implementation question; asked it but mapped 'no preference' to an assumption.",
+    "Skill has no guidance for verifying a Slack workspace connection; no allowed command can confirm it, so the flow had to be Conditional on an unverifiable prerequisite.",
+    "AskCoworker got documented flow behavior wrong in R ('updated to meet' never fires on create) and in I (channel name input, synchronous callout); Section 8 Resolved records the fixes, but the skill says not to spend follow-ups, so T was sent with the corrected facts only.",
+    "The Q2 message-content question borders on 'decide yourself' (requirement does not specify content); skill does not say whether message content/payload is intent or implementation."
+  ]
+}

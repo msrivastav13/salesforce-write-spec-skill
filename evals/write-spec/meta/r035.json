@@ -1,0 +1,10 @@
+{
+ "id": "r035",
+ "category": "multi-part",
+ "requirement": "Merchant onboarding revamp: (1) capture business name, address, cuisine and contact on the onboarding application; (2) when approved create Account, Contact and Storefront; (3) notify the merchant by email at each status change; (4) report on average days from Submitted to Onboarded.",
+ "hidden_intent": "All four parts as stated; per-status timestamps for the report.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Onboarding_Application__c only has Status__c \u2014 add fields; reuse Storefront Address__c compound; status timestamps for reporting; clear per-responsibility breakdown."
+ }
+}

@@ -1,0 +1,4 @@
+{
+ "id": "r048",
+ "requirement": "Auto-close cases that have been in 'Waiting on Customer' for 7 days."
+}

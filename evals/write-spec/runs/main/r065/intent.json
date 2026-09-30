@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Reason required, auto-approve <= $25, receipt on Completed. They'll drop the 'original order' check if there's no order amount."
+}

@@ -1,0 +1,184 @@
+{
+  "id": "r024",
+  "skill_rev": "v9",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r024/lead-demo-generator-field-cleanup-spec.md",
+  "askcoworker_calls": [
+    {
+      "seq": 2,
+      "kind": "d1",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 52
+    },
+    {
+      "seq": 7,
+      "kind": "d2",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 33
+    },
+    {
+      "seq": 16,
+      "kind": "i",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 26
+    },
+    {
+      "seq": 20,
+      "kind": "r",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 21
+    },
+    {
+      "seq": 21,
+      "kind": "t",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 27
+    }
+  ],
+  "org_queries": [
+    {
+      "seq": 1,
+      "purpose": "org reachable, API version",
+      "command_summary": "sf org display --json",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 3,
+      "purpose": "full Lead custom field list, namespace, creation batch",
+      "command_summary": "Tooling CustomField WHERE TableEnumOrId='Lead'",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 4,
+      "purpose": "data populated in candidate fields (0 claim)",
+      "command_summary": "COUNT() FROM Lead WHERE field != null for 6 fields; total Lead count",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 5,
+      "purpose": "field types, picklist values (GenWatt GC series)",
+      "command_summary": "sf sobject describe Lead",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 6,
+      "purpose": "dependencies of each of the 5 fields",
+      "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId per field (15-char)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 8,
+      "purpose": "project source references",
+      "command_summary": "grep force-app for field names",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 9,
+      "purpose": "validation rules on Lead (D2 unknown)",
+      "command_summary": "Tooling ValidationRule WHERE EntityDefinition.QualifiedApiName='Lead'",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 10,
+      "purpose": "Lead triggers",
+      "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId='Lead'",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 11,
+      "purpose": "Data 360 streams (D2 unknown)",
+      "command_summary": "SELECT COUNT() FROM DataStream",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 12,
+      "purpose": "org edition",
+      "command_summary": "Organization OrganizationType, IsSandbox",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 13,
+      "purpose": "Apex/trigger bodies reading the fields (absence claim)",
+      "command_summary": "Tooling ApexClass Body (unmanaged), ApexTrigger Body, local search",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 14,
+      "purpose": "Lead flows",
+      "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId='Lead'; FlowDefinition by DeveloperName (0 rows, managed); FlowDefinitionView by ApiName",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 15,
+      "purpose": "FLS grants and editability of permission sets",
+      "command_summary": "FieldPermissions WHERE Field IN (5 fields) with Parent namespace/type",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 17,
+      "purpose": "settle conditional default Lead Layout row",
+      "command_summary": "Tooling Layout WHERE TableEnumOrId='Lead'",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 18,
+      "purpose": "confirm 18-char dependency ID result",
+      "command_summary": "MetadataComponentDependency with 18-char Id",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 19,
+      "purpose": "Lead list view count (columns unreadable)",
+      "command_summary": "SELECT COUNT() FROM ListView WHERE SobjectType='Lead'",
+      "ok": true,
+      "contradicted_askcoworker": false
+    }
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 5,
+    "create": 0,
+    "update": 0,
+    "delete": 5
+  },
+  "skill_friction": [
+    "Scope ambiguity ('generator fields') was resolved by a recommended default without asking; SKILL.md Rule 5 allows this, but for irreversible Deletes it is unclear whether an ambiguous target set should always be confirmed with the user.",
+    "AskCoworker I proposed Layout Update rows claiming layouts block field deletion; SKILL.md Rule 3 lets me reject this as contradicting documented platform behavior, but no allowed read-only query can prove it, so the rejection rests on an assumption tag.",
+    "The content rule requiring a backup/export step and rollback for every Delete has no guidance for metadata-only rollback (Deleted Fields undelete window, purgeOnDelete); I had to supply it as documented platform behavior.",
+    "org-verification.md says MetadataComponentDependency needs retry with 15 chars if 18 returns nothing; I used 15-char IDs first and both worked, fine but the order is unspecified.",
+    "Reports and list view columns/filters referencing fields to delete cannot be read with the allowed commands; the skill says record as risk, which leaves the Delete absence claim partial."
+  ]
+}

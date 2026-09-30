@@ -1,0 +1,41 @@
+{
+  "id": "r069",
+  "skill_rev": "v27",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r069/review-rating-validation-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41},
+    {"seq": 14, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 45},
+    {"seq": 15, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 19, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Org connectivity and API version", "command_summary": "sf org display --json (connectedStatus, alias, id, apiVersion only)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Rating__c type/precision/scale/nillable and Review__c field list", "command_summary": "sf sobject describe Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Object DurableIds and full custom object scan", "command_summary": "Tooling EntityDefinition for Review__c/Storefront__c; sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Existing validation rules on Review__c (AskCoworker said not queryable)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId = 01Iak00000Dx4JW -> 0 rows", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "Triggers and record-triggered flows on Review__c/Storefront__c", "command_summary": "Tooling ApexTrigger IN (Review__c, Storefront__c); FlowDefinitionView TriggerObjectOrEventId IN (...) -> 0 and 0", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Same concept elsewhere (other Rating fields)", "command_summary": "Tooling CustomField DeveloperName LIKE '%Rating%' -> only Review__c.Rating plus managed/ssot", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Data shape: count, min, max, nulls, out-of-range (GROUP BY on double failed first)", "command_summary": "aggregate COUNT/MIN/MAX; COUNT() WHERE null; COUNT() WHERE <1 OR >5 -> 92, 1, 5, 0, 0", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Rating__c metadata (required, description, precision/scale) and dependencies", "command_summary": "Tooling CustomField Metadata by Id; MetadataComponentDependency on field and object", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Apex readers/writers of Review__c and AgentReviewActions logic", "command_summary": "Tooling ApexClass bodies (non-namespaced) scanned locally; AgentReviewActions body read", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Storefront roll-ups/formula; review-related flows and agent actions", "command_summary": "describe Storefront__c calculated fields; FlowDefinitionView ApiName LIKE '%Review%'; Tooling GenAiFunctionDefinition LIKE '%Review%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "reparentableMasterDetail claim from AskCoworker 'prior session'", "command_summary": "Tooling CustomField Metadata for Review__c.Storefront__c -> MasterDetail, reparentable false", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream -> 0", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Who can create/edit Review__c", "command_summary": "ObjectPermissions SobjectType=Review__c with Create or Edit -> sfdc_accelerate_dms, Agentforce_Reference_App (Edit), one profile", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "Rating__c is a Number(1,0) field, so the platform rounds a decimal like 3.7 to 4 rather than storing it. For 'whole numbers only', should (A) decimal input be rejected with an error, or (B) is the platform's rounding acceptable so only the 1-5 range needs enforcing? Recommendation: A. Also, since all 92 existing reviews have a rating, should a blank rating be rejected (recommended: yes)?", "simulated_answer": "Validation rule on Review: Rating required, 1-5, no decimals. (Mapped to A, and blank rejected.)"}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 1, "update": 1, "delete": 0},
+  "skill_friction": [
+    "The key design uncertainty (does a scale-0 Number field round decimal input before validation rules evaluate?) is platform behavior no read-only query can test; Rule 3 says state documented behavior, but the behavior is not clearly documented, so the skill gives no guidance on whether to make the scale change a Conditional row keyed to a sandbox test (chosen) or an Open decision only.",
+    "Conditional: rows are defined as depending on an 'unresolved fact' a query could settle; the skill does not say whether a condition settled only by a sandbox test is acceptable in the main inventory.",
+    "The step-5 question combined a decimal-handling fork and a required/blank fork; design-rules says required-ness follows data shape (0 nulls -> required), so the blank part arguably should have been decided without asking. The 'predict the answer first' rule was hard to apply when the user's wording ('whole numbers only') and the field's rounding point both ways.",
+    "AskCoworker made three wrong platform claims (validation rules not queryable, ISBLANK(TEXT()) needed for numbers, validation rules fire on undelete); after the second, Rule 3 requires verifying every kept AskCoworker fact, but untestable platform claims have no fallback beyond 'documented behavior', which is itself unclear for the rounding question."
+  ]
+}

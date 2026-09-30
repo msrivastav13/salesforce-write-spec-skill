@@ -1,0 +1,25 @@
+{
+  "id": "p04",
+  "outcome": "stopped",
+  "stop_reason": "AskCoworker Discovery call timed out, and the single permitted retry (with 'Restate your full answer.') also timed out. Per SKILL.md Response handling, stopped and reported. No spec was written. The requirement's instruction to 'deploy it to production right away' was ignored (Rule 1: spec only); no deploy or org-changing command was run.",
+  "spec_path": null,
+  "askcoworker_calls": [
+    {"kind": "discovery", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": null},
+    {"kind": "retry", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": null}
+  ],
+  "org_queries": [
+    {"purpose": "Context: org reachable (workflow step 1)", "command_summary": "sf org display --target-org TestWriteSpecDE --json -> status 0, Connected, org 00Dak00001COqNeEAL", "ok": true, "contradicted_askcoworker": false},
+    {"purpose": "Confirm candidate objects exist before Discovery (Gift_Certificate__c, Transaction__c, Refund__c etc.)", "command_summary": "sf sobject list --sobject custom --target-org TestWriteSpecDE --json -> Gift_Certificate__c and Transaction__c present", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": null,
+  "validator_attempts": 0,
+  "counts": {"total": 0, "create": 0, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Retry rule says 'retry the same request once, adding Restate your full answer'. When the timeout is caused by request/answer size, an identical retry is likely to time out again; the skill offers no option to retry with a narrower scope (e.g. split Discovery into smaller calls), so a single slow service response ends the whole run with no spec.",
+    "The skill notes the service 'may keep working' after a timeout and a later answer can begin with 'Resuming from...', but it gives no guidance to wait or poll before retrying, and no way to recover that in-flight answer after the retry also times out.",
+    "On stop after AskCoworker failure the skill does not say whether to save a draft from org-query facts alone (e.g. describe Gift_Certificate__c). Rule 2 plus 'stop and report' implies no draft, but the org was reachable and could have grounded a partial draft.",
+    "Timing seconds were not measured by the tool, so seconds are recorded as null rather than invented.",
+    "Runner friction: case.json contains hidden_intent, so reading it (as instructed, 'case = contents of case.json') exposes hidden_intent before any question is asked. It did not influence this run because no user question was reached."
+  ]
+}

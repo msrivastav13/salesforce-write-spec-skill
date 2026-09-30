@@ -1,0 +1,40 @@
+{
+  "id": "r094",
+  "skill_rev": "v30",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r094/storefront-low-review-auto-suspend-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 54},
+    {"seq": 10, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 57},
+    {"seq": 13, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42},
+    {"seq": 15, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 16, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 18, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 29}
+  ],
+  "org_queries": [
+    {"seq": 2, "purpose": "org reachable", "command_summary": "sf org display (connectedStatus, alias, id, apiVersion only)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "full custom object scan; Storefront__c/Review__c exist, no other same-concept object", "command_summary": "sf sobject list --sobject custom; Tooling EntityDefinition for DurableIds/namespace", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "complete custom field lists and field semantics (Status__c values, roll-ups, formula, Rating__c)", "command_summary": "Tooling CustomField by TableEnumOrId; sobject describe Storefront__c and Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "roll-up operations/filters and formula body/scale/blank handling (AskCoworker said unknown)", "command_summary": "Tooling CustomField.Metadata by Id for Total_Reviews, Total_Score, Average_Review_Score, Status", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "existing automation on both objects", "command_summary": "Tooling ApexTrigger; FlowDefinitionView IN (Storefront__c, Review__c) and full list; Tooling ValidationRule by EntityDefinitionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "readers and writers of Status__c, score fields, and the objects", "command_summary": "Tooling MetadataComponentDependency by field/object Id; unmanaged ApexClass bodies searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Partner Quality Watchlist logic; data shape (status distribution, max reviews, null ratings, review status)", "command_summary": "Tooling Flow.Metadata by ActiveVersionId; aggregate SOQL on Storefront__c and Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "email recipient path and email setup", "command_summary": "describe Storefront__c references; COUNT Account__c null; inactive account owners; OrgWideEmailAddress; EmailTemplate name search; CustomNotificationType; Organization type", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "name collisions and reusable test patterns", "command_summary": "ApexClass names/test bodies; FlowDefinitionView ApiName LIKE Suspen; Review__c required fields", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "who can create reviews, Status__c FLS, Data Cloud streams", "command_summary": "ObjectPermissions Review__c; FieldPermissions Storefront__c.Status__c; COUNT DataStream", "ok": true, "contradicted_askcoworker": true}
+  ],
+  "user_questions": [
+    {"seq": 12, "question": "Q1: Which storefronts should the rule suspend? (a) only Active [recommended], (b) Active and Pending Activation, (c) any status except Closed. Q2: Who should be told when a storefront is auto-suspended? (a) storefront record owner, (b) owner of the related Account by email [recommended], (c) no notification.", "simulated_answer": "Only Active storefronts get suspended. Notify the account owner by email. Evaluate whenever a review is saved."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 2, "update": 0, "delete": 0},
+  "skill_friction": [
+    "AskCoworker's I call put the flow on Review__c claiming roll-ups recalculate before child after-save flows and that roll-up updates do not fire parent flows, contradicting its own D1 and documented order of execution. The skill's table says to fix wrong details and 'send the corrected inventory to R and T', but gives no guidance on roll-up-driven automation placement; a design-rules note (automation driven by a roll-up belongs on the parent) would prevent this recurring error.",
+    "Design rule 'include a notification to the record owner' when records need follow-up overlaps with the step-5 'which persona' question; unclear whether asking who to notify is allowed or whether the rule already decides it (record owner). I asked because the Account owner was a plausible, different recipient.",
+    "Rule 3 'after two wrong AskCoworker claims, verify every AskCoworker fact you keep' - the third and fourth wrong claims arrived in R, after the spec's facts were already org-verified; it is unclear whether this should also trigger re-running earlier queries or only re-checking kept facts.",
+    "Send Email deliverability access level cannot be read with the allowed commands, and org-verification.md does not say whether that makes the email responsibility blocking for delivery; I marked it blocking for delivery of the notification only.",
+    "spec-format.md changed on disk mid-run (added the flow Active/Draft line); I re-read it before rendering."
+  ]
+}

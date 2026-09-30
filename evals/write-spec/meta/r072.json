@@ -1,0 +1,10 @@
+{
+ "id": "r072",
+ "category": "security",
+ "requirement": "Create a permission set for the onboarding team \u2014 they need to manage onboarding applications and create storefronts, nothing else.",
+ "hidden_intent": "Onboarding Application full CRUD, Storefront create/read/edit (no delete), Account read.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "New permission set; don't modify existing Merchant_* perm sets; least privilege."
+ }
+}

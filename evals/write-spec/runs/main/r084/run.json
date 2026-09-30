@@ -1,0 +1,38 @@
+{
+  "id": "r084",
+  "skill_rev": "v29",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r084/storefront-geolocation-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 36},
+    {"seq": 12, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Full custom object list; locate storefront object", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Storefront__c fields; Address__c compound sub-fields Latitude/Longitude exist and are updateable", "command_summary": "sf sobject describe Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Org-wide search for existing lat/long/geo/location fields", "command_summary": "Tooling CustomField WHERE DeveloperName LIKE %Lat%/%Long%/%Geo%/%Location%/%Coord%", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Data shape: counts of lat/long/street/city/zip, country and geocode accuracy distribution", "command_summary": "aggregate SOQL on Storefront__c (3 queries)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Triggers and flows on Storefront__c", "command_summary": "Tooling ApexTrigger; FlowDefinitionView by TriggerObjectOrEventId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Existing geocoding credentials", "command_summary": "Tooling NamedCredential, ExternalCredential; RemoteProxy (failed: unsupported)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Storefront__c DurableId, custom field Ids, object dependencies", "command_summary": "Tooling EntityDefinition, CustomField, MetadataComponentDependency", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "FLS on Storefront__c.Address__c", "command_summary": "FieldPermissions WHERE Field IN (Address__c, Phone__c)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Readers of Address__c (field dependencies 18/15 char)", "command_summary": "Tooling MetadataComponentDependency by field Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Apex bodies referencing Address__/Latitude/Longitude/DISTANCE/GEOLOCATION", "command_summary": "Tooling ApexClass Body (unmanaged), local regex", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Whether SOQL DISTANCE works on custom compound Address__c (AskCoworker D2 said unconfirmed/blocking)", "command_summary": "SELECT COUNT() ... WHERE DISTANCE(Address__c, GEOLOCATION(...),'mi') < 50; ORDER BY DISTANCE ... LIMIT 1", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 14, "purpose": "Named credential endpoints", "command_summary": "Tooling NamedCredential DeveloperName, Endpoint", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 15, "question": "Storefront__c.Address__c already has Latitude/Longitude sub-fields that SOQL DISTANCE accepts, but all 21 storefronts are blank. How should coordinates get onto storefronts? (A) One-time backfill only, loaded as a data step, no metadata (recommended; the requirement asks to store coordinates for later searches). (B) Backfill plus automatic geocoding when a storefront address is created or changed, via an external geocoding provider (none connected; only Pronto_Pass_Factory and Pronto_Orders_API named credentials exist) - which provider? (C) Staff enter coordinates manually.", "simulated_answer": "Geolocation for storefronts."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 0, "create": 0, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 4/6: when storage metadata already exists but the values are empty (a data gap), it is unclear whether the requirement counts as 'already met' (skip I/R/T) or as a 'data operation' zero-change spec; both lead to skipping I, but SKILL.md only explicitly skips I when 'the requirement is met'. I skipped I, R, T.",
+    "Hidden intent 'Geolocation for storefronts.' picked no option; the mapping rule ('the one its words match') gives no match, and 'Geolocation' could also be read as asking for a Geolocation-type field, which is an implementation choice the skill says to decide. Mapped to the recommended option as an assumption.",
+    "Step 5 prediction rule: it was borderline whether the population-source question should be asked at all (safe default = backfill only), since the answer revealed nothing; the skill could say explicitly whether 'ongoing vs one-time population' is intent or implementation.",
+    "org-verification.md does not mention that a read-only SOQL DISTANCE probe can settle platform-support questions; it was the cheapest way to refute AskCoworker's blocking OD-1.",
+    "AskCoworker labelled several facts '[Verified: prior session]' (e.g., 21 records null lat/long) that were echoes of my own message; the rule handles it but the label is noisy."
+  ]
+}

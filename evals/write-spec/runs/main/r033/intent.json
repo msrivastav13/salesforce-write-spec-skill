@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Before-save on Review insert: Rating >= 4 -> Status Published; else Submitted."
+}

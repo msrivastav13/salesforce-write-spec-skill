@@ -1,0 +1,41 @@
+{
+  "id": "r058",
+  "skill_rev": "v13",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r058/gift-certificate-expiration-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 57},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55},
+    {"seq": 13, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 56},
+    {"seq": 15, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 69},
+    {"seq": 17, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 62}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Gift_Certificate__c fields, types, picklists (Type__c, Status__c incl. Expired, Expiration_Date__c, Issue_Date__c)", "command_summary": "sf sobject describe Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "No Apex triggers on Gift_Certificate__c / Contact", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No flows triggered on Gift_Certificate__c", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId = 'Gift_Certificate__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Object DurableId", "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName = 'Gift_Certificate__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Validation rules on Gift_Certificate__c (AskCoworker: unknown)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId = '01Iak00000Dx4JX'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Apex writers/readers of Expiration_Date__c and Status__c; 90-day hardcode; post-insert re-query; tests asserting expiry", "command_summary": "Tooling ApexClass Name, Body (unmanaged), searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Data shape by Status__c and expiration population", "command_summary": "SELECT Status__c, COUNT(Id), COUNT(Expiration_Date__c) GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "All references to Expiration_Date__c", "command_summary": "Tooling CustomField Id lookup, then MetadataComponentDependency WHERE RefMetadataComponentId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "No existing gift-related flows by name", "command_summary": "FlowDefinitionView WHERE ApiName LIKE '%Gift%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Existing record details and org edition (AskCoworker I claimed 0 records)", "command_summary": "SELECT Type__c, Issue_Date__c, Expiration_Date__c, Status__c FROM Gift_Certificate__c LIMIT 5; Organization.OrganizationType", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 16, "purpose": "Data 360 streams, permission set grants on Gift_Certificate__c, existing record CreatedDate for backfill", "command_summary": "SELECT COUNT() FROM DataStream; ObjectPermissions WHERE SobjectType='Gift_Certificate__c'; CreatedDate LIMIT 1", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Required/default values of Type__c, Status__c, dates (blank Type__c handling)", "command_summary": "sf sobject describe Gift_Certificate__c (nillable, defaults)", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 12, "question": "Your requirement contradicts itself: gift certificates 'must never expire' and 'all gift certificates should auto-expire after 12 months'. Which rule should the design implement? (A) Expire after 12 months except when the recipient Contact's mailing state is California (no state field exists on Gift_Certificate__c; would derive from Recipient__c -> Contact); (B) By Gift_Certificate__c.Type__c: Purchased never expires; promotional types (Recovery, Promotion, Loyalty Reward, Referral Bonus) expire 12 months after Issue_Date__c; (C) No certificate expires; (D) All expire after 12 months. Evidence: Type__c picklist is Purchased/Recovery/Promotion/Loyalty Reward/Referral Bonus; IssueGiftCardAction currently hardcodes a 90-day expiry; nothing marks certificates Expired. Recommendation: B, since California law bars expiry on sold certificates but exempts free promotional ones.", "simulated_answer": "Promotion/Recovery/Loyalty certificates expire after 12 months; Purchased certificates never expire."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 4, "create": 3, "update": 1, "delete": 0},
+  "skill_friction": [
+    "Step 5 lists 'the requirement contradicts itself' as an ask trigger, but the pre-AskCoworker gate only covers vague requirements; unclear whether to ask before D1/D2 or after. I ran D1/D2 first to give the question evidence (object/picklist options), which cost two calls whose framing (California-address logic) became irrelevant.",
+    "The simulated answer did not cover one picklist value (Referral Bonus); the skill has no guidance on partial answers to a question with options, beyond defaulting as an assumption.",
+    "R and T answers repeatedly re-raised the same open decisions (DE scheduled-flow capacity, Referral Bonus) and 'prior session' tags on facts I had supplied; the response-handling table says echoed facts are established but does not say how to treat AskCoworker labeling my own supplied facts as '[Verified ... prior session]'.",
+    "Timing: R (69s) and T (62s) exceeded the documented ~60 s limit but still returned complete answers; the 'timed out' definition is ambiguous when a call returns after 60 s.",
+    "Legal-requirement facts (California Civil Code) are neither platform behavior nor org facts; Rule 3 has no tag for external legal claims, so I used 'assumption (documented platform behavior)' with a qualifier."
+  ]
+}

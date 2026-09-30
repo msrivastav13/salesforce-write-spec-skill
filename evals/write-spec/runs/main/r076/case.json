@@ -1,0 +1,4 @@
+{
+ "id": "r076",
+ "requirement": "When a refund is approved, call the payment provider's API to actually push the money back."
+}

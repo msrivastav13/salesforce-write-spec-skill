@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "New Inventory Item object per storefront with quantity, unit, reorder threshold; alert Primary Contact when below threshold."
+}

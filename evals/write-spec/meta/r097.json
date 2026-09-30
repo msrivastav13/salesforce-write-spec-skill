@@ -1,0 +1,10 @@
+{
+ "id": "r097",
+ "category": "integration",
+ "requirement": "When the app sends us an order, create loyalty points for the customer. The app will call Salesforce.",
+ "hidden_intent": "Inbound endpoint receiving {appAccountId, orderTotal, orderId}; match Contact by Pronto App Account Id; create Earn loyalty transaction; idempotent on orderId.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Contact.Pronto_App_Account_Id__c exists for matching; idempotency needs an order-id field on Loyalty_Transaction__c; standard REST/composite API may suffice."
+ }
+}

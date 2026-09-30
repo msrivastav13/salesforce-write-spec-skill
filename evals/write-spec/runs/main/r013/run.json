@@ -1,0 +1,154 @@
+{
+  "id": "r013",
+  "skill_rev": "v9",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r013/storefront-lifecycle-spec.md",
+  "askcoworker_calls": [
+    {
+      "seq": 1,
+      "kind": "d1",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 29
+    },
+    {
+      "seq": 2,
+      "kind": "d2",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 34
+    },
+    {
+      "seq": 13,
+      "kind": "i",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 53
+    },
+    {
+      "seq": 14,
+      "kind": "r",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 52
+    },
+    {
+      "seq": 17,
+      "kind": "t",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 41
+    }
+  ],
+  "org_queries": [
+    {
+      "seq": 3,
+      "purpose": "org reachable, API version",
+      "command_summary": "sf org display",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 4,
+      "purpose": "fields, picklist values, defaults, roll-ups, Account__c lookup on Storefront__c, Menu__c, Storefront_Hours_of_Operation__c",
+      "command_summary": "sf sobject describe x3",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 5,
+      "purpose": "absence of triggers and record-triggered flows on the three objects",
+      "command_summary": "Tooling ApexTrigger by TableEnumOrId; FlowDefinitionView by TriggerObjectOrEventId",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 6,
+      "purpose": "data shape: status distribution, Account__c nulls, owner type, active menus, hours per day, duplicate days, org edition",
+      "command_summary": "aggregate SOQL on Storefront__c, Menu__c, Storefront_Hours_of_Operation__c, Organization",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 7,
+      "purpose": "validation rules absent; full Storefront__c custom field list; same concept elsewhere; email alerts, templates, notification types; flows by name",
+      "command_summary": "Tooling ValidationRule, CustomField, WorkflowAlert; EmailTemplate; CustomNotificationType; FlowDefinitionView LIKE",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 8,
+      "purpose": "writers of Status__c/Active__c/hours; test classes inserting Storefront__c with a status",
+      "command_summary": "Tooling ApexClass Name, Body (unmanaged), searched locally",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 9,
+      "purpose": "AgentUpdateStorefrontDetailsActions error handling",
+      "command_summary": "local inspection of ApexClass body from seq 8",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 10,
+      "purpose": "no existing storefront status literal assignments in Apex",
+      "command_summary": "regex over Apex bodies from seq 8",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 11,
+      "purpose": "Menu_Count__c roll-up filter",
+      "command_summary": "Tooling CustomField.Metadata by Id",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 12,
+      "purpose": "master-detail reparentability and relationship names; Data 360 streams",
+      "command_summary": "Tooling CustomField.Metadata by Id x2; SELECT COUNT() FROM DataStream",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 18,
+      "purpose": "permission sets with access to Storefront__c and Menu__c",
+      "command_summary": "ObjectPermissions WHERE SobjectType IN (...) AND Parent.IsOwnedByProfile = false",
+      "ok": true,
+      "contradicted_askcoworker": false
+    }
+  ],
+  "user_questions": [
+    {
+      "seq": 16,
+      "question": "1) Who is the 'account owner' to notify on suspension: (a) owner of the related Account, Storefront__c.Account__r.Owner (recommended; Account__c is set on all 21 storefronts), or (b) the Storefront record owner, Storefront__c.OwnerId? 2) Notification channel: (a) email (recommended), (b) in-app custom notification (needs a new CustomNotificationType), or (c) both? 3) 'Start as Pending Activation': (a) picklist default plus a validation rule that blocks creating a storefront in any other status (recommended), or (b) picklist default only?",
+      "simulated_answer": "All four rules as stated: notify the account owner (the related Account's owner). For channel and insert enforcement: No preference; use your recommended default."
+    }
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 14,
+    "create": 13,
+    "update": 1,
+    "delete": 0
+  },
+  "skill_friction": [
+    "Step 5 says to ask the scope question 'as soon as a fork is known, before I when discovery already shows it'; I found the recipient fork (Account__r.Owner vs OwnerId) during verification but sent I with the recipient pre-tagged as 'user decision' before asking. The skill has no explicit checkpoint between step 3 and step 4 forcing the scope message first; a hard 'send the scope message before I if any fork is open' gate would prevent this.",
+    "AskCoworker repeatedly tagged facts I supplied as '[Verified: prior session]' and re-injected components from its own earlier proposal (Account_Owner_Email__c, EmailTemplate) into R even though the accepted inventory had dropped them, plus an unrelated Onboarding_Application__c item in T. The response-handling table covers 'unrelated content' but not 'echoes of rejected inventory rows'.",
+    "AskCoworker picklist formulas used = / != instead of ISPICKVAL; rule 'Wrong details in proposals' covered it, but a hint in the I template to use valid formula syntax could reduce corrections.",
+    "R and T resend rule: I split the single flow into two flows after R and T were sent (inventory row changed 13 -> 14). Step 5 says to resend R and T if a scope decision changes the inventory after them, but is silent when the change is a self-correction under Rule 3/step 4; I did not resend and relied on my own analysis."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r107",
+ "category": "new-automation",
+ "requirement": "Any refund over $500 needs manager approval before it can move past Pending.",
+ "hidden_intent": "Approval process on Refund when Amount > 500; submitter's manager approves; approve -> Approved, reject -> Cancelled. Block manual status change past Pending without approval.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Approval on Refund__c; existing Issue_Refund flow (used by the agent) must be considered so agent-issued refunds over $500 don't bypass approval."
+ }
+}

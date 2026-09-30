@@ -1,0 +1,4 @@
+{
+ "id": "r103",
+ "requirement": "Segment customers who haven't ordered in 60 days but have more than 1000 loyalty points, for a win-back campaign."
+}

@@ -1,0 +1,10 @@
+{
+ "id": "p03",
+ "category": "vague",
+ "requirement": "Add a field.",
+ "hidden_intent": "On Storefront, a text field for the storefront's website URL.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Too vague; must ask before AskCoworker."
+ }
+}

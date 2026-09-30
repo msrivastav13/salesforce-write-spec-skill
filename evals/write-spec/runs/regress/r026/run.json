@@ -1,0 +1,47 @@
+{
+  "id": "r026",
+  "skill_rev": "v20",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/regress/r026/ghost-kitchen-lead-routing-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 25},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 31},
+    {"seq": 21, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 35},
+    {"seq": 23, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 24, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Existing queues; no Ghost Kitchen queue", "command_summary": "Group WHERE Type='Queue'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Queue supported objects", "command_summary": "QueueSobject", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No group/queue named Ghost/Kitchen", "command_summary": "Group WHERE Name LIKE Kitchen/Ghost", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "No role for the team", "command_summary": "UserRole LIKE Kitchen/Ghost", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Lead fields and Business_Type__c picklist values", "command_summary": "sobject describe Lead", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Same concept elsewhere", "command_summary": "Tooling CustomField LIKE Kitchen/Ghost/Business_Type", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Complete Lead custom field list", "command_summary": "Tooling CustomField WHERE TableEnumOrId='Lead'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "No Lead triggers", "command_summary": "Tooling ApexTrigger TableEnumOrId='Lead'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Lead record-triggered flows", "command_summary": "FlowDefinitionView TriggerObjectOrEventId='Lead'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Lead assignment rules (AskCoworker said not queryable / unknown)", "command_summary": "AssignmentRule", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 13, "purpose": "Lead validation rules", "command_summary": "Tooling ValidationRule EntityDefinitionId='Lead'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Data shape of Business_Type__c and Ghost Kitchen owners", "command_summary": "Lead GROUP BY Business_Type__c; GROUP BY Owner for Ghost Kitchen", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Readers of Business_Type__c; restricted/required metadata; org edition", "command_summary": "MetadataComponentDependency; CustomField.Metadata by Id; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Apex readers/creators of leads, assignment header", "command_summary": "Tooling ApexClass bodies (unmanaged) searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Public groups, users, queue members, lead owners, lead-creating flows, Lead FlexiPages", "command_summary": "Group Regular; User GROUP BY UserType; GroupMember; Lead GROUP BY Owner.Type; FlowDefinitionView LIKE Lead/Route/Assign; Tooling FlexiPage", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Lead-creating flow namespaces", "command_summary": "FlowDefinitionView ApiName IN (CreateSalesLead, CreateLeadAndOpp)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "Standard users (candidate queue members); Lead OWD; flow and FlowTest name availability", "command_summary": "User Standard; Organization.DefaultLeadAccess; FlowDefinitionView LIKE Ghost; Tooling FlowTest COUNT", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 20, "question": "(1) What should the new queue be called, and who is on the Ghost Kitchen sales team (options: named users, a public group, or the only active human user 'OrgFarm EPIC'; no group or role for the team exists)? Recommendation: queue 'Ghost Kitchen Sales', members supplied by the sales owner. (2) Should a lead also be routed when an existing lead is later changed to Business Type = Ghost Kitchen, or only on creation ('comes in')? Recommendation: creation only; other leads unchanged.", "simulated_answer": "Business Type = Ghost Kitchen -> 'Ghost Kitchen Sales' queue. Other leads unchanged. Members and update-time routing: No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "org-verification.md says assignment rule entries cannot be read, but does not mention that the standard-API AssignmentRule object (Name, Active, SobjectType) is queryable; AskCoworker claimed assignment rules were not SOQL-queryable and missed the active 'Standard' Lead rule entirely.",
+    "Rule 'fail loud on ambiguous errors' (user CLAUDE.md) vs. business continuity: SKILL.md gives no guidance on whether a routing flow should raise a Custom Error (rolling back lead intake) or skip when its target is missing; decided as an assumption.",
+    "SKILL.md step 5 says ask after D1 but does not say whether verification (step 3) should come first; I verified before asking so options were grounded, which reorders steps 3 and 5 relative to the text.",
+    "Queue members are part of Queue metadata but are business values (people); unclear whether to model them as a named placeholder in the Create row or as a non-metadata setup step; chose a placeholder marked blocking for delivery.",
+    "AskCoworker labels echoed facts as '[Verified: prior session]' even when they came from the current message; the table row 'Facts you sent that come back echoed are already established' handles it, but the label is misleading."
+  ]
+}

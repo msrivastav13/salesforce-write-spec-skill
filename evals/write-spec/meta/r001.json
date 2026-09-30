@@ -1,0 +1,10 @@
+{
+ "id": "r001",
+ "category": "nonexistent-concept",
+ "requirement": "We want delivery zones \u2014 each storefront delivers to certain zip codes, and we charge different delivery fees per zone.",
+ "hidden_intent": "Zones with zip lists and fee; storefront-zone junction.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Region__c exists but has NO custom fields \u2014 consider extending Region__c vs new object and ask; no delivery fee concept."
+ }
+}

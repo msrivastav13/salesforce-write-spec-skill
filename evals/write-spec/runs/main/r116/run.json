@@ -1,0 +1,167 @@
+{
+  "id": "r116",
+  "skill_rev": "v34",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r116/refund-auto-approval-threshold-spec.md",
+  "askcoworker_calls": [
+    {
+      "seq": 1,
+      "kind": "d1",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 44
+    },
+    {
+      "seq": 15,
+      "kind": "i",
+      "error": true,
+      "timed_out": true,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 61
+    },
+    {
+      "seq": 16,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 41
+    },
+    {
+      "seq": 17,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 49
+    }
+  ],
+  "org_queries": [
+    {
+      "seq": 2,
+      "purpose": "org context and reachability",
+      "command_summary": "sf org display (connectedStatus, alias, id, apiVersion only)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 3,
+      "purpose": "full custom object scan; Refund__c exists",
+      "command_summary": "sf sobject list --sobject custom; EntityDefinition DurableId for Refund__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 4,
+      "purpose": "Refund__c fields, Status__c/Payment_Method__c picklists, record count",
+      "command_summary": "Tooling CustomField by TableEnumOrId; sobject describe Refund__c; COUNT() Refund__c",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 5,
+      "purpose": "existing automation on Refund__c (triggers, RT flows, VRs, approval processes, workflow)",
+      "command_summary": "ApexTrigger, FlowDefinitionView, ValidationRule, ProcessDefinition, WorkflowRule",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 6,
+      "purpose": "every reader/writer of Refund__c, Status__c, Amount__c",
+      "command_summary": "MetadataComponentDependency on object and field Ids",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 7,
+      "purpose": "Apex writers and how they set Status__c",
+      "command_summary": "Tooling ApexClass bodies (unmanaged) searched locally for Refund",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 8,
+      "purpose": "flow writers Issue_Refund/Apply_Remediation/Validate_Remediation logic",
+      "command_summary": "FlowDefinition ActiveVersionId; Tooling Flow.Metadata by Id",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 9,
+      "purpose": "manager hierarchy, queues, roles, agent actions",
+      "command_summary": "User (active, ManagerId), Group queues, QueueSobject, UserRole, GenAiFunctionDefinition",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 10,
+      "purpose": "callers of the flows and Apex action",
+      "command_summary": "GenAiFunctionDefinition by InvocationTarget; MetadataComponentDependency on flow and class Ids",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 11,
+      "purpose": "access to Refund__c and sharing model; action topic linkage",
+      "command_summary": "ObjectPermissions, FieldPermissions Status__c, EntityDefinition sharing model, GenAiPluginFunctionDef (GenAiPlannerFunctionDef query failed on column name, not retried)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 12,
+      "purpose": "Refund_XSF_OS flow AskCoworker reported; ManagerId count",
+      "command_summary": "FlowDefinitionView ApiName LIKE Refund; COUNT() users with ManagerId",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 13,
+      "purpose": "org edition/currency; same-concept approval fields; layout and flexipage",
+      "command_summary": "Organization; describe for CurrencyIsoCode; CustomField LIKE Approv; Layout; FlexiPage",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 18,
+      "purpose": "wallet callout failure handling for test design",
+      "command_summary": "ProntoWalletPassService body read locally",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 19,
+      "purpose": "layout related lists; name collisions for new components; GenAiFunction description",
+      "command_summary": "Layout.Metadata by Id; PermissionSet LIKE Refund; FlowDefinitionView Refund_%; GenAiFunctionDefinition Metadata by Id",
+      "ok": true,
+      "contradicted_askcoworker": false
+    }
+  ],
+  "user_questions": [
+    {
+      "seq": 14,
+      "question": "Who should approve refunds over $100? (A) the submitter's manager via User.ManagerId \u2014 0 active users have a manager set and agent-created refunds run as EinsteinServiceAgent User; (B) a new 'Refund Managers' queue whose members you name (recommended); (C) a specific named user. Recommendation: B.",
+      "simulated_answer": "No preference; use your recommended default."
+    }
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 11,
+    "create": 6,
+    "update": 5,
+    "delete": 0
+  },
+  "skill_friction": [
+    "The approver question is a persona question the skill says to ask, but intent.json only restates the threshold, so the predicted 'no preference' came true; the skill's 'predict the answer' rule and the 'which persona is meant' rule point in opposite directions when the default (a queue) is safe but the choice concerns money approval.",
+    "The requirement reads as self-contradictory ('auto-approved instantly' vs 'manager approval') but reconciles into a conditional rule; SKILL.md says such reconciliations are decided, yet the boundary ('over $100' at exactly 100.00) with money consequences is not explicitly covered by the 'money consequences' exception.",
+    "The Condition table says split I by responsibility and 'a split sends both halves and counts as one retry', but the askcoworker_calls schema has no way to mark two calls as one retry; both halves were logged as kind 'retry'.",
+    "After four wrong AskCoworker claims (two facts, two platform claims), SKILL.md allows skipping R and T; the wrong claims came from D1 and the I halves, so the platform-precedence error (DML value vs before-save flow) would have driven two unnecessary writer Updates had documented behavior not been applied \u2014 the skill has no explicit guidance that AskCoworker platform-behavior claims inside an I proposal count toward the tally.",
+    "Spec-format says approval processes etc. use standard source folders, but no guidance on Module for GenAiFunction/FlowTest/Queue; standard folder names were assumed."
+  ]
+}

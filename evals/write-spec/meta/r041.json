@@ -1,0 +1,10 @@
+{
+ "id": "r041",
+ "category": "standard-crm",
+ "requirement": "Merchant code on accounts has to be unique and exactly 8 characters",
+ "hidden_intent": "Unique, 8-char alphanumeric Merchant Code; not required on customer accounts.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Account.Merchant_Code__c exists as text; uniqueness via field attribute (existing dupes block it) + length validation; no data changes."
+ }
+}

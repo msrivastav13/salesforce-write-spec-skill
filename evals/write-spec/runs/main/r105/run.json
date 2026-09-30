@@ -1,0 +1,162 @@
+{
+  "id": "r105",
+  "skill_rev": "v33",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r105/promotion-date-order-validation-spec.md",
+  "askcoworker_calls": [
+    {
+      "seq": 1,
+      "kind": "d1",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 39
+    },
+    {
+      "seq": 2,
+      "kind": "d2",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 40
+    },
+    {
+      "seq": 14,
+      "kind": "i",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 25
+    },
+    {
+      "seq": 15,
+      "kind": "r",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 43
+    },
+    {
+      "seq": 18,
+      "kind": "t",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 46
+    }
+  ],
+  "org_queries": [
+    {
+      "seq": 3,
+      "purpose": "Full custom object list; Promotion__c is the only promotion object",
+      "command_summary": "sf sobject list --sobject custom",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 4,
+      "purpose": "Promotion__c DurableId",
+      "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName='Promotion__c'",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 5,
+      "purpose": "Field types, nillable, picklist values of Promotion__c",
+      "command_summary": "sf sobject describe Promotion__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 6,
+      "purpose": "Existing validation rules on Promotion__c (AskCoworker said not queryable)",
+      "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId='01Iak00000Dx4JZ' -> 0 rows",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 7,
+      "purpose": "Triggers, record-triggered flows, workflow rules on Promotion__c",
+      "command_summary": "Tooling ApexTrigger, FlowDefinitionView, Tooling WorkflowRule -> all 0",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 8,
+      "purpose": "Complete custom field list and same-concept date fields org-wide",
+      "command_summary": "Tooling CustomField by TableEnumOrId; CustomField LIKE %Start_Date%/%End_Date%",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 9,
+      "purpose": "Existing data breaking the rule",
+      "command_summary": "COUNT(Id) and Start/End dates of Promotion__c (1 record, valid)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 10,
+      "purpose": "All Apex readers/writers and dependencies of Promotion__c and date fields",
+      "command_summary": "Tooling ApexClass bodies (70 unmanaged) searched locally; MetadataComponentDependency on object and both fields",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 11,
+      "purpose": "Sibling validation rule on Marketing_Event__c (other End_Date field)",
+      "command_summary": "Tooling EntityDefinition by DurableId; Tooling ValidationRule for 01Iak00000Dx4JY -> 0",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 12,
+      "purpose": "Who can create/edit Promotion__c",
+      "command_summary": "ObjectPermissions WHERE SobjectType='Promotion__c' (found System Administrator profile AskCoworker omitted)",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 13,
+      "purpose": "Agent actions invoking AgentCreatePromotionActions",
+      "command_summary": "Tooling GenAiFunctionDefinition WHERE InvocationTargetType='apex'",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 16,
+      "purpose": "Data 360 involvement (AskCoworker 'prior session' fact) and Storefront__c lookup type",
+      "command_summary": "SELECT COUNT() FROM DataStream -> 0; describe Storefront__c field",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 17,
+      "purpose": "Test classes touching Promotion__c readers/writers",
+      "command_summary": "local search of ApexClass bodies for class references (MerchantRiskScoreActionTest only)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    }
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 1,
+    "create": 1,
+    "update": 0,
+    "delete": 0
+  },
+  "skill_friction": [
+    "Step 5 says to decide create-only vs create-and-edit via design-rules ('enforce on create and on change'), but the requirement literally says 'created'; the skill treats this as decided, though it could be read as the 'change that alters behavior for other callers' ask trigger. Not asking relied on the design rule overriding literal wording.",
+    "RUNNER seq numbering: org queries run in one Bash call with several commands were split into logical seq entries; the protocol does not say whether one Bash call with multiple queries is one or many org_queries.",
+    "AskCoworker D1 already covered most of D2 (triggers, flows, classes) but not permissions/integrations; the 'skip D2 only if D1 answered its questions' rule is binary and D2 was sent mostly redundantly.",
+    "Rule 3 wrong-claim counting is unclear on whether an omission (AskCoworker CRUD table leaving out the System Administrator profile) counts as a 'wrong AskCoworker claim'. Counted as 2 wrong claims, which triggers 'verify every AskCoworker fact you keep'; all kept facts were already verified by org query, and platform claims were tagged documented behavior."
+  ]
+}

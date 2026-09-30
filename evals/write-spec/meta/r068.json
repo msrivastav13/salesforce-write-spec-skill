@@ -1,0 +1,10 @@
+{
+ "id": "r068",
+ "category": "integration",
+ "requirement": "Our data warehouse needs to receive every new review in near real time.",
+ "hidden_intent": "CDC on Review consumed by warehouse via Pub/Sub API.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Enable CDC on Review__c; no custom code needed."
+ }
+}

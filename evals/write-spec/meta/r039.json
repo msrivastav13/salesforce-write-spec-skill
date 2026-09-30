@@ -1,0 +1,10 @@
+{
+ "id": "r039",
+ "category": "ui",
+ "requirement": "On the storefront page, show a star-rating badge with the average score and number of reviews near the top.",
+ "hidden_intent": "Small LWC on Storefront record page showing stars + average + count.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Reuse Average_Review_Score__c and Total_Reviews__c; handle null average; LWC or highlights panel."
+ }
+}

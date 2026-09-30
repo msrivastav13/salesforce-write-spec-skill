@@ -1,0 +1,4 @@
+{
+ "id": "r035",
+ "requirement": "Merchant onboarding revamp: (1) capture business name, address, cuisine and contact on the onboarding application; (2) when approved create Account, Contact and Storefront; (3) notify the merchant by email at each status change; (4) report on average days from Submitted to Onboarded."
+}

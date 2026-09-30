@@ -1,0 +1,53 @@
+{
+  "id": "r033",
+  "skill_rev": "v19",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r033/review-auto-publish-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 27},
+    {"seq": 4, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 26, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 31},
+    {"seq": 27, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 32, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 43}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable", "command_summary": "sf org display", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "scan custom objects for review/moderation concepts", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Review__c fields, Rating__c type, Status__c picklist values and default", "command_summary": "sf sobject describe Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "DurableIds of Review__c and Storefront__c", "command_summary": "Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no Apex triggers on Review__c/Storefront__c", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "no record-triggered flows on Review__c/Storefront__c", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Status__c distribution (all null claim)", "command_summary": "Review__c GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Rating__c distribution", "command_summary": "Review__c GROUP BY Rating__c (failed: double field not groupable)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Rating__c >=4, <4, null, >5, <1, fractional counts", "command_summary": "six COUNT() queries on Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "validation rules on Review__c", "command_summary": "Tooling ValidationRule with ErrorConditionFormula (failed: no such column)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "validation rules on Review__c (AskCoworker said unknown)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId = Review__c DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "complete custom field list and IDs on Review__c", "command_summary": "Tooling CustomField WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "readers of Status__c", "command_summary": "MetadataComponentDependency on Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "readers of Rating__c", "command_summary": "MetadataComponentDependency on Rating__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "readers of Review__c object", "command_summary": "MetadataComponentDependency on Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Rating__c and Status__c metadata (required, description, restricted picklist)", "command_summary": "Tooling CustomField.Metadata by Id x2", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "AgentReviewActions hardcodes Submitted; AgentSummarizeReviewsActions read-only", "command_summary": "Tooling ApexClass Body for the two classes", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "flows named Review", "command_summary": "FlowDefinitionView with OR (failed: disjunctions not supported)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "active flow count context", "command_summary": "FlowDefinitionView COUNT() IsActive", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "other review/moderation/publish classes", "command_summary": "Tooling ApexClass name LIKE search", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "flows by Label/ApiName LIKE Review (search for 'Flow default' referenced in class comment)", "command_summary": "FlowDefinitionView two LIKE queries", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "all Apex that references Review__c or Status__c", "command_summary": "Tooling ApexClass bodies (70 unmanaged) searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "trigger bodies referencing review", "command_summary": "Tooling ApexTrigger bodies searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 28, "purpose": "new flow name not taken", "command_summary": "FlowDefinitionView ApiName LIKE 'Review_Auto%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 29, "purpose": "existing FlowTest records", "command_summary": "Tooling FlowTest", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 30, "purpose": "Storefront__c master-detail reparentable", "command_summary": "Tooling CustomField.Metadata for Review__c.Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 31, "purpose": "FLS on Status__c (AskCoworker called it unknown/blocking)", "command_summary": "FieldPermissions WHERE Field = 'Review__c.Status__c'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 2, "update": 0, "delete": 0},
+  "skill_friction": [
+    "AskCoworker R and T asserted that a 'with sharing' Apex insert enforces FLS on Status__c and marked it blocking; the response table says to fix wrong platform claims from evidence, but it is a judgement call whether 'with sharing does not enforce FLS' counts as documented platform behavior I can state myself vs. an unverifiable AskCoworker claim. I rejected it as documented behavior.",
+    "AskCoworker T claimed FlowTest may not be deployable via sfdx and marked it blocking; spec-format explicitly recommends FlowTest metadata, so I rejected it, but the skill does not say whether the FlowTest row should be included by default for a flow-only change or is optional ('Flow Tests or manual checks').",
+    "AskCoworker repeatedly cited 'prior session' facts even though every call said to ignore earlier conversations; the skill handles this (verify in step 3) but it inflates verification work.",
+    "The requirement is silent on updates (rating edits, moderator manual publish); SKILL.md step 5 led me to decide rather than ask since the inventory is identical either way, which seems right but the transition rule in spec-format ('cover records that start or stop matching') effectively forces a behavioral choice the user never made."
+  ]
+}

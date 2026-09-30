@@ -1,0 +1,10 @@
+{
+ "id": "r008",
+ "category": "contradictory",
+ "requirement": "Reviews should be published immediately so customers see them right away, but every review has to be approved by moderation before anyone can see it.",
+ "hidden_intent": "4-5 star reviews publish immediately; 1-3 stars require moderation.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Direct contradiction \u2014 must surface and ask."
+ }
+}

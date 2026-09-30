@@ -1,0 +1,10 @@
+{
+ "id": "r078",
+ "category": "deletion-refactor",
+ "requirement": "Refactor the Agent*Actions Apex classes \u2014 there are like 20 of them and they all query storefronts separately.",
+ "hidden_intent": "Shared storefront selector/service used by all Agent*Actions; no behaviour change; keep invocable signatures stable.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Many Agent*Actions classes exist; preserve @InvocableMethod signatures used by Agentforce; single source of query; tests must still pass."
+ }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "r106",
+  "skill_rev": "v33",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r106/lead-number-of-locations-dedupe-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55},
+    {"seq": 17, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 51}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Data shape: populated counts of both Lead fields, total Leads, converted Leads", "command_summary": "COUNT() on Lead with each field != null; COUNT(); GROUP BY IsConverted", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Dependencies of each Lead field before Delete", "command_summary": "Tooling MetadataComponentDependency by 18- and 15-char CustomField Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Same concept elsewhere / Account counterpart", "command_summary": "Tooling CustomField DeveloperName LIKE '%Location%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Lead layouts", "command_summary": "Tooling Layout WHERE TableEnumOrId='Lead'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "Lead validation rules (AskCoworker said not queryable)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId='Lead'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Lead triggers and record-triggered flows", "command_summary": "Tooling ApexTrigger TableEnumOrId='Lead'; FlowDefinitionView TriggerObjectOrEventId='Lead'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Field semantics (description, help, precision, required)", "command_summary": "Tooling CustomField.Metadata by Id for both fields", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Apex reads/writes of either field", "command_summary": "Tooling ApexClass and ApexTrigger bodies searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "FLS grants on each field", "command_summary": "FieldPermissions COUNT GROUP BY Field; grants on Number_of_Locations__c; profile vs PS split", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Lead FlexiPages referencing either field", "command_summary": "Tooling FlexiPage EntityDefinitionId='Lead' then Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Account.NumberofLocations__c dependencies and population", "command_summary": "MetadataComponentDependency on Account field Id; COUNT() Account", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Lead-named flows and their namespaces", "command_summary": "FlowDefinitionView ApiName LIKE '%Lead%'; COUNT unmanaged flows", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Unmanaged flow bodies referencing either field", "command_summary": "Tooling Flow unmanaged versions, Metadata by Id searched locally (21 versions)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Which profiles/PS lose access; active users by profile; new PS name free", "command_summary": "FieldPermissions on Lead.NumberofLocations__c with Parent.Profile.Name; User GROUP BY Profile.Name; PermissionSet by Name", "ok": true, "contradicted_askcoworker": true}
+  ],
+  "user_questions": [
+    {"seq": 16, "question": "Which Lead 'Number of Locations' field should be removed? (A) Delete Lead.Number_of_Locations__c (Number(5,0); on no layout; 4 permission-set grants, no profiles; no dependencies) - recommended by the evidence; or (B) delete Lead.NumberofLocations__c (Number(3,0); on Lead (Marketing) and Lead (Sales) layouts; all 45 profiles have access; likely mapped to Account.NumberofLocations__c on conversion). Both have 0 populated Leads. Should any values be migrated to the kept field first?", "simulated_answer": "Keep Number_of_Locations__c (used by web form), migrate data from NumberofLocations__c, then delete it."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 5, "create": 1, "update": 3, "delete": 1},
+  "skill_friction": [
+    "Four wrong AskCoworker claims (conversion mapping by API-name match; validation rules not queryable; System Administrator has implicit FLS; field on a layout cannot be deleted) triggered the 'after four, may skip R and T' rule; skipping was optional and the skill gives no guidance on whether skipping is preferred.",
+    "Access for the kept field: the deleted field is granted on every profile (including guest/community), the kept field on none. design-rules says 'do not widen broad permission sets' and 'include access a responsibility needs', but there is no rule for re-homing access when consolidating duplicate fields; I chose a new dedicated permission set plus an assignment data step whose user set is an assumption.",
+    "LeadConvertSettings mapping is unreadable, and the Number(5,0) to Number(3,0) mapping compatibility is uncertain documented behavior; the skill has no guidance on whether to include the target-field widening as a Conditional row or a proposal.",
+    "Data migration with zero populated records: SKILL treats data operations as data steps, but the user explicitly asked to 'migrate data'; unclear whether this should ever be a metadata row (AskCoworker proposed a flow). Chose data step.",
+    "The evidence strongly favored deleting Number_of_Locations__c while the user wanted the opposite; the step-5 'predict the answer' heuristic would have led to deciding without asking, but 'ambiguous set of components to delete' forced a question, which turned out to be essential."
+  ]
+}

@@ -1,0 +1,9 @@
+{"id": "r057", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 1},
+ "scores": {"requirement_fit": 1, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Unrequested scope: the spec creates the POS_System global value set and promotes Lead.POS_System__c to it. That makes the existing Lead field restricted, which changes behavior for other writers such as the sfdc_accelerate_dms integration with Edit. A plain Account picklist with the same six values meets the requirement. The inventory grows from about 4 rows to 8 (global value set, Lead field update, precision widening, and so on).", "skill_gap": "Rule 4 ('share picklist values through a global value set') has no exception for when sharing changes an existing field's restriction. SKILL.md should say reuse must not alter behavior of existing components unless asked."},
+  {"defect": "It did not ask about a change that alters behavior for other callers (restricting Lead.POS_System__c), which Step 5 lists as an ask trigger. It decided this silently because the data is empty.", "skill_gap": "Step 5 'effects on other callers' vs. 'predict from empty data': SKILL.md gives no priority order."},
+  {"defect": "Widening Account.NumberofLocations__c from 3,0 to 5,0 changes an existing field used by 3 layouts and 10 populated Accounts. It is defensible and labelled, but it adds scope.", "skill_gap": "none"}
+ ]}

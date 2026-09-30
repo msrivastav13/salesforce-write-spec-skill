@@ -1,0 +1,10 @@
+{"id": "r009",
+ "claims": {"correct": 6, "wrong": 0, "unverifiable": 0},
+ "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Spec says the Apex replacement '(Total_Score__c / Total_Reviews__c).setScale(1)' matches the formula. Apex Decimal.setScale(1) rounds half-even while a formula with scale 1 rounds half-up, so values like 17/4 = 4.25 become 4.2 instead of 4.3. The equivalence is asserted as fact without a check.", "skill_gap": "None exists: SKILL has no instruction to label behavioural-equivalence claims about replacement logic as assumptions unless verified."},
+  {"defect": "Prompt templates (GenAiPromptTemplate) that might merge Average_Review_Score__c are not mentioned as checked or unchecked, although the field feeds agent actions and meta notes call out prompts. The 'References to the field' list reads as complete; only reports, list views, and external readers are flagged as unverified (and a Storefront__c 'All' list view exists that was not named).", "skill_gap": "SKILL/org-verification.md does not list prompt templates and list views as mandatory dependency categories before a field Delete."},
+  {"defect": "The same guarded division (Total_Score__c / Total_Reviews__c, null on zero) is copied into four Apex classes plus a flow formula, with no shared helper, replacing one formula field (a single source of truth) with five copies of the logic.", "skill_gap": "None exists: SKILL's reuse guidance does not address single-source-of-truth when a Delete forces logic to be re-implemented in several consumers."}
+ ]}

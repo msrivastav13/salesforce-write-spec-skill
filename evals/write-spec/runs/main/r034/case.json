@@ -1,0 +1,4 @@
+{
+ "id": "r034",
+ "requirement": "When a storefront is Closed, all its menus should be deactivated and all menu items marked unavailable."
+}

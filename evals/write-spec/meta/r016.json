@@ -1,0 +1,10 @@
+{
+ "id": "r016",
+ "category": "new-automation",
+ "requirement": "When an onboarding application is Approved, create the Account and Storefront for the merchant automatically.",
+ "hidden_intent": "On status -> Approved create a business Account and a Storefront in Pending Activation linked to it, using merchant name, address, cuisine and phone captured on the application (they assume those fields exist).",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Onboarding_Application__c has only Status__c \u2014 no merchant data to map; must ask what to capture or propose adding fields."
+ }
+}

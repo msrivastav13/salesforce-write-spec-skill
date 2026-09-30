@@ -1,0 +1,39 @@
+{
+  "id": "r017",
+  "skill_rev": "v15",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r017/order-loyalty-points-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"seq": 12, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 31},
+    {"seq": 13, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 43},
+    {"seq": 16, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Custom object list scan; Loyalty_Transaction__c fields, picklists, and relationships", "command_summary": "sf sobject list --sobject custom; sf sobject describe Loyalty_Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Same concept elsewhere: order/amount/total/points fields across the org", "command_summary": "Tooling EntityDefinition DurableIds; Tooling CustomField DeveloperName LIKE Order/Amount/Total/Point/Dollar", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 5, "purpose": "Complete custom field lists of Transaction__c, Loyalty_Transaction__c, Review__c, Refund__c (D1 claimed Transaction__c has no custom fields)", "command_summary": "Tooling CustomField WHERE TableEnumOrId per object", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Field semantics of Total_Amount__c, Contact__c, Points__c; describe Transaction__c hides fields by FLS", "command_summary": "Tooling CustomField.Metadata by Id; sobject describe Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Picklist values of Transaction__c.Transaction_Type__c and Transaction_Source__c; record counts of Order, Transaction__c, Loyalty_Transaction__c", "command_summary": "Tooling CustomField.Metadata; SELECT COUNT() x3; GROUP BY source/type", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Absence of automation and references on Loyalty_Transaction__c/Transaction__c/Order", "command_summary": "Tooling ApexTrigger; FlowDefinitionView per object; Tooling ValidationRule; Tooling MetadataComponentDependency for object and fields", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Apex bodies reading/writing Loyalty_Transaction__c, Points__c, Transaction__c", "command_summary": "Tooling ApexClass Body (70 unmanaged classes) searched locally; grep force-app", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Order.TotalAmount type/updateable; object and field permissions on Loyalty_Transaction__c, Transaction__c, Order", "command_summary": "sobject describe Order; ObjectPermissions; FieldPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "DataStream count; editability of permission sets; name collisions; org edition; Pronto external order claim", "command_summary": "SELECT COUNT() FROM DataStream; PermissionSet NamespacePrefix; FlowDefinitionView by ApiName; Organization; Tooling ApexClass Body comments", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Inbound Pronto integration identity", "command_summary": "Tooling NamedCredential; User LIKE Pronto/Integration; ConnectedApplication LIKE Pronto", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Contact/Account sharing defaults; Apex class name collision; Loyalty_Transaction__c layouts", "command_summary": "Organization DefaultContactAccess; Tooling ApexClass LIKE Loyalty%; Tooling Layout by TableEnumOrId", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 11, "question": "Where does the order dollar amount come from? Loyalty_Transaction__c has no link to any order. Options: (a) standard Order.TotalAmount via a new lookup (Order has 0 records); (b) Transaction__c.Total_Amount__c via a new lookup (0 records, sale/refund object); (c) the Pronto app sends the order amount in its payload when it creates the loyalty transaction, stored on a new Loyalty_Transaction__c.Order_Amount__c field. Evidence: Apex class comments say Pronto orders live in the external Heroku Orders API. Recommendation: (c).", "simulated_answer": "When the Pronto app posts an order, an Earn loyalty transaction is created; the order total comes from the app payload. I assumed the order data was in Salesforce, but it would come from the app payload."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 4, "create": 4, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 5 says 'If you can write a recommendation for the question, you have a basis: do not ask', but also lists 'two interpretations need different objects' as an example that warrants asking. Here I could write a recommendation (Pronto payload) yet the choice changed the target object (Order vs Transaction__c vs new field), so the two rules conflict; I asked.",
+    "Intent says the Pronto app 'creates' the Earn transaction; the requirement says points are awarded when the transaction is created. The skill gives no guidance on whether the external creator's payload change counts as an 'undeliverable responsibility' that should be asked about or just recorded; I recorded it as blocking for delivery.",
+    "No guidance on whether a test ApexClass should be added for a flow-only inventory (Rule 4 minimal design vs production flow-coverage requirement); AskCoworker T said no test needed and I added one.",
+    "Whether a new field written only by an integration needs layout placement is unclear; the content rule allows 'Section 8 says why not', which I used, but the default is not stated."
+  ]
+}

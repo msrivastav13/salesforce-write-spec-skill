@@ -1,0 +1,10 @@
+{
+ "id": "r038",
+ "category": "new-automation",
+ "requirement": "Redeem transactions should never put a customer's loyalty balance below zero.",
+ "hidden_intent": "Block insert of a Redeem Loyalty Transaction if points exceed the current net balance. Points are stored as positive numbers for both Earn and Redeem.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Needs balance computation across Loyalty_Transaction__c (lookup, no roll-up); sign convention of Points__c for Redeem is ambiguous \u2014 ask or state assumption."
+ }
+}

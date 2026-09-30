@@ -1,0 +1,165 @@
+{
+  "id": "r098",
+  "skill_rev": "v32",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r098/menu-item-allergens-spec.md",
+  "askcoworker_calls": [
+    {
+      "seq": 1,
+      "kind": "d1",
+      "error": true,
+      "timed_out": false,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 33
+    },
+    {
+      "seq": 2,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 51
+    },
+    {
+      "seq": 10,
+      "kind": "d2",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 39
+    },
+    {
+      "seq": 14,
+      "kind": "i",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 44
+    },
+    {
+      "seq": 15,
+      "kind": "r",
+      "error": true,
+      "timed_out": true,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 60
+    },
+    {
+      "seq": 16,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 29
+    },
+    {
+      "seq": 18,
+      "kind": "t",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 28
+    }
+  ],
+  "org_queries": [
+    {
+      "seq": 3,
+      "purpose": "Context: org connected, API version",
+      "command_summary": "sf org display --json (printed connectedStatus, alias, id, apiVersion only)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 4,
+      "purpose": "Full custom object list; Menu objects exist; no allergen/dietary field anywhere (D1 claim)",
+      "command_summary": "sf sobject list custom; Tooling EntityDefinition DurableIds; Tooling CustomField DeveloperName LIKE Allerg/Gluten/Nut/Dairy/Shellfish/Diet/Vegan (only 9sd DMO hits)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 5,
+      "purpose": "Menu_Item__c field list, types, record count; label scan across related objects",
+      "command_summary": "Tooling CustomField by TableEnumOrId; sobject describe Menu_Item__c; COUNT() Menu_Item__c = 206; FieldDefinition label scan",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 6,
+      "purpose": "Automation, dependencies, UI components, pages, layout, sites, object perms on Menu_Item__c",
+      "command_summary": "Tooling ApexTrigger, ValidationRule, MetadataComponentDependency, LightningComponentBundle, AuraDefinitionBundle, FlexiPage, Layout; FlowDefinitionView; Network; ObjectPermissions; describe Storefront_Tag__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 7,
+      "purpose": "Readers of Menu_Item__c: MenuBrowserController and AgentGetMenuItemsActions bodies",
+      "command_summary": "Tooling ApexClass Name, Body for 6 classes (searched locally)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 8,
+      "purpose": "menuBrowser LWC source and existing client-side filters; project source present",
+      "command_summary": "Tooling LightningComponentResource for menuBrowser; ls force-app (empty)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 9,
+      "purpose": "Agent action callers of menu classes (merchant vs customer) and menuBrowser placement",
+      "command_summary": "Tooling ApexClass Ids; GenAiFunctionDefinition by InvocationTarget IN; MetadataComponentDependency on menuBrowser and controller; GenAiPlannerDefinition; Network",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 11,
+      "purpose": "Record page Dynamic Forms fields and menuBrowser placement; FLS pattern; OWD; Data 360 streams (tests D2 claims)",
+      "command_summary": "Tooling FlexiPage Metadata for 3 record pages; FieldPermissions for Calories__c; EntityDefinition sharing model; PermissionSet; COUNT() DataStream = 0",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 12,
+      "purpose": "Test class absence, permission set assignment count, profile object access, layout Id",
+      "command_summary": "Tooling ApexClass LIKE MenuBrowser/Allerg; PermissionSetAssignment COUNT; ObjectPermissions profiles; Tooling Layout",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 17,
+      "purpose": "Editability of permission sets named by R; FieldPermissions per permission set",
+      "command_summary": "PermissionSet NamespacePrefix; FieldPermissions GROUP BY Parent.Name for Menu_Item__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    }
+  ],
+  "user_questions": [
+    {
+      "seq": 13,
+      "question": "When a menu item has no allergen information recorded yet, should the customer filter treat it as safe and show it, or hide it whenever an allergen filter is on? Options: (a) show it, labelled 'Allergens not provided' (recommended; the 206 existing items are all blank, so hiding would empty the menu until backfilled); (b) hide it whenever any allergen filter is selected, which needs an 'allergens reviewed' flag.",
+      "simulated_answer": "No preference; use your recommended default."
+    }
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 7,
+    "create": 2,
+    "update": 5,
+    "delete": 0
+  },
+  "skill_friction": [
+    "Step 5 predict-the-answer rule: the blank-value convention looked like a 'data convention nothing settles' (ask) but the answer was predictably 'no preference' with a safe default (decide). The skill gives both rules without a tie-breaker for safety-relevant conventions.",
+    "Wrong-claim counting: AskCoworker made three wrong claims (validation rules not queryable, Data 360 auto-ingestion, SOQL LIKE on multi-select picklists). The skill does not say whether an incorrect design proposal (LIKE filter) counts as a 'platform claim' toward the two/four thresholds.",
+    "The requirement names a customer channel, but the only customer UI (menuBrowser) is unplaced and all Experience sites are UnderConstruction; the skill's 'exists but not placed: the gap is only the placement' rule conflicts with not knowing which site/page to place it on, so it became a blocking open decision rather than a row.",
+    "RUNNER says timeouts are ~60s; seq 15 hit exactly 60s. The template for R with 7 rows and a 400-word limit still timed out; the 'split R for more than 8 changes' threshold may be too high."
+  ]
+}

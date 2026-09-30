@@ -1,0 +1,14 @@
+{"id": "r010", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 1},
+ "verified": [
+  "Storefront__c.Total_Score__c is Summary, sum of Review__c.Rating__c over Review__c.Storefront__c, no filter items (Tooling CustomField Metadata) - correct",
+  "Top-3 SUM(Rating__c) by storefront = 33/29/28 and Total_Score__c holds the same values; 0 null ratings - correct",
+  "FieldPermissions on Total_Score__c: Read true/Edit false in exactly 5 permission sets, none profile-owned - correct",
+  "No Apex triggers and no validation rules on Storefront__c/Review__c - correct",
+  "AskCoworker: AgentReviewActions inserts Review__c (body contains 'insert r;') - correct",
+  "AskCoworker: AgentSummarizeReviewsActions computes its own windowed, capped average from Rating__c, not Total_Score__c (LIMIT :reviewLimit, daysBack, no Total_Score__c reference) - correct"
+ ],
+ "defects": [
+  {"defect": "Zero-change spec is ~11 KB. It includes a 5-step testing strategy and security narrative for behavior that is not changing, and two non-blocking open decisions that restate hypotheticals. This is padding that dilutes the one-line answer ('already met by Total_Score__c').", "skill_gap": "None exists: SKILL.md has no instruction to shorten Sections 3-8 when the inventory is empty (the run's own skill_friction notes the same thing about R/T calls)."}
+ ]}

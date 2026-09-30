@@ -1,0 +1,10 @@
+{
+ "id": "r081",
+ "category": "data360-analytics",
+ "requirement": "Dashboard for regional managers: storefront count, avg rating and refunds by region.",
+ "hidden_intent": "Dashboard grouped by region, where region = state from the storefront address.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Region__c has no fields and Storefront__c has no Region lookup \u2014 region undefined; ask (address state vs link to Region__c)."
+ }
+}

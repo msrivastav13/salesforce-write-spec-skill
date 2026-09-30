@@ -1,0 +1,9 @@
+{"id": "r066", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0}, "wrong_claims": ["Section 6: 'No profile has an explicit grant on the field; users with View All Data still see it.' View All Data does not override field-level security; with no profile FieldPermissions rows, users who rely only on their profile (including admins without one of the 4 permission sets) cannot see Lead_Conversion_Probability__c at all."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 1, "reuse": 2, "scope_behavior": 2, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Wrong platform claim that View All Data lets users see a field without FLS grants.", "skill_gap": "None explicit: SKILL.md/org-verification do not state that View All Data / Modify All Data never bypass FLS."},
+  {"defect": "Visibility gap missed: FieldPermissions shows only 4 permission sets (no profiles) grant Read on the output field, so sales users viewing Lead Layout will not see the score; the spec says existing readers 'see' it and adds no FLS change or open decision.", "skill_gap": "None explicit: no instruction to check that the intended audience actually has FLS on an output field that is being repurposed."},
+  {"defect": "The single inventory row converts an existing Number(18,2) custom field in place to a Formula field. Salesforce does not generally allow changing an existing non-formula custom field to the Formula type (Change Field Type offers no Formula option); feasibility is presented as fact, not labelled as an assumption, and no fallback (new formula field, or before-save flow writing the existing field) is given.", "skill_gap": "Rule 3 (label undocumented/unverified platform behavior as assumption) would have caught it if applied; no specific rule about field-type conversion limits."}
+ ]}

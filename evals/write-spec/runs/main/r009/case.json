@@ -1,0 +1,4 @@
+{
+ "id": "r009",
+ "requirement": "Remove the Average Review Score field, we'll just compute it in reports."
+}

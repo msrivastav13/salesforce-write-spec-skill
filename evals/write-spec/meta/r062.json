@@ -1,0 +1,10 @@
+{
+ "id": "r062",
+ "category": "new-automation",
+ "requirement": "Send the primary contact a heads-up email 7 days before their storefront's promotion ends",
+ "hidden_intent": "Scheduled path 7 days before End Date on Active Promotion: email the Storefront's Primary Contact using an email template. One email per promo.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Scheduled path on Promotion__c relative to End_Date__c; recipient via Storefront__c.Primary_Contact__c; handle missing primary contact."
+ }
+}

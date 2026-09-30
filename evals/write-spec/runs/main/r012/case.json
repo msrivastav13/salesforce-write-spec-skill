@@ -1,0 +1,4 @@
+{
+ "id": "r012",
+ "requirement": "Storefront hours: closing time must be after opening time, and each storefront can only have one row per day of the week."
+}

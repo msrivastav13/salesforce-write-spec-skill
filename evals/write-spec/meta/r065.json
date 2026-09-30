@@ -1,0 +1,10 @@
+{
+ "id": "r065",
+ "category": "multi-part",
+ "requirement": "Refund overhaul: require a reason for every refund, block refunds larger than the original order, auto-approve under $25, and send the customer a receipt when it's completed.",
+ "hidden_intent": "Reason required, auto-approve <= $25, receipt on Completed. They'll drop the 'original order' check if there's no order amount.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "No order amount exists to compare against \u2014 ask/flag; reuse IssueRefundReceiptAction; Reason__c exists."
+ }
+}

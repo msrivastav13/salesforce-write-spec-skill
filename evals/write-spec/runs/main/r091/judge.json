@@ -1,0 +1,30 @@
+{
+ "id": "r091",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 0,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Account merge leaves the winner's count stale; kept as a non-blocking proposal rather than covered. The gap is disclosed, and the fix is a manual workaround.",
+   "skill_gap": "design-rules 'cover records that start or stop matching' does not say whether parent-merge reparenting is in scope for a lookup roll-up."
+  }
+ ]
+}

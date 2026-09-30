@@ -1,0 +1,9 @@
+{"id": "r058", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0},
+ "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The run decided on its own to override the caller-supplied expirationDate of AgentGiftCertificateActions (a shared agent action), recorded only as an assumption. Step 5 lists 'the design would change behavior for other callers of a shared component' as a reason to ask. It could have been added to the one question message.", "skill_gap": "Step 5 already names this ask trigger. The instruction exists but was not applied because the fork appeared after the first question."},
+  {"defect": "A legal claim (California Civil Code 1749.5) is tagged 'assumption (documented platform behavior)', which is the wrong category.", "skill_gap": "None exists. Rule 3 has no tag for external legal or regulatory facts."},
+  {"defect": "D1 and D2 ran before the question about the contradiction. Here that was reasonable, because they supplied the Type__c options the question used, but their California-address framing was wasted.", "skill_gap": "SKILL.md does not say whether a self-contradicting requirement should be asked before or after discovery. The pre-AskCoworker gate on line 14 covers only vague requirements."}
+ ]}

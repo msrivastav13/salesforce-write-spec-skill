@@ -1,0 +1,10 @@
+{
+ "id": "r059",
+ "category": "contradictory",
+ "requirement": "Only the account owner should be able to edit a storefront. Also, all merchant support agents need to update storefront hours and details from the console.",
+ "hidden_intent": "Owner edits storefront record directly; support agents edit hours/details only through the agent actions or a scoped permission set.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Sharing conflict; existing AgentUpdateStorefront*Actions may bypass sharing \u2014 ask and flag."
+ }
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r018",
+ "category": "new-automation",
+ "requirement": "Can we get a nightly job that deactivates menu items with no price?",
+ "hidden_intent": "Nightly: Menu Items where Price is null and Available = true -> Available = false.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Scheduled flow on Menu_Item__c; a validation rule requiring Price__c when Available may be the better root fix \u2014 spec may mention it but keep scope."
+ }
+}

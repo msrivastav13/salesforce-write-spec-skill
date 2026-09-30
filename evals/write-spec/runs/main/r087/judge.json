@@ -1,0 +1,9 @@
+{"id": "r087", "claims": {"correct": 4, "wrong": 2, "unverifiable": 0},
+ "wrong_claims": ["Section 2: the 'complete list' of parents with Delete/Modify All on Case/Refund__c names only System Administrator, Agentforce_Reference_App, Pronto_Deep_Dive_Workshop, sfdc_accelerate_dms and Custom: Support Profile. ObjectPermissions also returns ~25 force-namespace Session permission sets with Case Delete (ActorCASCPermSet, C2CCapstonePermSet, C2CMcpServicePermSet, D360HomeOrgPermSet, etc.).", "Section 8 'AskCoworker corrections': 'the complete Delete-grant query returns no rows for' ActorCASCPermSet and the C2C* sets. False: they exist (NamespacePrefix force) and have Case Delete + Modify All; AskCoworker was right. Test step 2's expected result is therefore also wrong."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Falsely 'corrected' a true AskCoworker claim and presented an incomplete Delete-grant list as complete (omits the force-namespace platform permission sets). Design outcome unaffected (they are non-editable platform sets, not support agents), but the claim is unverified-as-stated.", "skill_gap": "v29 SKILL.md: 'State each verified claim within its query's scope (object, namespace, filters)' and 'Never keep a claim your own query contradicted' (exist, not followed)."},
+  {"defect": "Did not examine the agent permission sets Merchant_Support_Agent_Permissions and NextGen_1bYKj000000CactMAC_Permissions (the latter assigned to the Einstein Agent User). Neither grants Case/Refund__c access, so no change is needed, but the spec does not ground this.", "skill_gap": "None specific; v29 SKILL.md step 5 names persona as a fork but no instruction says to search permission sets by persona name (the run searched profiles/roles only)."}
+ ]}

@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Block insert of a Redeem Loyalty Transaction if points exceed the current net balance. Points are stored as positive numbers for both Earn and Redeem."
+}

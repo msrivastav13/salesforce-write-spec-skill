@@ -1,0 +1,34 @@
+{
+ "id": "r118",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 0,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Section 6 labels the general statement 'Field access comes only from FieldPermissions' as verified by org query; it is platform behavior, and only the listed rows were queried.",
+   "skill_gap": "None specific; the labelling rules cover this in principle, but SKILL.md does not separate a queried fact from the platform rule used to interpret it."
+  },
+  {
+   "defect": "The layout row is Conditional even though the layout lacks both fields and drives New/Clone for every profile regardless of FlexiPage activation. That makes the condition effectively always true, so a plain Update would have been clearer.",
+   "skill_gap": "spec-format 'Conditional: when page activation cannot be read' does not cover layouts that drive New/Clone dialogs independent of activation (reported in skill_friction)."
+  }
+ ]
+}

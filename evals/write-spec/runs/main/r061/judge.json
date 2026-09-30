@@ -1,0 +1,7 @@
+{"id": "r061", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The flow check covers only the 13 unmanaged flows; the managed Case flows (for example SvcCopilotTmpl__CreateCaseEnhancedData, SvcCopilotTmpl__CreateCase) are not mentioned, although the spec does explain the equivalent point for managed Apex. Low impact: MetadataComponentDependency returns only the three layouts for each field.", "skill_gap": "None exists: org-verification guidance does not say to name managed-package automation on the object when the check is limited to unmanaged components."}
+ ]}

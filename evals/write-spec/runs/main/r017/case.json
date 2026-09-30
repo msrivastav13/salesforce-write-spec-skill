@@ -1,0 +1,4 @@
+{
+ "id": "r017",
+ "requirement": "Every time an order-sourced loyalty transaction is created, award points at 1 point per dollar. The dollar amount is on the order."
+}

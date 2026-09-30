@@ -1,0 +1,38 @@
+{
+ "id": "r075",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 1,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "meta.expect says Onboarding_Application__c has no Account lookup, but the org has Onboarding_Application__c.Account__c (Lookup to Account, SetNull, relationship Onboarding_Applications), confirmed by Tooling CustomField metadata. The spec correctly reused it and corrected AskCoworker. This is an eval metadata defect, not a run defect.",
+   "skill_gap": "None (meta file needs updating)."
+  },
+  {
+   "defect": "No automated test component. The spec explains why (a Flow Test cannot assert a created related record) and gives 11 manual checks. Acceptable, but a bulk-safety claim ('flows batch Get/Create across interviews') is left to a manual check.",
+   "skill_gap": "SKILL.md testing guidance does not cover a record-triggered flow whose outcome is a created related record (the run notes this in skill_friction)."
+  },
+  {
+   "defect": "Minor: the Admin profile FLS row is correct (FLS is required even for admins), but the run's friction shows SKILL.md led it to doubt this.",
+   "skill_gap": "The SKILL.md org-verification note says View All Data users see fields without FLS grants. It is wrong."
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "r038",
+  "skill_rev": "v20",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r038/loyalty-redeem-balance-guard-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 33},
+    {"seq": 11, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48},
+    {"seq": 12, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 13, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 21},
+    {"seq": 14, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Loyalty_Transaction__c fields, picklist values, relationship (tests D1 claim that Transaction_Type__c has only Redeem)", "command_summary": "sf sobject describe Loyalty_Transaction__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 4, "purpose": "Contact custom fields; no balance field; object DurableIds", "command_summary": "sf sobject describe Contact; Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Org-wide search for Balance/Point/Loyalty/Redeem fields; complete CustomField lists on Contact and Loyalty_Transaction__c", "command_summary": "Tooling CustomField LIKE queries and TableEnumOrId lists", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Existing automation, data volume, dependencies", "command_summary": "ApexTrigger, FlowDefinitionView (two forms), Tooling ValidationRule, GROUP BY count, MetadataComponentDependency", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Re-run VR and dependency checks with 18/15-char IDs; COUNT(); Apex body search; custom and all object lists for loyalty concepts", "command_summary": "Tooling ValidationRule, MetadataComponentDependency, COUNT(), ApexClass Body scan, sobject list custom/all", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Field metadata (required, reparentable, picklist valueSet, description)", "command_summary": "Tooling CustomField.Metadata by Id for Points, Contact, Transaction_Type", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "Who can create transactions; sharing model; org edition", "command_summary": "ObjectPermissions on Loyalty_Transaction__c; EntityDefinition sharing; Organization", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 10, "question": "Two questions: (1) How is Points__c recorded on a Redeem: as a positive number subtracted from the balance (recommended; field description says 'number of points involved'), or as a negative number? There are 0 records to check. (2) Scope: block only a Redeem whose points exceed the Contact's current net balance (Earn sum minus Redeem sum) (recommended), or block any change, including deleting or reducing Earn records, that leaves the balance negative?", "simulated_answer": "Block insert of a Redeem Loyalty Transaction if points exceed the current net balance. Points are stored as positive numbers for both Earn and Redeem."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "AskCoworker D1 reported Transaction_Type__c had only 'Redeem' with a confident [Verified] label, and much of D1/D2 relied on 'prior session' facts; the skill handles this via step 3 but gives no guidance on how aggressively to distrust an answer whose headline 'critical finding' is wrong.",
+    "After an R retry narrowed to runtime-only succeeded, SKILL.md does not say whether the dropped R parts (security, CRUD/FLS, Data 360) need another follow-up or may be covered by org queries; the D2/R/T failure rule covers only calls that fail after retries, not a successful narrowed retry.",
+    "The skill mixes 'decide implementation yourself' with intent questions; the Points__c sign convention is arguably a data-convention/implementation fact rather than intent, but no evidence could settle it and it is load-bearing for the formula, so it was asked. A rule for 'load-bearing data conventions with zero records' would help.",
+    "Several platform-behavior points (parent validation rule running on roll-up recalculation, PRIORVALUE on roll-up fields in a validation rule) cannot be tested with the allowed read-only commands; the design rests on them as load-bearing assumptions.",
+    "Spec-format content rule on access ('every new field that people must see includes access') vs. least access: roll-up fields used only by a validation rule needed a judgement call; left without grants and recorded in Section 8."
+  ]
+}

@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Ingest Contact, Loyalty Transaction, Review via CRM connector; identity resolution on Pronto App Account Id + email; calculated insight for lifetime points."
+}

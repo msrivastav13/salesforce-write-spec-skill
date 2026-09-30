@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Sum of Refund Amount where Status = Completed per Storefront, shown on storefront as a new field."
+}

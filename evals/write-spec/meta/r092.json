@@ -1,0 +1,10 @@
+{
+ "id": "r092",
+ "category": "new-automation",
+ "requirement": "Set the refund Issue Date to today whenever a refund record is created and it's blank.",
+ "hidden_intent": "Default Issue Date to today on create when blank.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "A field default value (TODAY()) on Issue_Date__c is simpler than a flow \u2014 good spec considers the declarative default first."
+ }
+}

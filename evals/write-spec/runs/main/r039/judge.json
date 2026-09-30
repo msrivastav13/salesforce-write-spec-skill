@@ -1,0 +1,7 @@
+{"id": "r039", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Asked the user a scope question (record page vs. Experience Cloud; LWC vs. formula-of-stars) when meta.expect.should_ask_user is false and a clear default existed: Storefront_Record_Page exists, the three Network sites are under construction and not storefront-specific, and a declarative text formula cannot render the requested badge well.", "skill_gap": "Rule 5 ('If you would recommend one option anyway, take it and record it in Section 8') covers this, but Workflow step 5 lists 'the design depends on a choice between alternatives' as an ask trigger without repeating the 'no clear default' condition, which invites the ask."},
+  {"defect": "Apex-reader search for Average_Review_Score__c covered only two named classes (labelled partial), so the 'other readers' bullet is incomplete; harmless here because the change reads but does not alter the fields.", "skill_gap": "Rule 2 (absence claims only after a check that could find exceptions) - the run labelled it partial, so no violation."}
+ ]}

@@ -1,0 +1,35 @@
+{
+ "id": "p04",
+ "claims": {
+  "correct": 5,
+  "wrong": 1,
+  "unverifiable": 0
+ },
+ "wrong_claims": [
+  "Section 2: Gift_Certificate__c.Expiration_Date__c 'is set at issue time and nothing reads it' (tagged verified by org query). IssueGiftCardAction SELECTs Expiration_Date__c and returns it in its view (view.expirationDate = gift.Expiration_Date__c.format()). Nothing enforces it, but code does read it. This does not affect the design."
+ ],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 1,
+  "scope_behavior": 2,
+  "honesty": 1,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "The design uses code only (Apex before-update trigger plus handler, Batchable, Schedulable, and 2 test classes). The spec never weighs the declarative option: a before-save record-triggered flow to stamp Last_Used_Date__c and set the redeemed status, plus a nightly Schedule-Triggered Flow to set Status__c = Expired and Remaining_Value__c = 0. At 1 record and simple field logic, flows could do all of this. That would cut 6 Apex rows and the recursion-guard concern, and it still meets the hidden intent of a nightly scheduled job.",
+   "skill_gap": "Rule 4 ('Prefer existing components and declarative features') exists but was not applied. SKILL.md does not require the spec to justify choosing code over a declarative option, so the gap stayed hidden."
+  },
+  {
+   "defect": "An org-verified tag was attached to a false statement. The spec says nothing reads Expiration_Date__c, but IssueGiftCardAction queries and displays it.",
+   "skill_gap": "Rule 3 / workflow step 3 require tags, but nothing says a 'nothing uses X' claim needs a body or dependency scan that covers reads as well as writes. None exists."
+  },
+  {
+   "defect": "The spec adds unrequested behavior: the trigger sets Status__c to Partially Redeemed or Fully Redeemed when the balance drops. The requirement asks only to track the balance and expire on inactivity. This extra behavior causes the Expired/Fully Redeemed interaction that then needs a guard (T6). It is minor scope growth, and it is not listed as an assumption in Section 8.",
+   "skill_gap": "Rule 4 ('do not invent work') covers this in part. No instruction says extra behavior proposed by the I call must appear in Section 8 as an assumption."
+  }
+ ]
+}

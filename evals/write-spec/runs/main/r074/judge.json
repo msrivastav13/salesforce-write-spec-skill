@@ -1,0 +1,10 @@
+{"id": "r074", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0},
+ "wrong_claims": ["Section 4 (Unique_Review_Key__c) and Section 6 (Bypass): 'no FLS grant ... administrators see it through Modify All Data' / 'only administrators can' blank the key. Modify All Data does not override field-level security; with no FLS grant (FieldPermissions on Review__c show no profile rows at all) no administrator can see or edit the field."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 1, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "States that administrators see/edit Review__c.Unique_Review_Key__c through Modify All Data despite no FLS grant; wrong platform behavior presented as fact.", "skill_gap": "v27 reference/org-verification.md FieldPermissions note itself says users with Modify All Data or View All Data still see the field (wrong; corrected in v29.1). The skill caused this defect."},
+  {"defect": "Open decision 4 backfills Unique_Review_Key__c as a data step, but the design grants no FLS on the field to anyone, so the loading user (even System Administrator) cannot write it via Data Loader/API; the spec does not list the temporary FLS grant the backfill needs.", "skill_gap": "None specific; a design-rules check that every data step names the access the loading user needs would prevent it."},
+  {"defect": "Asked the user which reviews the nightly summary should use (reuse existing AgentSummarizeReviewsActions vs new query) although the evidence already showed a clear reuse default; this is an implementation choice.", "skill_gap": "SKILL.md step 5 ask/decide rule exists (implementation choices with a clear default are decided, not asked); not followed."}
+ ]}

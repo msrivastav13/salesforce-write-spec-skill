@@ -1,0 +1,58 @@
+{
+  "id": "r044",
+  "skill_rev": "v20",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r044/contact-lifetime-stats-sync-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 2, "kind": "d2", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 3, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 36},
+    {"seq": 31, "kind": "i", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 32, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 22},
+    {"seq": 33, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48},
+    {"seq": 34, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42}
+  ],
+  "org_queries": [
+    {"seq": 4, "purpose": "scan full custom object list for order/transaction concepts", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "same concept elsewhere; target field descriptions", "command_summary": "Tooling CustomField DeveloperName LIKE Lifetime/Order/LTV/Value/Spend/Revenue", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "resolve object DurableIds", "command_summary": "EntityDefinition WHERE DurableId IN (...) OR QualifiedApiName IN (...) (failed), then QualifiedApiName IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Transaction__c has no fields; Loyalty_Transaction__c and Refund__c relationships/amounts", "command_summary": "sf sobject describe Loyalty_Transaction__c, Transaction__c, Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Loyalty_Transaction__c picklist semantics (points not orders)", "command_summary": "describe picklist values", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "data shape: Order/Transaction__c/Loyalty_Transaction__c/Refund__c counts; Contacts with fields populated", "command_summary": "SELECT COUNT() queries", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "no triggers on Contact/Order/Transaction objects", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "record-triggered flows on objects", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "scheduled flows", "command_summary": "FlowDefinitionView WHERE TriggerType='Scheduled'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "existing scheduled jobs", "command_summary": "CronTrigger with CronJobDetail", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "field IDs for dependency check", "command_summary": "Tooling CustomField WHERE TableEnumOrId='Contact' AND DeveloperName IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Named Credentials exist", "command_summary": "Tooling NamedCredential", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "no metadata references the fields", "command_summary": "MetadataComponentDependency by 18- and 15-char field Ids", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "no Apex reads/writes the fields or calls Pronto_Orders_API", "command_summary": "Tooling ApexClass Body (unmanaged) searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "who can read/edit the fields", "command_summary": "FieldPermissions WHERE Field IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "order source per class comments; no real callout", "command_summary": "Tooling ApexClass Body for OrderStatusCardAction, OrderPickerController", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "org edition", "command_summary": "Organization OrganizationType, IsSandbox", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "assignees of permission sets with Edit on the fields", "command_summary": "User WHERE Id IN PermissionSetAssignment", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "External Service registration (API contract)", "command_summary": "Tooling ExternalServiceRegistration (first attempt bad column, retried once)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "External Credentials", "command_summary": "Tooling ExternalCredential", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "Pronto_Orders_API detail", "command_summary": "Tooling NamedCredential WHERE DeveloperName='Pronto_Orders_API'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "no existing lifetime/order aggregation class; new names free", "command_summary": "Tooling ApexClass Name LIKE", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "principal access to external credential", "command_summary": "SetupEntityAccess WHERE SetupEntityType='ExternalCredentialParameter'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 28, "purpose": "map principal parameters to external credentials", "command_summary": "Tooling ExternalCredentialParameter", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 29, "purpose": "Pronto_ECP_Access assignees", "command_summary": "PermissionSet with Assignments subquery", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 30, "question": "Two questions. (1) Source: Salesforce holds no order data (Order 0 records, Transaction__c empty with no fields), all 198 Contacts have both fields blank, and nothing in Salesforce writes them; field descriptions say 'app-side aggregation' and Apex comments say orders live in the external Heroku Orders API behind Named Credential Pronto_Orders_API. Should (a) Salesforce pull per-Contact totals from the Pronto Orders API on a schedule and write the fields [recommended], (b) the external app's integration (DMS integration user, sfdc_accelerate_dms) be repaired to resume writing, with no Salesforce metadata change, or (c) orders be loaded into standard Order and totals computed from them? (2) Freshness: nightly [recommended], hourly, or near-real-time on each order?", "simulated_answer": "Recompute them nightly from the order data. I'm not sure where the order data lives; the app used to write these fields via integration and it stopped."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "D2 and I (500-word template) both timed out at ~60s; the I template with a ~10-bullet 'Established so far' plus 500 words is too large to finish reliably. The narrowed retries succeeded.",
+    "D2 retry was narrowed to integrations/order objects only; SKILL.md says to cover left-out parts with org queries, which worked, but it is unclear whether a second narrow D2 call is expected when org queries already cover triggers/flows.",
+    "The user's answer picked no source option; the mapping rule ('map to the option its words match') was hard to apply because 'recompute from order data' fits (a) or (c) and 'app used to write via integration' hints at (b). Mapped to (a) as the only evidenced order source.",
+    "The key blocking unknown (external API contract) makes every Create row Conditional; the skill has no guidance on whether a spec whose whole inventory is conditional on an external contract should still be saved as complete rather than as a Draft.",
+    "AskCoworker in R asserted scheduled Apex runs as Automated Process (wrong platform behavior); the rule to fix wrong platform claims covers this, but no org query can test running-user behavior, so it rests on documented platform behavior.",
+    "Scheduling a CronTrigger after deploy is a non-metadata setup step; the skill covers it as a blocking deployment step but does not say whether the spec should name Setup UI vs anonymous Apex (Rule 1 forbids me running Apex, but a user step using it is fine)."
+  ]
+}

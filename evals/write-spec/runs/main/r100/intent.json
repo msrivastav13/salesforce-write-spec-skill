@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "New Driver object (name, phone, vehicle type, plate, active) and a link from each delivery/order to the driver. Drivers are contractors, not Users."
+}

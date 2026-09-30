@@ -1,0 +1,10 @@
+{
+ "id": "r115",
+ "category": "nonexistent-concept",
+ "requirement": "Track health inspection results for every storefront, with scores and inspection dates, and suspend any with a failing grade.",
+ "hidden_intent": "New Health Inspection object (master-detail to Storefront, date, score, grade A/B/C/Fail); Fail sets Storefront Suspended.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "No inspection object; propose Create (master-detail to Storefront__c) + automation setting Status__c Suspended."
+ }
+}

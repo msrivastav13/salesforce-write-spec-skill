@@ -1,0 +1,4 @@
+{
+ "id": "r060",
+ "requirement": "When a contact's status becomes Former Employee, remove them as primary contact on any storefront."
+}

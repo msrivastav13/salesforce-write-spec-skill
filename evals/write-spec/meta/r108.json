@@ -1,0 +1,10 @@
+{
+ "id": "r108",
+ "category": "data360-analytics",
+ "requirement": "Build a unified customer profile in Data Cloud that combines app accounts, loyalty transactions and reviews.",
+ "hidden_intent": "Ingest Contact, Loyalty Transaction, Review via CRM connector; identity resolution on Pronto App Account Id + email; calculated insight for lifetime points.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Data 360 streams/DMOs/identity resolution; reuse Contact.Pronto_App_Account_Id__c as match key; GetDataFromRTDatagraph/realTimeEngagements suggest data graphs exist \u2014 check."
+ }
+}

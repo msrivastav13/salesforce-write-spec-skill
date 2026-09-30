@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Block conversion if POS System or Number of Locations blank. The web form writes Number_of_Locations__c."
+}

@@ -1,0 +1,15 @@
+{
+  "name": "salesforce-write-spec",
+  "description": "Unofficial (not a Salesforce product). Turn a plain-English business requirement into a grounded Salesforce implementation spec, using the AskCoworker MCP server and read-only sf CLI queries. Spec only; never deploys.",
+  "version": "0.38.0",
+  "author": {
+    "name": "Mohith Shrivastava"
+  },
+  "keywords": [
+    "salesforce",
+    "spec",
+    "design",
+    "sf-cli",
+    "mcp"
+  ]
+}

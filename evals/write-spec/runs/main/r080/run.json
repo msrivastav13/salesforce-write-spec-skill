@@ -1,0 +1,57 @@
+{
+  "id": "r080",
+  "skill_rev": "v28",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r080/refund-amount-tier2-visibility-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 52},
+    {"seq": 30, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 31, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 50},
+    {"seq": 34, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "full custom object list; Refund__c exists", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Refund__c DurableId", "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName='Refund__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "complete Refund__c custom field list; Amount__c exists", "command_summary": "Tooling CustomField WHERE TableEnumOrId=01Iak00000Dx4KP", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "who has FLS on Refund__c.Amount__c (AskCoworker FLS table)", "command_summary": "FieldPermissions WHERE Field='Refund__c.Amount__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "object access on Refund__c", "command_summary": "ObjectPermissions WHERE SobjectType='Refund__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "any tier/level/support field anywhere (agent tier concept)", "command_summary": "Tooling CustomField DeveloperName LIKE Tier/Level/Support", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "no tier-named permission set", "command_summary": "PermissionSet non-profile non-namespaced", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "no tier-named permission set group", "command_summary": "PermissionSetGroup", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "no tier-named role", "command_summary": "UserRole", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "no tier queue/group", "command_summary": "Group Type IN Regular,Queue", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "no User custom tier field", "command_summary": "Tooling CustomField WHERE TableEnumOrId='User'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "assignment counts of PS granting Amount read", "command_summary": "PermissionSetAssignment GROUP BY PermissionSet.Name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "users in support roles", "command_summary": "User GROUP BY UserRole.Name, Profile.Name", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "active standard users by profile", "command_summary": "User GROUP BY Profile.Name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "readers of Amount__c", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId 18-char", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "readers of Amount__c (15-char retry)", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId 15-char", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "active users by role", "command_summary": "User GROUP BY UserRole.DeveloperName", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "Apex readers of Refund__c/Amount__c and FLS enforcement in IssueRefundReceiptAction", "command_summary": "Tooling ApexClass Name, Body (non-namespaced), searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "flow types of Issue Refund / Apply Remediation", "command_summary": "FlowDefinitionView WHERE Label IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "Refund__c FlexiPages", "command_summary": "Tooling FlexiPage WHERE EntityDefinitionId='Refund__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "Refund__c layouts", "command_summary": "Tooling Layout WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "active users and types", "command_summary": "User WHERE IsActive=true", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "holders of Agentforce_Reference_App / Pronto_Deep_Dive_Workshop", "command_summary": "PermissionSetAssignment with Assignee.Profile.Name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "IssueRefundReceiptAction Id", "command_summary": "Tooling ApexClass WHERE Name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "agent action backed by IssueRefundReceiptAction", "command_summary": "Tooling GenAiFunctionDefinition LIKE Refund", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 28, "purpose": "callers of IssueRefundReceiptAction", "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentName (unsupported)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 32, "purpose": "active version ids of the two flows", "command_summary": "Tooling FlowDefinition WHERE DeveloperName", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 33, "purpose": "whether flows expose Amount__c beyond caller input; runInMode", "command_summary": "Tooling Flow.Metadata by Id", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 29, "question": "The org has no concept of support-agent tier (no tier role, profile, permission set, group, or User field; no human agent users yet). How should 'below Tier 2' be defined? Options: (A) Recommended: a new dedicated Tier 2 permission set grants Read on Refund__c.Amount__c, everyone else (Tier 1) has no grant; (B) use roles CustomerSupportNorthAmerica/CustomerSupportInternational (roles control sharing, not field visibility); (C) add a tier field on User and drive visibility from it (needs code or dynamic visibility, weaker).", "simulated_answer": "Amount hidden for Tier 1 agents; visible to a Tier 2 permission set."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 1, "create": 1, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 5 says to predict the answer and decide if 'no preference' is expected, but here the persona fork (how Tier 2 is represented) was genuinely needed; the skill gives no guidance on whether a missing persona representation (no tier concept in org) counts as 'which persona' or as implementation (how to build). I treated it as an intent question.",
+    "AskCoworker repeatedly labels facts '[Verified: prior session]' and invents components (AgentActionsTest); the rule to treat these as untraceable is clear but the volume forced re-verifying nearly everything.",
+    "AskCoworker I proposed a separate 'PermissionSetFieldSecurity' row for a field permission inside a permission set; spec-format says not to fold dependent parts but does not say field/object permissions are part of the PermissionSet component. I merged them; explicit guidance would help.",
+    "Design-rules 'a security fix must not be bypassable by the same actor' vs. Apex/flow paths that echo caller-supplied values: no guidance on whether echoing back a value the caller supplied counts as a bypass. I treated it as non-blocking proposal.",
+    "org-verification.md says users with View All Data still see fields without FLS; this is at odds with typical platform behavior (View All Data does not override FLS in most contexts), so I stated it as documented behavior per the reference but it may be inaccurate."
+  ]
+}

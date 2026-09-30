@@ -1,0 +1,8 @@
+{"id": "r083", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Report placed in unfiled$public for a source-deployed report; works but is a weak home for a shared metric and the folder choice is deferred as Open item 5.", "skill_gap": "None exists; skill has no guidance on report folder defaults (also noted in skill_friction)."},
+  {"defect": "writeRequiresMasterRead=false is described with a confusing parenthetical ('Read/Write on the storefront record is needed'), which is the platform behavior for false but reads as contradictory.", "skill_gap": "None exists."},
+  {"defect": "Actual prep minutes are a manually entered number with no start/ready timestamps, so 'actual prep time' depends on an unspecified external source; labelled as Open item 1 rather than hidden.", "skill_gap": "None exists."}
+ ]}

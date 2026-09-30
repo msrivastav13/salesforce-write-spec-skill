@@ -1,0 +1,10 @@
+{
+ "id": "r054",
+ "category": "new-automation",
+ "requirement": "When a promotion's end date passes, it should automatically flip to Expired so customers stop seeing it.",
+ "hidden_intent": "Nightly scheduled job (flow or Apex) that sets Promotion status to Expired where End Date < today and status is Active. Canceled promos stay canceled. No notifications needed.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Scheduled flow on Promotion__c; filter Status=Active AND End_Date__c < TODAY; must not touch Canceled; no existing automation does this."
+ }
+}

@@ -1,0 +1,8 @@
+{"id": "r081", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Custom report type Refunds_with_Storefront is justified by the assumption that the standard Refund__c report type cannot expose lookup-parent (Storefront__c) fields; this is labelled an assumption but is doubtful and may add an unnecessary component. The alternative (standard report type with lookup fields) is not weighed.", "skill_gap": "None: Rule 4 (declarative/standard first) exists but no instruction requires weighing the standard report type's lookup-field support before adding a custom report type."},
+  {"defect": "Name availability of ReportType Refunds_with_Storefront and the report/dashboard DeveloperNames is not stated as checked in Section 2 (judge also could not query CustomReportType via allowed tools).", "skill_gap": "org-verification.md gives no query for report-type/report name collisions (run friction also notes no way to check Allow Reports)."},
+  {"defect": "'Allow Reports' on Storefront__c and Refund__c left as a deployment-time assumption; correctly labelled but unresolved.", "skill_gap": "org-verification.md has no method for reading the Allow Reports setting."}
+ ]}

@@ -1,0 +1,10 @@
+{
+ "id": "r109",
+ "category": "nonexistent-concept",
+ "requirement": "Catering orders need a deposit and a minimum headcount of 20.",
+ "hidden_intent": "Catering Order object: headcount, event date, deposit amount/paid; validation headcount >= 20; related to Storefront and customer Account.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "No catering or order object; propose Create and ask about relationships."
+ }
+}

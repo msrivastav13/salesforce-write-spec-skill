@@ -1,0 +1,10 @@
+{
+ "id": "r091",
+ "category": "new-automation",
+ "requirement": "Roll up the number of storefronts onto the account.",
+ "hidden_intent": "Keep Account Total Storefronts in sync with count of storefronts on the account, all statuses.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Account.Total_Storefronts__c already exists as a plain Number (NOT a roll-up) and Storefront__c.Account__c is a lookup, so native roll-up isn't possible \u2014 maintain the existing field via flow/trigger, don't create a new field."
+ }
+}

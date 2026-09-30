@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Record-triggered flow on Review create: if Rating <= 2, create a Case linked to the Storefront and the reviewing Contact, assigned to the Merchant Success queue, subject including the storefront name. Only on create, not on edits."
+}

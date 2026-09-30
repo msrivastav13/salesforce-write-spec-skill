@@ -1,0 +1,44 @@
+{
+  "id": "r097",
+  "skill_rev": "v31",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r097/order-loyalty-points-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 2, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 19},
+    {"seq": 3, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 45},
+    {"seq": 16, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 35},
+    {"seq": 18, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 19, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 21},
+    {"seq": 20, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28},
+    {"seq": 21, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30}
+  ],
+  "org_queries": [
+    {"seq": 4, "purpose": "org context", "command_summary": "sf org display (connectedStatus, alias, id, apiVersion only)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "full custom object scan; order/points candidates", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Loyalty_Transaction__c and Transaction__c fields, picklist values (AskCoworker said values unknown)", "command_summary": "sobject describe Loyalty_Transaction__c, Transaction__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "same concept elsewhere (order id, total, points, pronto)", "command_summary": "Tooling EntityDefinition DurableIds; CustomField DeveloperName LIKE Point/Loyal/Order/Pronto/External", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "complete custom field lists; Contact external ID key", "command_summary": "Tooling CustomField by TableEnumOrId for both objects; Contact describe", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "data shape, field descriptions, Order usage", "command_summary": "Loyalty_Transaction__c GROUP BY type/source; FieldDefinition descriptions; COUNT Order", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Transaction__c semantics; automation absence on Loyalty_Transaction__c", "command_summary": "CustomField Metadata by Id; ApexTrigger; FlowDefinitionView; ValidationRule; MetadataComponentDependency object + fields", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "writers/readers in Apex; @RestResource absence", "command_summary": "Tooling ApexClass bodies (unmanaged) searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "existing access and integration users", "command_summary": "NamedCredential; ObjectPermissions/FieldPermissions Loyalty_Transaction__c; User by name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "match-key population", "command_summary": "COUNT Contact, COUNT(Pronto_App_Account_Id__c)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "master-detail settings, OWD, name collisions for new components", "command_summary": "CustomField Metadata Contact__c; EntityDefinition sharing models; CustomField Order_Id/Order_Total; FlowDefinition/PermissionSet LIKE Loyalty; CloudIntegrationUser", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "existing OAuth clients and integration licenses", "command_summary": "ConnectedApplication; Tooling ExternalClientApplication; Profile/UserLicense LIKE Integration", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 14, "question": "How should the points for an order be determined? (A) the app computes the points and sends the number; (B) a fixed number of points per order; (C) points calculated in Salesforce from the order total at a rate you give (for example 1 point per currency unit). Evidence: Loyalty_Transaction__c has Points__c but no order ID or amount field, no rate is stored in the org, and Contact.Lifetime_Orders__c is described as an app-side aggregation. Recommendation: A.", "simulated_answer": "The app sends appAccountId, orderTotal and orderId (no points). Match the Contact by Pronto App Account Id, create an Earn loyalty transaction with points from the order total, idempotent on orderId. No preference on the rate."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 8, "create": 8, "update": 0, "delete": 0},
+  "skill_friction": [
+    "spec-format says 'Integration users and OAuth clients that an external owner manages are setup steps, not rows', but when Salesforce itself hosts the OAuth client (External Client App) it is unclear whether ExternalClientApplication/ExtlClntAppOauthSettings/Policies are rows; I made them rows and the run-as user a Setup step.",
+    "Retry accounting for a split: RUNNER kinds have no way to mark the two halves of one split retry (I logged both as 'retry'), and SKILL says a split counts as one retry.",
+    "The two-wrong-claims rule is triggered almost every run by AskCoworker platform claims (formula conversion, relationship syntax, writeRequiresMasterRead meaning); guidance on how to tag the replacement documented-behavior claims when no query can test them (e.g. master Read/Write requirement) would help.",
+    "No guidance on whether the step-5 question may be answered with a value outside the options that also adds scope (idempotency); treated as adding to the requirement per 'an answer that adds scope becomes part of the requirement'.",
+    "FlowTest API-name convention and source folder names for External Client App types are not given in the references; Module paths for those rows are best-effort."
+  ]
+}

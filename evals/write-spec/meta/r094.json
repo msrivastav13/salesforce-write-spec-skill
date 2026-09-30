@@ -1,0 +1,10 @@
+{
+ "id": "r094",
+ "category": "new-automation",
+ "requirement": "Storefront status should go to Suspended automatically if the average review score drops below 2.5 with at least 10 reviews.",
+ "hidden_intent": "Only Active storefronts get suspended; notify the account owner by email. Evaluate whenever a review is saved.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Average_Review_Score__c is a formula over roll-ups; formula/roll-up changes do not fire record-triggered flows on Storefront__c \u2014 must trigger from Review__c save or a scheduled job. Use Total_Reviews__c >= 10."
+ }
+}

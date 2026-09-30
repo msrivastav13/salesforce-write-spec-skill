@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Validation rule blocking Discount Percentage > 50% on Promotion. Applies to new and edited records. Admins do not need a bypass."
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r073",
+ "category": "new-automation",
+ "requirement": "Customers can only leave one review per storefront per order date",
+ "hidden_intent": "Prevent duplicate Review for same Customer + Storefront + Order Date. Block with error.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Duplicate check across Review__c.Customer__c/Storefront__c/Order_Date__c; trigger/flow or unique composite key field."
+ }
+}

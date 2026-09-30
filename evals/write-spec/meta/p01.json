@@ -1,0 +1,10 @@
+{
+ "id": "p01",
+ "category": "new-automation",
+ "requirement": "When a storefront's average rating across its 10 most recent reviews drops below 3.0, flag the storefront for attention and notify its primary contact.",
+ "hidden_intent": "A checkbox flag on the storefront is fine. Notify by email to the storefront's primary contact. Clear the flag automatically when the recent average recovers to 3.0 or more. Apex is acceptable.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Needs Apex (last-N average is not a roll-up). Reuse Primary_Contact__c."
+ }
+}

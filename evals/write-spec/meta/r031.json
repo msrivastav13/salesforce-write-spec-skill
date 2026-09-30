@@ -1,0 +1,10 @@
+{
+ "id": "r031",
+ "category": "vague",
+ "requirement": "I want the menu to be smarter",
+ "hidden_intent": "AI-generated menu item descriptions when description is blank.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Vague; ask. If intent is AI descriptions, reuse existing MenuDescriptionPromptGrounding class."
+ }
+}

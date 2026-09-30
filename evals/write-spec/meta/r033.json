@@ -1,0 +1,10 @@
+{
+ "id": "r033",
+ "category": "new-automation",
+ "requirement": "Auto-publish reviews rated 4 or 5 stars, anything lower stays Submitted for moderation.",
+ "hidden_intent": "Before-save on Review insert: Rating >= 4 -> Status Published; else Submitted.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Before-save flow on Review__c.Status__c; create only; no existing automation."
+ }
+}

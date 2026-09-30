@@ -1,0 +1,51 @@
+{
+  "id": "r001",
+  "skill_rev": "v7",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r001/delivery-zones-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 33},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 29},
+    {"seq": 21, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 44},
+    {"seq": 26, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53},
+    {"seq": 27, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 45}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Missed components: list all custom objects for zone/zip/fee/order concepts", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 4, "purpose": "Storefront__c fields, picklists, child relationships; no zone/fee fields", "command_summary": "sf sobject describe Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Region__c and Transaction__c shape (missed by AskCoworker)", "command_summary": "sf sobject describe Region__c, Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Absence: no custom field for zip/postal/fee/delivery/zone/region anywhere", "command_summary": "Tooling CustomField WHERE DeveloperName LIKE ...", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "DurableIds and namespace of Storefront__c, Region__c, Transaction__c", "command_summary": "Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Data shape: Region__c and Transaction__c record counts", "command_summary": "SELECT COUNT() FROM Region__c / Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Data shape: Storefront__c status distribution and postal code population", "command_summary": "Storefront__c GROUP BY Status__c; COUNT(Address__PostalCode__s)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Absence of triggers on in-scope objects", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Absence of record-triggered flows", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Object descriptions and sharing models", "command_summary": "Tooling CustomObject Description, SharingModel", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "FLS-hidden fields and dependencies on Region__c and Transaction__c", "command_summary": "Tooling CustomField by TableEnumOrId; MetadataComponentDependency by RefMetadataComponentId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Validation rules on Storefront__c (AskCoworker said Unknown)", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Full field list with types for Region__c and Transaction__c (no Storefront lookup on Transaction__c)", "command_summary": "Tooling FieldDefinition by EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Named credentials that suggest external ordering", "command_summary": "SELECT DeveloperName, Endpoint FROM NamedCredential", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Absence of order/cart/delivery custom objects", "command_summary": "Tooling CustomObject WHERE DeveloperName LIKE Order/Cart/Delivery", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "Exact API name of existing Storefront__c layout (inventory row Update)", "command_summary": "Tooling Layout WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "Editability and non-existence of candidate permission sets", "command_summary": "PermissionSet WHERE Name LIKE Delivery/Zone or = Agentforce_Reference_App", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "Delete grants on Storefront__c (cascade impact)", "command_summary": "ObjectPermissions WHERE SobjectType = 'Storefront__c'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 25, "purpose": "Existing duplicate rules on Storefront__c", "command_summary": "Tooling DuplicateRule WHERE SobjectType", "ok": false, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 18, "question": "How should zones relate to storefronts? (a) each zone belongs to one storefront (Master-Detail child of Storefront__c); (b) zones are shared records linked to storefronts through a Storefront-to-Zone junction (many-to-many); (c) reuse the existing empty Region__c object (0 records, only Onboarding_Specialist__c). Evidence: no zone object exists; Region__c exists but is an onboarding concept.", "simulated_answer": "(b) Shared zones with a storefront-zone junction."},
+    {"seq": 19, "question": "How should a zone's zip codes be stored? (a) one child record per zip code (filterable, enforceable uniqueness); (b) a zip code list field on the zone record. Evidence: no zip field or object exists; Storefront__c.Address__c is only the storefront's own address.", "simulated_answer": "(b) Zones hold zip lists."},
+    {"seq": 20, "question": "How should the fee be charged? No order or cart object exists and Transaction__c has no Storefront__c lookup. (a) store the fee on the zone only; applying it to orders is out of scope here (recommended); (b) also build a fee lookup (for example an invocable action returning the fee for storefront + zip); (c) add the fee to Transaction__c.", "simulated_answer": "No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": false,
+  "validator_attempts": 2,
+  "counts": {"total": 10, "create": 9, "update": 1, "delete": 0},
+  "skill_friction": [
+    "validate_spec.py rejects two changes with the same API name even when their types differ; a CustomTab for a custom object necessarily shares the object's API name (Delivery_Zone__c), so the tab had to be dropped from the inventory and moved to Section 8. The format spec says 'Section 9 lists the same (Action, API name) pairs, each once' without saying how to handle tab/object or other same-name components of different types.",
+    "Module rule says 'the known force-app/... path or Not specified. Do not invent paths.' With force-app empty, it is unclear whether standard source-format paths (force-app/main/default/objects/...) for new components count as known or invented; I used the standard paths and noted the Storefront layout must be retrieved first.",
+    "The I template has no slot for scope-check decisions to be sent as decisions vs facts; AskCoworker tagged user decisions as [Verified: user decision], blurring the source labels.",
+    "AskCoworker repeatedly reported 'prior session' facts (data streams, ObjectPermissions) despite the ignore-earlier-conversations header; the skill says verify them, but gives no guidance for facts like DataStreamDefinition that the allowed commands cannot query.",
+    "Step 5 lists 'cannot deliver a responsibility end to end' as an ask trigger, but when the simulated user answers 'no preference', the skill does not say whether deferring the responsibility as a recommended default is acceptable or counts as 'silently deferring to another spec'.",
+    "The R answer asserted a platform behavior (cascade-deleted details are not restored on master undelete) that contradicts documented behavior; Rule 3 covers rejecting proposals that depend on it, but not where to record a factual correction that no query can test — I put it in Section 8."
+  ]
+}

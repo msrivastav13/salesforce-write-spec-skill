@@ -1,0 +1,44 @@
+{
+  "id": "r072",
+  "skill_rev": "v11",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r072/onboarding-team-permission-set-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 29},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 35},
+    {"seq": 13, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"seq": 17, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 21, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Existence, fields, record types, child relationships of both objects", "command_summary": "sf sobject describe Onboarding_Application__c and Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "DurableIds, sharing model, namespace", "command_summary": "EntityDefinition WHERE QualifiedApiName IN (both)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "No onboarding permission set / PSG already exists", "command_summary": "PermissionSet and PermissionSetGroup LIKE %Onboard%/%Storefront%", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Existing object grants on both objects (complete)", "command_summary": "ObjectPermissions WHERE SobjectType IN (both)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Full custom field list despite FLS-hidden describe; D1 claim that Status__c is the only business field", "command_summary": "Tooling CustomField WHERE TableEnumOrId = DurableId (both objects)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Absence of validation rules, triggers, flows; tab existence", "command_summary": "Tooling ValidationRule, ApexTrigger; FlowDefinitionView; TabDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Field definitions and existing FLS grants on Onboarding_Application__c; FLS on Storefront__c by parent", "command_summary": "FieldDefinition; FieldPermissions WHERE SobjectType", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "CustomTab lookup by name", "command_summary": "Tooling CustomTab with SobjectName column", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Types and required flag of each Onboarding_Application__c custom field", "command_summary": "Tooling CustomField Metadata by Id (8 single-row queries)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Custom tab by DeveloperName", "command_summary": "Tooling CustomTab WHERE DeveloperName LIKE", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Page layouts exist for both objects", "command_summary": "Tooling Layout WHERE TableEnumOrId IN (both DurableIds)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Onboarding_Application__c record count", "command_summary": "SELECT COUNT() FROM Onboarding_Application__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Components referencing Onboarding_Application__c", "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId = 01I...", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "R claim of 21 Storefront records", "command_summary": "SELECT COUNT() FROM Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "R claim of zero DataStreams", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "Org edition", "command_summary": "Organization OrganizationType, IsSandbox", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "Minimum Access profile exists for test setup", "command_summary": "Profile WHERE Name LIKE 'Minimum Access%'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 2, "update": 0, "delete": 0},
+  "skill_friction": [
+    "AskCoworker's I template produced one Create PermissionSet row plus seven Update rows on the same PermissionSet; the skill says one row per deployable component but gives no explicit rule to merge Create+Update of the same component, so the merge was a judgment call recorded in Section 8.",
+    "Whether a CustomTab is in scope for a request that names only a permission set ('nothing else') is a fork the skill does not address; decided by the Rule 5 default (responsibility left undelivered without it) rather than asking.",
+    "org-verification.md says FieldDefinition is a cross-check for FLS-hidden fields, but in this org FieldDefinition also hid the 7 FLS-less fields; only Tooling CustomField returned them. The note could say FieldDefinition may also be filtered.",
+    "AskCoworker labelled facts '[Verified: prior session]' even though they were supplied in the message; the handling table covers echoed facts but these labels are misleading when counting verified vs reported claims.",
+    "The Tooling CustomTab object has no SobjectName column; the reference lists TabDefinition implicitly but not how to find a custom-object tab reliably (the DeveloperName LIKE query returned no rows even for the existing Storefront__c tab)."
+  ]
+}

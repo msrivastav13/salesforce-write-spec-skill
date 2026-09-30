@@ -1,0 +1,48 @@
+{
+  "id": "r042",
+  "skill_rev": "v20",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r042/one-active-promotion-per-storefront-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49},
+    {"seq": 4, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 43},
+    {"seq": 21, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48},
+    {"seq": 22, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55},
+    {"seq": 25, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 59}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Org reachable, alias and API version", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "Scan custom objects for promotion/storefront concepts", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Field types, nillability, picklist restriction, child relationships on Promotion__c and Storefront__c", "command_summary": "sf sobject describe Promotion__c and Storefront__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "No Apex triggers on Promotion__c/Storefront__c", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "No record-triggered flows on the objects", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "DurableIds and OWD (internal/external sharing)", "command_summary": "Tooling EntityDefinition InternalSharingModel, ExternalSharingModel", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Existing data shape / pre-existing conflicts", "command_summary": "SELECT Storefront__c, Status__c, COUNT(Id) FROM Promotion__c GROUP BY", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "No validation rules on Promotion__c", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Complete custom field list and field IDs on Promotion__c", "command_summary": "Tooling CustomField WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Same concept elsewhere (Promo/Active fields)", "command_summary": "Tooling CustomField DeveloperName LIKE", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Promotion-related Apex classes", "command_summary": "Tooling ApexClass Name LIKE '%Promotion%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Writer class behavior (sharing, exception handling, status default)", "command_summary": "Tooling ApexClass Body for the two agent classes", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Dependencies on Promotion__c, Status__c, Storefront__c", "command_summary": "Tooling MetadataComponentDependency by RefMetadataComponentId (3 queries)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Agent actions invoking the writer classes", "command_summary": "Tooling GenAiFunctionDefinition WHERE InvocationTarget IN (names)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Count unmanaged Apex classes", "command_summary": "Tooling ApexClass WHERE NamespacePrefix = null", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Absence of other Promotion__c writers in Apex bodies", "command_summary": "Tooling ApexClass Body scan locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "Agent actions by InvocationTarget LIKE", "command_summary": "Tooling GenAiFunctionDefinition InvocationTarget LIKE (failed: id field)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "New component names do not already exist", "command_summary": "Tooling ApexTrigger Name = PromotionOverlapTrigger; ApexClass Name LIKE PromotionOverlap%", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 20, "question": "1) When someone tries to make a second promotion Active on a storefront that already has one, should Salesforce (A) block the save with an error [recommended; the agent actions already return errors as success=false], or (B) automatically set the older promotion to Expired? 2) What counts as 'at a time'? (A) any two promotions with Status__c = Active on the same storefront conflict, regardless of dates [recommended; Status__c is the org's activity flag], or (B) they conflict only when their Start_Date__c/End_Date__c ranges overlap, so a future-dated Active promotion is allowed?", "simulated_answer": "Block with an error rather than auto-expiring the old one. Only prevent a second Active promotion when the date ranges overlap; non-overlapping future-dated active promos are fine."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 5 lets the model 'decide yourself' intent answered by org semantics; Status__c = Active suggested the status-only reading, but 'at a time' also pointed to dates. The rule 'points both ways' justified asking, but the boundary between org-semantics-answers-it and ask is judgment-heavy.",
+    "RUNNER/skill say to write the exact question before opening intent.json; the skill's single-message rule meant date-boundary (inclusive) and null-date semantics had to be defaulted as assumptions rather than asked, even though they are intent (they change behavior, not inventory).",
+    "AskCoworker's I proposal ran one SOQL per storefront and claimed in-batch detection without comparing Trigger.new siblings; skill says fix wrong proposal details without follow-ups, which worked but left R/T sent with the corrected design only described in 'Established so far' bullets, not as a resent I.",
+    "AskCoworker repeatedly cited 'prior session' facts (e.g. 21 storefronts, 0 DataStreams) despite the ignore-earlier-conversations header; skill covers verification but not how to count dropping unverifiable ones.",
+    "org-verification.md does not note that GenAiFunctionDefinition.InvocationTarget is an id-type field that rejects LIKE; one query failed on that."
+  ]
+}

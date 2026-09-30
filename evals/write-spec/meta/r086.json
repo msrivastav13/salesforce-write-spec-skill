@@ -1,0 +1,10 @@
+{
+ "id": "r086",
+ "category": "already-met",
+ "requirement": "Add a field on storefront showing how many menus they have.",
+ "hidden_intent": "Count of menus per storefront.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Already met: Storefront__c.Menu_Count__c is a roll-up COUNT of Menu__c. Must not create a duplicate field."
+ }
+}

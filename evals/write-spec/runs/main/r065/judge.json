@@ -1,0 +1,8 @@
+{"id": "r065", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 3, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The change makes refunds over $25 start as Pending, yet the IssueRefundReceiptAction invocable description ('Creates an approved refund'), the Apply_Remediation description, and the Issue_Refund_Receipt agent action instructions are left as an Open proposal instead of inventory rows, so the agent may still tell customers a pending refund is approved.", "skill_gap": "None explicit: no SKILL.md rule requires updating descriptions/instructions of existing callers whose stated behavior the change falsifies."},
+  {"defect": "Section 6 and Section 8 state as a load-bearing assumption that the Run Asynchronously path runs as the Automated Process user; labelled correctly but not tied to a verification that would catch a send failure before go-live beyond manual case 6.", "skill_gap": "None; labelling rule was followed."}
+ ]}

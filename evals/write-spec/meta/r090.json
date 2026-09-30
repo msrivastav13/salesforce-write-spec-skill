@@ -1,0 +1,10 @@
+{
+ "id": "r090",
+ "category": "nonexistent-concept",
+ "requirement": "Let customers save favourite storefronts in the app.",
+ "hidden_intent": "Junction object Favorite Storefront (Contact, Storefront), unique pair.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "No favourites concept; junction Contact<->Storefront__c; uniqueness."
+ }
+}

@@ -1,0 +1,7 @@
+{"id": "r033", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The hidden intent covers insert only, but the flow also runs on updates that change Rating__c. A rating edit can overwrite a moderator's status choice (for example, a Published 3-star review edited to 2 goes back to Submitted). This is a minor extra behavior, labelled as an assumption in Resolved.", "skill_gap": "The spec-format rule to 'cover records that start or stop matching' pushes toward adding update behavior; no instruction says to default to the trigger event the requirement names (here, 'auto-publish' of new reviews)."},
+  {"defect": "The spec contains no claims labelled 'reported by AskCoworker'; everything was re-verified. This is not a defect in itself, but it means the spot-check could not sample any AskCoworker-sourced claims.", "skill_gap": "None."}
+ ]}

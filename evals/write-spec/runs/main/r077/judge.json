@@ -1,0 +1,34 @@
+{
+ "id": "r077",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 0,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Jest tests are folded into the LightningComponentBundle row rather than listed separately. This is acceptable because they are not deployable.",
+   "skill_gap": "SKILL.md testing and spec-format guidance does not cover LWC Jest tests."
+  },
+  {
+   "defect": "Whether Case_Record_Page is activated cannot be read. It is a load-bearing assumption, correctly labelled and made a blocking-for-delivery manual check.",
+   "skill_gap": "SKILL.md does not say how to classify an unreadable, load-bearing page activation."
+  }
+ ]
+}

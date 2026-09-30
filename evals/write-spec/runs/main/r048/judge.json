@@ -1,0 +1,8 @@
+{"id": "r048", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Section 4 says to keep 'the inactive Working' value in CaseStatus. Describe does not return Working at all, even as inactive, and CaseStatus has no such row. The only evidence is 2 Case rows holding 'Working', which is consistent with a deleted value. Calling it an inactive value in the set is unverified and presented as fact.", "skill_gap": "None exists: no instruction to separate 'value present in data' from 'value present in the value set' for picklists."},
+  {"defect": "Section 6 reuses an AskCoworker list of permission sets with Case Edit without re-querying it. The list is labelled 'reported by AskCoworker' and is correct (verified), but it is a small subset of the 30 non-profile permission sets with Case Edit.", "skill_gap": "None exists: no guidance on marking a reported list as partial."}
+ ]}

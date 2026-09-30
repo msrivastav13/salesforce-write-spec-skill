@@ -1,0 +1,10 @@
+{
+ "id": "r019",
+ "category": "new-automation",
+ "requirement": "Gift certificates should expire automatically on their expiration date.",
+ "hidden_intent": "Scheduled daily job: Gift Certificate with Expiration Date < today and status Active or Partially Redeemed -> Expired. Fully Redeemed/Cancelled/Draft untouched.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Scheduled flow on Gift_Certificate__c; correct status filter (Active, Partially Redeemed); Draft excluded."
+ }
+}

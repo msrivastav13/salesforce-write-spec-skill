@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Delete ProductInterest__c, CurrentGenerators__c, SICCode__c, Primary__c on Lead; also Opportunity CurrentGenerators__c."
+}

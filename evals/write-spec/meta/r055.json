@@ -1,0 +1,10 @@
+{
+ "id": "r055",
+ "category": "new-automation",
+ "requirement": "When a new gift certificate is issued, default the remaining value to the original value and generate a unique code.",
+ "hidden_intent": "Before-insert: Remaining = Original if blank; External Code = random 12-char alphanumeric, unique across all certificates.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "External_Code__c exists \u2014 reuse, don't add a new code field; uniqueness via field setting or check; IssueGiftCardAction Apex may already generate codes \u2014 check before reinventing."
+ }
+}

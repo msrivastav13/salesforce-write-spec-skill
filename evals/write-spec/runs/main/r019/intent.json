@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Scheduled daily job: Gift Certificate with Expiration Date < today and status Active or Partially Redeemed -> Expired. Fully Redeemed/Cancelled/Draft untouched."
+}

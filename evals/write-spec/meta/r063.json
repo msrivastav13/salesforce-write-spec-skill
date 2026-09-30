@@ -1,0 +1,10 @@
+{
+ "id": "r063",
+ "category": "new-automation",
+ "requirement": "new onboarding apps should get auto assigned round robin to the onboarding team",
+ "hidden_intent": "Round-robin assignment of new Onboarding Applications across members of the Merchant Onboarding queue; skip inactive users.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Onboarding_Application__c only has Status__c; round-robin needs persisted state; check existing Route_Merchant_to_Queue routing flow / Omni-Channel before inventing new routing."
+ }
+}

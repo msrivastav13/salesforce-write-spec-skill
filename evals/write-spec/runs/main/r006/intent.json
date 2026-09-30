@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "They actually want Processed Date set when the refund status becomes Completed (money has gone out), not when it becomes Approved. Only set if blank."
+}

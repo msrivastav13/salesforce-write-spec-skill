@@ -1,0 +1,4 @@
+{
+ "id": "r078",
+ "requirement": "Refactor the Agent*Actions Apex classes \u2014 there are like 20 of them and they all query storefronts separately."
+}

@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "On status -> Approved, async callout to Stripe refunds API via Named Credential; success -> Processing then Completed with processed date; failure -> Failed with error logged."
+}

@@ -1,0 +1,47 @@
+{
+  "id": "r052",
+  "skill_rev": "v22",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r052/gift-certificate-status-auto-update-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"seq": 4, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 53},
+    {"seq": 20, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 22, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 51},
+    {"seq": 24, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable", "command_summary": "sf org display", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "scan custom objects for gift certificate concept", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "field types, precision, picklist values, child objects", "command_summary": "sf sobject describe Gift_Certificate__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "no triggers on Gift_Certificate__c", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no record-triggered flows", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "object DurableId", "command_summary": "EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "status data distribution", "command_summary": "COUNT GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "no validation rules", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 11, "purpose": "complete custom field list and IDs", "command_summary": "Tooling CustomField WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "value field data shape", "command_summary": "SELECT values/status LIMIT 5", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "same concept elsewhere (Redeem/Remaining/Balance fields)", "command_summary": "Tooling CustomField DeveloperName LIKE", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "field descriptions for comparator semantics", "command_summary": "FieldDefinition Description", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "readers/writers of Status__c, Remaining_Value__c, Original_Value__c, object", "command_summary": "Tooling MetadataComponentDependency x4", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Apex bodies writing/reading status and remaining value", "command_summary": "Tooling ApexClass Body, local grep", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "active flows that might touch gift certificates", "command_summary": "FlowDefinitionView IsActive = true", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "gift-related Apex classes and tests", "command_summary": "Tooling ApexClass Name LIKE %Gift%", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "giftValue validation claim, flow name free, Status__c FLS grants", "command_summary": "Apex body grep; Tooling FlowDefinition LIKE %Gift%; FieldPermissions", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 23, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 19, "question": "(1) RenderGiftCardAction and the IssueGiftCardAction duplicate guard only look up certificates with Status__c = 'Active'. Once the automation moves a certificate to Partially Redeemed, the agent can no longer find it. Options: (a) leave those classes unchanged (recommended; not asked for), (b) also update them to include Partially Redeemed. (2) Status__c is hand-editable and has Draft, Expired, and Cancelled values. Should the automation override those? Options: (a) never override Cancelled, Expired, or Draft (recommended), (b) override any status based on remaining value, (c) never override only Cancelled and Expired.", "simulated_answer": "(1) No preference; use your recommended default. (2) Never override Cancelled/Expired/Draft."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 4, "create": 4, "update": 0, "delete": 0},
+  "skill_friction": [
+    "RUNNER says to use validate_spec.py with --root, which SKILL.md step 8 does not mention; works but the two documents disagree on the save path (design/ vs out).",
+    "spec-format.md says to add a FlowTest row 'only when it can assert the flow's main outcome', but gives no guidance on how many FlowTest components to add when a flow has several outcomes (each FlowTest holds one trigger scenario), or on the FlowTest API name convention; I chose three FlowTests and guessed the names and folder (force-app/main/default/flowtests).",
+    "Step 5 lists 'automation that overwrites values people edit by hand' as an ask trigger, but the requirement itself asks for exactly that; unclear whether the protected-status question was required or should have been decided from the picklist semantics.",
+    "Reverse transitions (remaining restored to original) are not covered by the requirement; Rule 4 says drop unrequested behavior while spec-format asks to cover records that start/stop matching. Kept it as an assumption; the skill does not say which rule wins.",
+    "AskCoworker kept citing 'prior session' and a 'bounds validation rule (separate requirement)' despite the ignore-earlier-conversations header; handled via the drop rule."
+  ]
+}

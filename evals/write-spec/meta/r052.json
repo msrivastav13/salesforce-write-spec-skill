@@ -1,0 +1,10 @@
+{
+ "id": "r052",
+ "category": "new-automation",
+ "requirement": "gift cert status should update itself based on remaining value \u2014 if it hits zero its fully redeemed, if its less than original its partially redeemed",
+ "hidden_intent": "Before-save flow on Gift Certificate: Remaining = 0 -> Fully Redeemed; 0 < Remaining < Original -> Partially Redeemed; never override Cancelled/Expired/Draft.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Uses Remaining_Value__c vs Original_Value__c; must not overwrite terminal statuses; check AgentGiftCertificateActions/IssueGiftCardAction Apex for existing status logic to avoid duplicating it."
+ }
+}

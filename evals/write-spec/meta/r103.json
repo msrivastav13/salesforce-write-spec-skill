@@ -1,0 +1,10 @@
+{
+ "id": "r103",
+ "category": "data360-analytics",
+ "requirement": "Segment customers who haven't ordered in 60 days but have more than 1000 loyalty points, for a win-back campaign.",
+ "hidden_intent": "Segment: last order > 60 days ago and points balance > 1000; activate to Marketing Cloud.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "No reliable last-order source in CRM (Transaction__c empty) and no stored points balance \u2014 ask about data source."
+ }
+}

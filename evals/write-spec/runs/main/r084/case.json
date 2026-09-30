@@ -1,0 +1,4 @@
+{
+ "id": "r084",
+ "requirement": "Store the storefront's lat/long so we can do distance searches later"
+}

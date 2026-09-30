@@ -1,0 +1,8 @@
+{"id": "r045", "claims": {"correct": 6, "wrong": 0, "unverifiable": 1}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The AskCoworker claim that SendCustomNotification/ISendCustomNotification is an in-app notification framework cannot be checked, because both class bodies are hidden (managed). The spec labels the claim 'reported by AskCoworker' but does not say the body is unreadable.", "skill_gap": "None exists: no instruction to note when an AskCoworker claim targets a component whose body is hidden and so cannot be verified."},
+  {"defect": "Q1 (native Slack app connection vs webhook named credential) is asked as a pick-an-option question with a recommended default. The real unknown is the environment fact of whether a Slack workspace is connected, and that could have been asked directly. The user answered 'no preference', and the design is still Conditional on the unverified connection.", "skill_gap": "None exists: SKILL.md does not separate an environment-fact question (is X connected?) from an implementation-choice question."}
+ ]}

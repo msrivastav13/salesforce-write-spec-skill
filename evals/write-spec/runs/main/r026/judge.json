@@ -1,0 +1,9 @@
+{"id": "r026", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 1, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Asked the user two questions (queue members; assignment rule vs flow) although expect.should_ask_user is false and both had clear recommended defaults the run itself stated.", "skill_gap": "SKILL.md Step 5 'decide, don't ask' exists but is not sharp enough on 'a fork with a stated recommended default is not a question'."},
+  {"defect": "Chose a new after-save record-triggered flow that overrides OwnerId instead of the preferred lead assignment rule entry on the existing active 'Standard' rule; the flow also bypasses the platform routing mechanism and runs a second DML on every ghost-kitchen insert. The reasoning (entries unreadable, rule deploy replaces the whole rule) is sound and recorded, but the rule could be retrieved by the implementer before editing.", "skill_gap": "None exists; org-verification.md notes assignment rule entries are unreadable but gives no design stance (e.g. prefer the rule entry and flag 'retrieve before edit' as a deployment step)."},
+  {"defect": "Queue named Ghost_Kitchen_Sales_Team rather than the intended 'Ghost Kitchen Sales'; minor, labelled as assumption.", "skill_gap": "None exists; SKILL.md does not say whether implied API names are label defaults."},
+  {"defect": "Did not mention that the inactive ApprovalDispatcher flow is irrelevant in the automation grounding beyond one parenthetical; acceptable. Queue members left empty, so routed leads reach nobody until configured; labelled as Open.", "skill_gap": "None exists."}
+ ]}

@@ -1,0 +1,10 @@
+{
+ "id": "r079",
+ "category": "ui",
+ "requirement": "The review related list on storefronts should show rating, customer, date and status \u2014 and newest first.",
+ "hidden_intent": "Related list columns/sort on Storefront page.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Declarative related list config; no code."
+ }
+}

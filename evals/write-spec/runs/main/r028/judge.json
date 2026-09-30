@@ -1,0 +1,8 @@
+{"id": "r028", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0},
+ "wrong_claims": ["Section 2 says there is no flow named like %Refund% other than Issue_Refund and Apply_Remediation (tagged verified by org query). FlowDefinitionView also returns Refund_XSF_OS (namespace runtime_commerce_oms, inactive, PlatformEvent-triggered). Apply_Remediation does not match %Refund% either. This does not affect the design, because that flow is managed and does not act on Refund__c."],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "A small absence claim was tagged verified even though the query result contradicts it: a namespaced Refund_XSF_OS flow exists. The claim was stated too broadly instead of saying 'no unmanaged flow on Refund__c'.", "skill_gap": "None specific. Step 3 (Verify) and Rule 3 require tagging from query results, but nothing says to state absence claims exactly as the query scope and filter define them (for example, namespace excluded)."},
+  {"defect": "The run called D1 and D2 before asking the scope question, although the requirement had no outcome. It cost two AskCoworker calls, but the question was still asked before I.", "skill_gap": "SKILL.md line 14 asks before AskCoworker only when 'no business object, process, or outcome can be identified'. A requirement that names a process but no outcome does not trigger it. The rule could say that a missing outcome alone is enough to ask."}
+ ]}

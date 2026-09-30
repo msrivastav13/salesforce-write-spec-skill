@@ -1,0 +1,43 @@
+{
+  "id": "r081",
+  "skill_rev": "v9",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r081/regional-manager-dashboard-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41},
+    {"seq": 16, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 31},
+    {"seq": 17, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 19, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Fields, types, formulas, relationships on Storefront__c, Refund__c, Review__c", "command_summary": "sf sobject describe x3", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Same concept elsewhere: any region/territory field or object in the org", "command_summary": "Tooling CustomField DeveloperName LIKE Region/Territor/District/Zone/Area; FieldDefinition on Account/User; sf sobject list custom", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 5, "purpose": "Shape of discovered Region__c object; EntityDefinition DurableIds", "command_summary": "sf sobject describe Region__c; EntityDefinition query (failed: Description column); COUNT Region__c", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "DurableIds and namespace for in-scope objects; Region__c CustomObject", "command_summary": "EntityDefinition DurableId/NamespacePrefix; Tooling CustomObject Region", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Readers of Region__c; whether Dashboard* Apex classes are relevant", "command_summary": "Tooling MetadataComponentDependency on Region__c; unmanaged ApexClass bodies scan; ApexClass Dashboard% NamespacePrefix", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "Existing reports, dashboards, folders, roles for regional managers", "command_summary": "Report GROUP BY NamespacePrefix and name LIKE; Dashboard; Folder; UserRole", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Data shape: storefront state distribution, status, refunds, reviews, zero-review storefronts", "command_summary": "Aggregates on Storefront__c, Refund__c, Review__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Roll-up field IDs; absence of triggers, flows, validation rules", "command_summary": "Tooling CustomField ids; Tooling ApexTrigger; FlowDefinitionView; Tooling ValidationRule x3", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Roll-up and formula definitions; sharing models; Region__c permissions", "command_summary": "Tooling CustomField.Metadata by Id x3; AVG/SUM on Storefront__c; EntityDefinition sharing; ObjectPermissions Region__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Formula result for zero reviews; FLS grants; existing manager permission sets", "command_summary": "Storefront__c zero-review rows; FieldPermissions; PermissionSet name LIKE", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Allow Reports setting on Storefront__c", "command_summary": "Tooling CustomObject Metadata (failed: column not available)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Public groups, org edition, state picklist details", "command_summary": "Group Type=Regular; Organization; describe Address__StateCode__s", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Data 360 involvement (AskCoworker prior-session claim)", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "Existing dynamic dashboards; profiles with RunReports", "command_summary": "Dashboard GROUP BY Type; PermissionSet IsOwnedByProfile AND PermissionsRunReports", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 15, "question": "1) How should 'region' be defined? (A) state from Storefront__c.Address__c (Address__StateCode__s; all 21 storefronts are US/TX today), (B) new lookup from Storefront__c to the existing empty Region__c object, or (C) new Region picklist on Storefront__c. 2) Should every regional manager see all regions, or only their own? 3) Should 'refunds' be the count, the sum of Amount__c, or both, and cover all statuses?", "simulated_answer": "1) Region = state from the storefront address. 2) and 3) No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 8, "create": 8, "update": 0, "delete": 0},
+  "skill_friction": [
+    "AskCoworker D2 put an Open Decisions table after the 'Sections included' line but before the end marker; the response-handling table only covers text after the end marker, so it is unclear whether content after 'Sections included' should be kept.",
+    "org-verification.md gives no way to check a custom object's 'Allow Reports' setting (Tooling CustomObject has no Metadata column here), yet report and report-type designs depend on it; had to leave it as an assumption.",
+    "spec-format.md says to use the standard source-format folder for Module but does not say which folder holds ReportFolder/DashboardFolder metadata; AskCoworker invented reportFolders/dashboardFolders paths.",
+    "AskCoworker repeatedly tagged facts I sent it as '[Verified: prior session]'; the skill says echoed facts are already established, but the label makes it harder to separate them from genuine prior-session facts (e.g. DataStream count, which I then verified).",
+    "AskCoworker D1 claimed the region concept 'does not exist anywhere in the org' while a Region__c custom object exists; the skill's 'missed components' check caught it only because I searched sobject list by keyword, which org-verification.md does not explicitly suggest for objects (it only suggests CustomField searches)."
+  ]
+}

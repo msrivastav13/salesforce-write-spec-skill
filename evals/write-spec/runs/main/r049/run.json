@@ -1,0 +1,42 @@
+{
+  "id": "r049",
+  "skill_rev": "v22",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r049/customer-loyalty-tier-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41},
+    {"seq": 4, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 19, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 132}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable, org id", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "scan custom objects for loyalty/tier concepts", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Contact.Loyalty_Tier__c exists; picklist values, restricted, default; other customer fields", "command_summary": "sf sobject describe Contact (custom + tier fields)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "whether tiers are populated", "command_summary": "SELECT Loyalty_Tier__c, COUNT(Id) FROM Contact GROUP BY Loyalty_Tier__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no other tier/loyalty field anywhere", "command_summary": "Tooling CustomField DeveloperName LIKE %Tier% OR %Loyalty%", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "same-label tier field on related objects", "command_summary": "FieldDefinition Label LIKE %Tier% on Account/Contact/Lead/Loyalty_Transaction__c/Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "other loyalty/tier objects (standard)", "command_summary": "sf sobject list --sobject all filtered loyal/tier", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "field description, required, history tracking", "command_summary": "Tooling CustomField Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "readers of the field", "command_summary": "Tooling MetadataComponentDependency RefMetadataComponentId = field Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Apex readers/writers of Loyalty_Tier__c and tier value strings", "command_summary": "Tooling ApexClass bodies (unmanaged), grep locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Apex triggers referencing field", "command_summary": "Tooling ApexTrigger bodies (unmanaged), grep", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "who can read/edit the field", "command_summary": "FieldPermissions WHERE Field = 'Contact.Loyalty_Tier__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "flows and triggers on Contact / Loyalty_Transaction__c; transaction count", "command_summary": "FlowDefinitionView, Tooling ApexTrigger by TableEnumOrId, COUNT() Loyalty_Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Contact record pages and layouts for placement", "command_summary": "Tooling FlexiPage and Layout for Contact (first FlexiPage query form failed, rewritten once)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "agent actions invoking AgentGetLoyaltyTierActions", "command_summary": "Tooling ApexClass Id; GenAiFunctionDefinition WHERE InvocationTarget = class Id", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 18, "question": "Two intent questions. (1) The org already has Contact.Loyalty_Tier__c (restricted picklist) with values Explorer, Insider, Pronto Plus, Pronto One, Pronto Elite; your requirement says Plus, One, Elite. Options: (a) keep the existing values as-is, zero change [recommended; AgentGetLoyaltyTierActions, Data Cloud and Slack read them]; (b) change only the labels to Plus/One/Elite, keeping API values; (c) rename the API values too, with a data update. (2) All 198 Contacts have a blank tier. Options: (a) leave blank until real tiers are known [recommended]; (b) backfill Explorer as a data step; (c) you supply tier data to load.", "simulated_answer": "Just the tier value on the customer. (Q1 mapped to option a as an assumption; Q2 not covered: No preference; use your recommended default.)"}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 0, "create": 0, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 4 says always send I, but when discovery already shows the requirement is met (zero-change), the I call adds latency (132 s here) and only returns 'No metadata changes are required.' plus irrelevant alternatives; the skill could allow skipping I for a verified already-met case, as it does for R and T.",
+    "Step 5 'Before asking, predict the answer' vs 'a change that alters behavior for other callers of a shared component': the Pronto-prefix label mismatch sits on both sides (a safe zero-change default exists, yet the requirement wording differs from org values). Unclear whether a naming mismatch between requirement and existing values is a question or a decide-yourself case.",
+    "No guidance on what an answer like 'Just the tier value on the customer' that confirms scope but ignores the options should be tagged as: user decision for scope vs assumption for the option mapping; I split it, but the rule only covers mapping to one option.",
+    "AskCoworker labelled facts it got from my message as '[Verified: ... prior session]'; the memory rule handles this, but echoed facts carry misleading provenance labels.",
+    "FieldPermissions returned no profile rows (not even System Administrator) for the field; org-verification.md does not say how to interpret or report profile-level access when no rows appear."
+  ]
+}

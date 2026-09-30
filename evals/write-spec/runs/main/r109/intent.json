@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Catering Order object: headcount, event date, deposit amount/paid; validation headcount >= 20; related to Storefront and customer Account."
+}

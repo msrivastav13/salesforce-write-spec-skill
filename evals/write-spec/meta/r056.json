@@ -1,0 +1,10 @@
+{
+ "id": "r056",
+ "category": "ui",
+ "requirement": "Add a component that lets agents browse a storefront's menu by category.",
+ "hidden_intent": "Menu browser in the service console grouped by category.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Largely met: menuBrowser LWC and MenuBrowserController exist \u2014 reuse/place it, don't rebuild."
+ }
+}

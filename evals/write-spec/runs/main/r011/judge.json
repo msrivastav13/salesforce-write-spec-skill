@@ -1,0 +1,6 @@
+{"id": "r011", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The requirement names 'production' but the configured org is a Developer Edition; the spec notes the org type in Section 8 item 4 but does not explicitly flag the environment mismatch as a finding.", "skill_gap": "None exists: SKILL.md has no guidance on a mismatch between the environment named in the requirement and the target org."}
+ ]}

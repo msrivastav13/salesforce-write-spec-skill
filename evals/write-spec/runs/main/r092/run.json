@@ -1,0 +1,42 @@
+{
+  "id": "r092",
+  "skill_rev": "v30",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r092/refund-issue-date-default-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 57},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 45},
+    {"seq": 14, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 21},
+    {"seq": 15, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 16, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 27},
+    {"seq": 19, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 24}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Org context", "command_summary": "sf org display (connectedStatus, alias, id, apiVersion only)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Full custom object scan for refund-like objects; Refund__c DurableId", "command_summary": "sf sobject list custom; Tooling EntityDefinition Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Complete field list and Issue_Date__c type/default/nillable", "command_summary": "Tooling CustomField by TableEnumOrId; sobject describe Refund__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Existing automation on Refund__c (triggers, record-triggered flows, validation rules, workflow)", "command_summary": "Tooling ApexTrigger, FlowDefinitionView by name and DurableId, Tooling ValidationRule, Tooling WorkflowRule", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "All references to Issue_Date__c and Refund__c", "command_summary": "Tooling MetadataComponentDependency by field Id (18 and 15 char) and object DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Apex writers of Refund__c / Issue_Date__c; trigger bodies", "command_summary": "Tooling ApexClass bodies (unmanaged) searched locally; ApexTrigger bodies", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "IssueRefundReceiptAction sets Issue_Date__c before insert", "command_summary": "Local search of class body lines", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Flow definitions and active versions for refund flows", "command_summary": "Tooling FlowDefinition by DeveloperName IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Whether Issue_Refund and Apply_Remediation set Issue_Date__c; Refund_XSF_OS status", "command_summary": "Tooling Flow.Metadata by Id; FlowDefinitionView Refund_XSF_OS", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 12, "purpose": "Data shape (blank Issue_Date__c count, total); new flow/FlowTest names free", "command_summary": "COUNT on Refund__c; FlowDefinitionView ApiName LIKE %Refund%; Tooling FlowTest LIKE %Refund%", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Duplicate rules on Refund__c", "command_summary": "DuplicateRule WHERE SobjectType = 'Refund__c' (failed: wrong column Name, not retried)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Data 360 involvement claim from R", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 18, "purpose": "FLS grants on Issue_Date__c (R claim)", "command_summary": "FieldPermissions WHERE Field = 'Refund__c.Issue_Date__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "Org time zone claim from T; edition; layouts on Refund__c", "command_summary": "Organization OrganizationType, IsSandbox, TimeZoneSidKey; Tooling Layout by TableEnumOrId", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 2, "update": 0, "delete": 0},
+  "skill_friction": [
+    "The 'two wrong AskCoworker claims' threshold is hard to count: it is unclear whether AskCoworker's statements about its own tool limits (e.g. 'ValidationRule not queryable via SOQL', 'flow bodies not retrievable', 'default value not queryable') count as wrong platform claims or as Unknowns. I counted ValidationRule plus the TODAY()-default claim in I.",
+    "SKILL.md says 'Skip D2 only if D1 already answered its questions' but D1 answered most of D2 (triggers, flows, writers); no guidance on whether a partial overlap justifies a narrower D2. I sent full D2.",
+    "The R template regularly times out; the retry rule says split or narrow, but it is unclear whether runtime ordering then must get its own follow-up call or can be covered by documented platform behavior. I covered it with platform behavior plus org queries and noted it in Section 8.",
+    "Spec format says to use Flow Tests for flow-only changes, but T returned Apex-style test methods inside a FlowTest; there is no guidance on how many FlowTest components to create for multiple scenarios (one per scenario vs one main-outcome test). I kept one FlowTest and moved the rest to manual checks.",
+    "RUNNER says scratch files go in {out}/.tmp while org-verification.md says design/.tmp; followed the eval note."
+  ]
+}

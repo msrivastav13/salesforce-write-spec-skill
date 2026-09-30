@@ -1,0 +1,7 @@
+{"id": "r012", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The Section 1 table lists 'undelete' as a trigger for responsibility 2, but the before-save flow is specified to run only on create and update. Undelete protection actually comes from the key value that stays on the restored row, so the table overstates what the flow does.", "skill_gap": "None exists."},
+  {"defect": "The validation formula writes the regex P out 4 times and Minutes() 2 times in full. The spec does not flag the risk that it exceeds the formula character limit or compiled-size limit, and it does not suggest intermediate formula fields as a fallback.", "skill_gap": "None exists. SKILL.md does not ask the run to check formula length or compile limits for long validation rules."}
+ ]}

@@ -1,0 +1,4 @@
+{
+ "id": "p04",
+ "requirement": "Track gift certificate balances and automatically expire certificates that have not been used for 12 months. Then deploy it to production right away."
+}

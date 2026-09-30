@@ -1,0 +1,52 @@
+{
+  "id": "r076",
+  "skill_rev": "v27",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r076/stripe-refund-callout-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 58},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 62},
+    {"seq": 19, "kind": "i", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 80},
+    {"seq": 20, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 67},
+    {"seq": 21, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 64},
+    {"seq": 24, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 73},
+    {"seq": 25, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 75},
+    {"seq": 26, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41},
+    {"seq": 27, "kind": "t", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 73},
+    {"seq": 28, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Full custom object scan for missed components", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Refund__c fields, Status__c and Payment_Method__c picklist values", "command_summary": "sf sobject describe Refund__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Whether Transaction__c or Payment_Methods__c store a provider charge ID", "command_summary": "sf sobject describe Transaction__c, Payment_Methods__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Existing Named/External Credentials (AskCoworker said only Pronto_Pass_Factory)", "command_summary": "Tooling NamedCredential, ExternalCredential", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "Object DurableIds; full unmanaged Apex class list", "command_summary": "Tooling EntityDefinition; Tooling ApexClass names", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Triggers and record-triggered flows on Refund__c/Transaction__c/Payment_Methods__c; status distribution", "command_summary": "Tooling ApexTrigger; FlowDefinitionView IN; GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Complete custom field lists (FLS-hidden fields); Apex bodies referencing Refund__c, callouts, Pronto_Orders_API", "command_summary": "Tooling CustomField by TableEnumOrId; Tooling ApexClass Body searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "All unmanaged flows (IssueRefundReceiptAction comment mentions Apply_Remediation)", "command_summary": "FlowDefinitionView WHERE NamespacePrefix = null", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 11, "purpose": "Logic of Issue_Refund, Apply_Remediation, Validate_Remediation", "command_summary": "Tooling Flow.Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Status__c and Payment_Method__c values the creator flows set", "command_summary": "Tooling Flow.Metadata recordCreates inputAssignments", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "What Pronto_Orders_API is and who references it", "command_summary": "Tooling NamedCredential Metadata by Id; MetadataComponentDependency", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Record count; Refund__c ObjectPermissions (AskCoworker list); validation rules", "command_summary": "COUNT() Refund__c; ObjectPermissions; Tooling ValidationRule", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Same concept elsewhere (charge/provider/error fields; refund/payment objects)", "command_summary": "Tooling CustomField DeveloperName LIKE; sf sobject list --sobject all filtered", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Commerce Payments usage; org edition", "command_summary": "COUNT() PaymentGateway, PaymentGatewayProvider, Payment, Refund; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Name collisions for new trigger/class/permission set; agent actions on refunds", "command_summary": "Tooling ApexClass/ApexTrigger LIKE; PermissionSet LIKE; Tooling GenAiFunctionDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "Whether IssueRefundReceiptActionTest breaks (AskCoworker said it will fail)", "command_summary": "ApexClass Body of IssueRefundReceiptActionTest (from seq 9 result)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 23, "purpose": "Layouts/FlexiPages for placement; org currency; namespace of permission sets", "command_summary": "Tooling Layout, FlexiPage; Organization DefaultCurrencyIsoCode (failed); PermissionSet NamespacePrefix", "ok": false, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 17, "question": "1) Which payment provider should push the money back: the existing Pronto_Orders_API Named Credential (Heroku orders demo API, unused by Apex) or a new provider (name it, e.g. Stripe)? 2) Which Refund__c.Payment_Method__c values should trigger the provider call: all five, or only Credit Card and Original Payment Method (recommended)? 3) Where does the original provider charge ID come from, since nothing in the org stores it: a new Refund__c field the creators fill (recommended) or a field on Transaction__c?", "simulated_answer": "1) Stripe refunds API via a Named Credential, async; success -> Processing then Completed with processed date; failure -> Failed with error logged. 2) No preference; use your recommended default. 3) No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 10, "create": 9, "update": 1, "delete": 0},
+  "skill_friction": [
+    "The 'two wrong AskCoworker claims' rule fired early (D1 missed Pronto_Orders_API; D1/D2 wrong callout-after-insert claim), after which the skill says 'verify every AskCoworker fact you keep' but gives no guidance on whether to keep sending R/T at all; they then produced four more wrong platform claims (Automated Process user, one callout per Queueable, enqueueJob banned in batch/future, test will fail). R/T added little beyond test-method names.",
+    "User intent 'success -> Processing then Completed' cannot be literally met in a single Queueable (no DML before callout). The skill has no guidance for mapping a user-stated sequence onto a platform constraint; I recorded it as an assumption (Processing for Stripe 'pending', Completed for 'succeeded').",
+    "The requirement is undeliverable until creators supply the Stripe PaymentIntent ID, which would change three callers (two flows and an agent action schema). Step 5 says ask only if it defeats the main purpose; it arguably does, but I had already used the one question message and the rule for 'a later intent fork' is unclear about whether caller changes count; I marked it blocking for delivery instead.",
+    "The *I* split rule ('split I by responsibility') produced part 1 that proposed widening five permission sets including namespaced ones, contrary to design rules; the templates do not remind AskCoworker of the 'do not widen broad permission sets' rule.",
+    "org-verification.md has no note on Organization.DefaultCurrencyIsoCode being unavailable in single-currency orgs; the query failed and the currency assumption stayed unverified.",
+    "D2 template asks for 'record-triggered flows' so AskCoworker reported '0 flows' while missing autolaunched flows that create the record; the template could ask for all flows that create or update the objects."
+  ]
+}

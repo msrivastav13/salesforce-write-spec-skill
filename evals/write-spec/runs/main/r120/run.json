@@ -1,0 +1,116 @@
+{
+  "id": "r120",
+  "skill_rev": "v35",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r120/opportunity-competitor-negotiation-gate-spec.md",
+  "askcoworker_calls": [
+    {
+      "seq": 1,
+      "kind": "d1",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 117
+    },
+    {
+      "seq": 2,
+      "kind": "d2",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 114
+    },
+    {
+      "seq": 11,
+      "kind": "i",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 61
+    }
+  ],
+  "org_queries": [
+    {
+      "seq": 3,
+      "purpose": "Opportunity fields (Amount, StageName values incl. Negotiation/Review, MainCompetitors__c Text(100)) and OpportunityCompetitor fields",
+      "command_summary": "sf sobject describe Opportunity, OpportunityCompetitor",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 4,
+      "purpose": "Existing automation: validation rules, triggers, record-triggered flows, approval processes, workflow rules; record counts; org type",
+      "command_summary": "Tooling ValidationRule/ApexTrigger/WorkflowRule; FlowDefinitionView; ProcessDefinition; COUNT Opportunity/OpportunityCompetitor; Organization",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 5,
+      "purpose": "Same concept elsewhere; custom object list; record types/business processes; currency",
+      "command_summary": "Tooling CustomField LIKE %Compet%; sobject list custom/all; FieldDefinition by label; RecordType; BusinessProcess; Organization.DefaultCurrencyIsoCode (failed = single currency)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 6,
+      "purpose": "Readers and field access of MainCompetitors__c; OpportunityCompetitor object perms; layouts and FlexiPages",
+      "command_summary": "MetadataComponentDependency on field Id; FieldPermissions Field=Opportunity.MainCompetitors__c; ObjectPermissions OpportunityCompetitor; Tooling Layout, FlexiPage",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 7,
+      "purpose": "Apex bodies referencing Opportunity/MainCompetitors__c; layout placement of field and Competitors related list",
+      "command_summary": "Tooling ApexClass Body (unmanaged, 70) searched locally; Tooling Layout.Metadata for Opportunity Layout",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 8,
+      "purpose": "Non-profile permission sets with Opportunity Edit (integration callers)",
+      "command_summary": "ObjectPermissions SobjectType=Opportunity, IsOwnedByProfile=false, Edit=true",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 9,
+      "purpose": "Re-check validation rule absence before resting the design on it",
+      "command_summary": "Tooling ValidationRule WHERE EntityDefinition.QualifiedApiName='Opportunity'; COUNT() ValidationRule (first attempt with DeveloperName column failed)",
+      "ok": true,
+      "contradicted_askcoworker": true
+    },
+    {
+      "seq": 12,
+      "purpose": "LWC bundles queryable (tests AskCoworker claim that LWC is not queryable)",
+      "command_summary": "Tooling COUNT() LightningComponentBundle",
+      "ok": true,
+      "contradicted_askcoworker": true
+    }
+  ],
+  "user_questions": [
+    {
+      "seq": 10,
+      "question": "What counts as 'a competitor listed' for Opportunities over $50k entering Negotiation/Review? Options: (A) the existing text field Opportunity.MainCompetitors__c ('Main Competitor(s)', Text(100), editable on all 4 Opportunity layouts) is not blank; (B) at least one OpportunityCompetitor record on the Competitors related list (on Opportunity Layout, 0 records today); (C) either one. Evidence: both exist and are on the layout; no automation uses either. Recommendation: A (a single declarative validation rule; B needs a flow or Apex because validation rules cannot count child records).",
+      "simulated_answer": "A: validation rule when Amount > 50000 and Stage = Negotiation/Review makes Main Competitors required."
+    }
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 1,
+    "create": 1,
+    "update": 0,
+    "delete": 0
+  },
+  "skill_friction": [
+    "Workflow step 5 says to ask after D1 and step 3, but the I call is where the fork naturally shows up too; here D1 already surfaced it, so no friction in ordering, but SKILL.md does not say whether D2 should be sent before or after the question (sent before).",
+    "The 'four wrong AskCoworker claims -> may skip R and T' rule: unclear whether a wrong design proposal (unneeded permission set based on 'profile FLS unknown') counts as one claim or two (fact + proposal); counted as one.",
+    "Some AskCoworker errors (e.g. 'LWC is not SOQL-queryable') concern topics the design does not need; SKILL.md says to drop facts the design does not need but still count wrong claims, so it is unclear whether an irrelevant wrong claim should count toward the threshold.",
+    "Validation-rule-only specs: spec-format says declarative-only changes get manual checks, but the RUNNER/skill gives no guidance on whether a validation rule needs a layout/help text update when its error location field is already placed; decided none.",
+    "Org currency code cannot be read in a single-currency org with the allowed commands (Organization.DefaultCurrencyIsoCode unavailable, User has no DefaultCurrencyIsoCode); org-verification.md mentions currency describe but Opportunity.Amount describe does not expose the code. Recorded as an assumption."
+  ]
+}

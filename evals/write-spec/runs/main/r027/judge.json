@@ -1,0 +1,8 @@
+{"id": "r027", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 1, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Create Lead_Conversion_Fields permission set: the spec itself says no current user needs it (the only active admin already has access through Agentforce_Reference_App). It is an unassigned speculative component. It belongs in Open decisions, not in the change set.", "skill_gap": "None explicit. Rule 4 (minimal design) implies it, but nothing requires every inventory row to serve a current user or caller."},
+  {"defect": "A Conditional FlexiPage Update (Lead_Record_Page1) is included even though its activation is unknown. This widens the change set beyond the core validation rule. It is honestly labelled Conditional, so the effect is minor.", "skill_gap": "org-verification.md does not say how to handle record-page activation that the allowed commands cannot read (flagged in the run's skill_friction)."},
+  {"defect": "The 'Require Validation for Converted Leads' Lead Setting is load-bearing, but the spec treats it only as a manual Setup step. It has a metadata representation (LeadConvertSettings), which could be a change-set row or at least be named. It is labelled as an assumption and a blocking dependency, so honesty is intact.", "skill_gap": "The skill does not say whether org settings that have a metadata form belong in Section 9 or in the Open decisions (flagged in the run's skill_friction)."}
+ ]}

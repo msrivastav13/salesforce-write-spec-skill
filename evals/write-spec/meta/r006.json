@@ -1,0 +1,10 @@
+{
+ "id": "r006",
+ "category": "new-automation",
+ "requirement": "When a refund gets approved, stamp the processed date automatically.",
+ "hidden_intent": "They actually want Processed Date set when the refund status becomes Completed (money has gone out), not when it becomes Approved. Only set if blank.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Refund__c.Status__c has both Approved and Completed; 'processed' vs 'approved' is ambiguous \u2014 should confirm which status stamps Processed_Date__c. Before-save flow."
+ }
+}

@@ -1,0 +1,8 @@
+{"id": "r038", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Core mechanism (parent Contact validation rule firing on roll-up recalculation, and PRIORVALUE on a roll-up field during that save) is load-bearing and only labelled as documented-platform assumption; no fallback test component is planned, only manual verification.", "skill_gap": "None exists: SKILL.md offers only the 'assumption (documented platform behavior)' label and no rule for requiring an automated test when the central mechanism is an unverifiable platform assumption."},
+  {"defect": "0 DataStreams left as 'reported by AskCoworker' although it was verifiable with a one-line COUNT() query (it is correct).", "skill_gap": "Partial: the 'prior session' re-verify rule exists but was not applied to this claim."}
+ ]}

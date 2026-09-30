@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Menu price action must verify the Menu Item belongs to a storefront on the verified contact's account; fail loudly otherwise."
+}

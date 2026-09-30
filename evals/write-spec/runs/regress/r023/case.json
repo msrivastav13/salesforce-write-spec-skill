@@ -1,0 +1,4 @@
+{
+ "id": "r023",
+ "requirement": "Gift certificates need to track how much balance is left after partial redemptions, and link to the case they were issued for if it was a service recovery."
+}

@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Lead field mapping: Cuisine Type -> Account Cuisine Type, Number of Locations -> Account NumberofLocations; POS has no Account field -> create one."
+}

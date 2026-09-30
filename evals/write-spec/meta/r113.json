@@ -1,0 +1,10 @@
+{
+ "id": "r113",
+ "category": "nonexistent-concept",
+ "requirement": "Kitchen inventory: each storefront needs to track ingredient stock levels and get alerted when something runs low.",
+ "hidden_intent": "New Inventory Item object per storefront with quantity, unit, reorder threshold; alert Primary Contact when below threshold.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "No inventory concept in org; propose new objects and ask about thresholds/alerting."
+ }
+}

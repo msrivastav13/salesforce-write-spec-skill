@@ -1,0 +1,4 @@
+{
+ "id": "r045",
+ "requirement": "Send a Slack message to #merchant-escalations whenever a storefront gets suspended."
+}

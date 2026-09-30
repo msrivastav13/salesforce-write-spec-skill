@@ -1,0 +1,52 @@
+{
+  "id": "r022",
+  "skill_rev": "v9",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r022/storefront-archive-history-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 25, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 39},
+    {"seq": 28, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 43},
+    {"seq": 29, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Inactive storefront count / status distribution (premise)", "command_summary": "SOQL Storefront__c GROUP BY Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Status__c picklist values, field list, child relationships and cascadeDelete", "command_summary": "sf sobject describe Storefront__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 5, "purpose": "Storefront__c DurableId and history entity", "command_summary": "SOQL EntityDefinition IN (Storefront__c, Storefront__History)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Storefront-related sobjects and custom big objects", "command_summary": "sf sobject list --sobject all filtered", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Org edition", "command_summary": "SOQL Organization OrganizationType, IsSandbox", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Triggers on Storefront__c and children", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Record-triggered flows on Storefront__c and children", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Field history tracking state", "command_summary": "FieldDefinition IsFieldHistoryTracked for Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "History row count", "command_summary": "SOQL COUNT() FROM Storefront__History", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Inactive records in recycle bin", "command_summary": "SOQL COUNT ... ALL ROWS (syntax rejected)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Custom big objects for archive", "command_summary": "Tooling EntityDefinition LIKE '%__b'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Data 360 involvement", "command_summary": "SOQL COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "List views on Storefront__c", "command_summary": "SOQL ListView WHERE SobjectType = Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Layouts on Storefront__c", "command_summary": "Tooling Layout WHERE TableEnumOrId = DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Field Audit Trail entity presence", "command_summary": "SOQL COUNT() FROM FieldHistoryArchive (aggregate unsupported)", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Field types for trackability", "command_summary": "sf sobject describe Storefront__c field types", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "Object editability (namespace)", "command_summary": "Tooling CustomObject DeveloperName = Storefront", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "Field Audit Trail entity queryable", "command_summary": "SOQL FieldHistoryArchive LIMIT 1", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "Delete/Read grants on Storefront__c", "command_summary": "SOQL ObjectPermissions WHERE SobjectType = Storefront__c", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 22, "purpose": "Custom field IDs", "command_summary": "Tooling CustomField WHERE TableEnumOrId = DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "LongTextArea type and trackHistory of Description, Storefront_Overview, Status", "command_summary": "Tooling CustomField Metadata by Id (x3)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "Record page by EntityDefinitionId name", "command_summary": "Tooling FlexiPage WHERE EntityDefinitionId = 'Storefront__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "Record page for Storefront__c", "command_summary": "Tooling FlexiPage WHERE DeveloperName LIKE '%Storefront%'", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 24, "question": "Your requirement contradicts itself: deleting storefronts removes them and their cascade children (Review__c, Menu__c, Storefront_Hours_of_Operation__c, Event_Storefront__c), so history cannot then be kept 7 years; also 0 of 21 storefronts are Inactive today. (1) Do you want (a) no deletion: keep Inactive storefronts as archived records and hide them from default list views [recommended], (b) export to external archive then delete, or (c) delete and accept the loss? (2) For 7-year history, Field Audit Trail add-on [recommended] or a custom archive (standard history keeps 18-24 months)? (3) Track all trackable business fields [recommended] or a subset?", "simulated_answer": "(1) Don't delete — archive: keep records, hide from default list views. (2) and (3): No preference; use your recommended default."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 15, "create": 0, "update": 15, "delete": 0},
+  "skill_friction": [
+    "AskCoworker repeatedly asserted platform behavior (long text areas untrackable, HistoryRetentionPolicy as a standalone metadata type) that contradicts documented behavior; Rule 3 covers rejecting it, but there is no guidance on whether to spend a follow-up to correct AskCoworker or just correct in Section 8.",
+    "AskCoworker R/T marked 'Delete permission not revoked' as blocking; SKILL says judge blocking yourself, but no guidance on whether an unrequested protection that the responsibility (7-year history) arguably needs counts as an end-to-end delivery gap (step 5 last bullet) or unrequested behavior (Rule 4).",
+    "Step 5's zero-change default for false premise/data operation conflicted with the metadata-bearing second half of the requirement and the self-contradiction; the skill does not say which rule wins when both apply.",
+    "Field Audit Trail license cannot be verified with the allowed commands; the Conditional row's condition is inherently unresolvable read-only, with no guidance for license-dependent metadata beyond generic Conditional handling.",
+    "org-verification.md lacks notes for history-tracking checks (FieldDefinition.IsFieldHistoryTracked, <Object>__History entity) and ListView filters being unreadable."
+  ]
+}

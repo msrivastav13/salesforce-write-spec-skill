@@ -1,0 +1,10 @@
+{
+ "id": "r110",
+ "category": "standard-crm",
+ "requirement": "Escalate high-priority cases that haven't been touched in 4 hours.",
+ "hidden_intent": "Cases Priority High, not Closed, no modification for 4 hours -> escalate (IsEscalated, reassign to Escalations queue). Business hours not required.",
+ "expect": {
+  "should_ask_user": null,
+  "notes": "Escalation rule vs scheduled flow; an Escalate_Case flow already exists \u2014 reuse it."
+ }
+}

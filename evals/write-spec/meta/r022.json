@@ -1,0 +1,10 @@
+{
+ "id": "r022",
+ "category": "contradictory",
+ "requirement": "Delete all Inactive storefronts to clean up the org. Also keep full history of every storefront for 7 years for audit.",
+ "hidden_intent": "Don't delete \u2014 archive: keep records, hide from default list views.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Retention conflicts with deletion; ask; spec must not propose deleting data outright."
+ }
+}

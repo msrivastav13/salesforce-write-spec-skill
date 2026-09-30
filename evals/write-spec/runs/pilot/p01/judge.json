@@ -1,0 +1,11 @@
+{"id": "p01",
+ "claims": {"correct": 6, "wrong": 0, "unverifiable": 0},
+ "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 1},
+ "defects": [
+  {"defect": "Asked the user three questions although meta.expect.should_ask_user is false. Q1 (checkbox vs Status value, email to Primary_Contact__c) and Q2 (auto-clear) had obvious defaults the spec could have taken and labelled as assumptions; only Q3 (no storefront has 10 reviews) was a real data finding, and the run offered a default for it anyway.", "skill_gap": "SKILL scope check (step 5) does not say to take a labelled default instead of asking when the requirement plus org evidence already imply one; none exists that distinguishes 'recommended default available' from 'must ask'."},
+  {"defect": "Auto-clear is incomplete: deleting or undeleting a Review__c can move the 10-review average back to 3.0 or above (or below), but the inventory only re-evaluates on create or Rating__c change. The fix (after delete/undelete trigger) is left as a non-blocking proposal outside the inventory, even though hidden intent requires the flag to clear automatically on recovery.", "skill_gap": "SKILL step 7 says a responsibility gap goes back to step 5, but gives no rule for closing a gap with a default when the question budget is spent; the run noted this friction itself."},
+  {"defect": "No field-level security or layout change for Flagged_For_Attention__c, so no non-admin user can see the attention flag the requirement asks for; left as open decision 4.", "skill_gap": "None exists: SKILL has no instruction that a new field meant for users to see needs an FLS/layout entry or an explicit default in the inventory."},
+  {"defect": "Section 8 carries 10 items, several of them not decisions (item 8 Review__c Create grant is explicitly unrelated to the requirement; item 10 is a changelog of AskCoworker corrections), which dilutes the real open questions.", "skill_gap": "None exists: SKILL does not tell the writer to drop out-of-scope observations from Open decisions."}
+ ]}

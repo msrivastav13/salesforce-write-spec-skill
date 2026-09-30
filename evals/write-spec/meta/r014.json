@@ -1,0 +1,10 @@
+{
+ "id": "r014",
+ "category": "multi-part",
+ "requirement": "Loyalty program v2: points balance on contact, tier auto-calc, points expire after 12 months, and customers get a gift certificate when they reach Pronto Elite.",
+ "hidden_intent": "Thresholds: Explorer <1000, Insider <5000, Pronto Plus <10000, Pronto One <25000, Elite 25000+. Expiry = scheduled Redeem/Manual Adjustment entries. One-time $25 Loyalty Reward certificate on reaching Elite.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Thresholds and expiry mechanics unspecified; Loyalty_Transaction__c is a master-detail (verified by judge) (no roll-up); Gift_Certificate__c Type 'Loyalty Reward' exists \u2014 reuse."
+ }
+}

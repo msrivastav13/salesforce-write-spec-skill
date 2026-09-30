@@ -1,0 +1,10 @@
+{
+ "id": "r101",
+ "category": "vague",
+ "requirement": "Can the promo stuff be more automated?",
+ "hidden_intent": "Only: promotions auto-expire on end date.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Vague; several possible automations \u2014 ask which."
+ }
+}

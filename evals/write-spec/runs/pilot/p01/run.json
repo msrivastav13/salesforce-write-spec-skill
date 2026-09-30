@@ -1,0 +1,214 @@
+{
+  "id": "p01",
+  "skill_rev": "v4",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/pilot/p01/storefront-low-rating-alert-spec.md",
+  "askcoworker_calls": [
+    {
+      "seq": 1,
+      "kind": "d1",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 34
+    },
+    {
+      "seq": 2,
+      "kind": "d2",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 35
+    },
+    {
+      "seq": 16,
+      "kind": "i",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 32
+    },
+    {
+      "seq": 19,
+      "kind": "rt",
+      "error": true,
+      "timed_out": true,
+      "end_marker": false,
+      "resumed_fragment": false,
+      "seconds": 60
+    },
+    {
+      "seq": 20,
+      "kind": "retry",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 30
+    },
+    {
+      "seq": 23,
+      "kind": "t",
+      "error": false,
+      "timed_out": false,
+      "end_marker": true,
+      "resumed_fragment": false,
+      "seconds": 32
+    }
+  ],
+  "org_queries": [
+    {
+      "seq": 3,
+      "purpose": "Field list, types, picklists, relationships, formula of Storefront__c and Review__c (D1 claims)",
+      "command_summary": "sf sobject describe Storefront__c and Review__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 4,
+      "purpose": "Absence of Apex triggers on Storefront__c, Review__c, Contact",
+      "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 5,
+      "purpose": "Absence of record-triggered flows on the three objects",
+      "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (...)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 6,
+      "purpose": "DurableIds for Tooling lookups",
+      "command_summary": "Tooling EntityDefinition QualifiedApiName IN (Storefront__c, Review__c)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 7,
+      "purpose": "FLS-independent field lists; roll-up types; no existing flag field",
+      "command_summary": "FieldDefinition for Storefront__c and Review__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 8,
+      "purpose": "Validation rules on Storefront__c and Review__c (AskCoworker said Unknown)",
+      "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId IN (...)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 9,
+      "purpose": "Missed readers/writers of Storefront__c and Review__c",
+      "command_summary": "Tooling MetadataComponentDependency by object DurableId (x2)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 10,
+      "purpose": "Data shape: storefront count, primary contact/email presence, review status and null ratings, rating distribution, storefront status",
+      "command_summary": "COUNT / GROUP BY aggregates on Storefront__c and Review__c (GROUP BY Rating__c failed: double not groupable)",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 11,
+      "purpose": "Nature of related flows (Apply Remediation, Watchlist) and scheduled flows",
+      "command_summary": "FlowDefinitionView by Label; TriggerType = Scheduled",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 12,
+      "purpose": "Alert/AlertManager/AlertController ownership and review classes",
+      "command_summary": "Tooling ApexClass Name, NamespacePrefix",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 13,
+      "purpose": "Existing email alerts, templates, scheduled jobs",
+      "command_summary": "Tooling WorkflowAlert; EmailTemplate LIKE; CronTrigger",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 14,
+      "purpose": "What AgentReviewActions and AgentSummarizeReviewsActions read/write and recency ordering",
+      "command_summary": "Tooling ApexClass Body, local grep",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 15,
+      "purpose": "Apply_Remediation logic; rolling-10 average data shape (reviews per storefront, count below 3.0, CreatedDate spread)",
+      "command_summary": "Tooling Flow.Metadata by Id; Review__c SELECT Storefront__c, Rating__c, CreatedDate, Order_Date__c summarized locally",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 17,
+      "purpose": "Whether AgentReviewActions sets Order_Date__c (drives recency default)",
+      "command_summary": "Tooling ApexClass Body, grep field assignments",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 21,
+      "purpose": "OWD claim from 'prior session'; new names do not exist; Data 360 streams",
+      "command_summary": "EntityDefinition sharing models; CustomField ids; ApexClass/FlowDefinitionView/EmailTemplate name checks; COUNT DataStream",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 22,
+      "purpose": "AskCoworker claim that Master-Detail reparenting is unsupported; Storefront__c edit grants",
+      "command_summary": "Tooling CustomField.Metadata for Review__c.Storefront__c; ObjectPermissions Storefront__c",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 24,
+      "purpose": "AskCoworker T claim that Agentforce_Reference_App lacks Create on Review__c (confirmed); OrgWideEmailAddress existence",
+      "command_summary": "ObjectPermissions Review__c; COUNT OrgWideEmailAddress",
+      "ok": true,
+      "contradicted_askcoworker": false
+    },
+    {
+      "seq": 25,
+      "purpose": "Absence claim: no Apex deletes Review__c; DML runs without USER_MODE",
+      "command_summary": "Tooling ApexClass Body grep delete/update/USER_MODE",
+      "ok": true,
+      "contradicted_askcoworker": false
+    }
+  ],
+  "user_questions": [
+    {
+      "seq": 18,
+      "question": "(1) Flag via new checkbox Storefront__c.Flagged_For_Attention__c (recommended) or a new Status__c value; and notify the Contact in Primary_Contact__c by email? (2) When the 10-review average recovers to 3.0+, clear the flag automatically or leave it for manual clearing? (3) No storefront has 10 reviews yet (2-8 each): evaluate on available reviews (4 would be below 3.0 today) or wait for 10?",
+      "simulated_answer": "A checkbox flag on the storefront is fine. Notify by email to the storefront's primary contact. Clear the flag automatically when the recent average recovers to 3.0 or more. Apex is acceptable. (3) No preference; use your recommended default."
+    }
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {
+    "total": 5,
+    "create": 5,
+    "update": 0,
+    "delete": 0
+  },
+  "skill_friction": [
+    "Combined R+T call (allowed for <=5 changes at 500 words) timed out at 60s; the templates' guidance that ~400 words finishes in time did not hold for the combined call. Splitting into R and T after the timeout worked. Unclear whether the separate T call after the R retry counts as a retry or a new call.",
+    "RUNNER kind list has 'rt' and 'retry' but no way to record that a retry was a narrowed R-only call; recorded retry.",
+    "AskCoworker repeatedly cited 'prior session' queries (OWD, templates, DataStream, FLS) despite the ignore-earlier-conversations header; SKILL says drop or verify, which required extra queries each time.",
+    "SKILL step 7 says any responsibility gap goes back to step 5, but the auto-clear decision leaves a delete/undelete gap that the one-message/3-question budget was already spent on; recorded as non-blocking with a proposal rather than re-asking. SKILL does not say whether a second scope-check round is allowed.",
+    "AskCoworker asserted platform behaviors (invocable called once per record in bulk; 10 emails per transaction) that contradict documented behavior; Rule 3 covers recording the conflict, but there is no guidance on whether to let a contradicted AskCoworker 'blocking' label drive design.",
+    "Choosing without sharing vs with sharing for the Apex action was not covered by any template question; R answer proposed with sharing, which was corrected from verified sharing facts."
+  ]
+}

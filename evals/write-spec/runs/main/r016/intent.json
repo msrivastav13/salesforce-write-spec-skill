@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "On status -> Approved create a business Account and a Storefront in Pending Activation linked to it, using merchant name, address, cuisine and phone captured on the application (they assume those fields exist)."
+}

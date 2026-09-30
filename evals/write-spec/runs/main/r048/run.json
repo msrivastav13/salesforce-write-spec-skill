@@ -1,0 +1,39 @@
+{
+  "id": "r048",
+  "skill_rev": "v22",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r048/case-waiting-on-customer-auto-close-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 51},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42},
+    {"seq": 13, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 37},
+    {"seq": 14, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 15, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 14},
+    {"seq": 17, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 54}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Case.Status picklist values, custom fields, record types", "command_summary": "sf sobject describe Case", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Which statuses are closed", "command_summary": "SOQL CaseStatus ApiName, IsClosed", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Data shape of Case.Status; any Waiting on Customer rows", "command_summary": "SOQL Case GROUP BY Status (New 4, Working 2, Closed 3) and COUNT where Status='Waiting on Customer' (0)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Complete custom field list on Case (no status-entry timestamp)", "command_summary": "Tooling CustomField WHERE TableEnumOrId='Case'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Existing Case automation: triggers, record-triggered flows, scheduled flows, workflow rules, validation rules", "command_summary": "Tooling ApexTrigger, FlowDefinitionView, WorkflowRule, ValidationRule on Case", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 8, "purpose": "History tracking, CaseHistory rows, BusinessHours, org edition, BusinessProcess", "command_summary": "FieldDefinition IsFieldHistoryTracked; CaseHistory COUNT; BusinessHours; Organization; BusinessProcess", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Apex that writes Case.Status or schedules/batches Case", "command_summary": "Tooling ApexClass bodies searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Reusable close component: Close_Case flow logic and callers", "command_summary": "Tooling FlowDefinition + Flow.Metadata for Close_Case; FlowDefinitionView for CloseCase (managed SvcCopilotTmpl); GenAiFunctionDefinition flow targets", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Custom objects for case/waiting concepts", "command_summary": "sf sobject list --sobject custom (110, none relevant)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Data 360 involvement, new flow name not taken, Automated Process user", "command_summary": "DataStream COUNT (0); Tooling FlowDefinition LIKE '%Waiting%' (0); User Automated Process", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 12, "question": "'Waiting on Customer' is not a Case status in this org (active values: New, On Hold, Escalated, Closed; only Closed is a closed status). Which status should the 7-day auto-close watch? (a) Add a new open status 'Waiting on Customer' [recommended: matches the requirement wording]; (b) reuse the existing 'On Hold' status; (c) another value you name.", "simulated_answer": "Add the status value since it's missing (a). Cases in 'Waiting on Customer' unchanged for 7 days should be closed on a schedule."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 1, "update": 1, "delete": 0},
+  "skill_friction": [
+    "The R call timed out and the narrowed retry covered only security; SKILL.md says to cover left-out parts 'with another narrow call or with org queries', but runtime behavior of scheduled paths (cancellation, create entry, undelete) is platform behavior no allowed query can test, so it had to be documented as assumptions without a clear rule on whether a further AskCoworker call was expected (and whether it counts against the follow-up budget).",
+    "The simulated answer's word 'unchanged' is ambiguous (status unchanged vs. record not edited); step 5 mapping rule handled it as an assumption, but SKILL.md gives no guidance on whether an ambiguous answer term that changes the design (timestamp field vs. LastModifiedDate) warrants the permitted second question.",
+    "AskCoworker's 'Validation Rules not queryable via SOQL' and the '29 existing cases' claim were fabricated/wrong; the skill handles this (record in Section 8), but there is no guidance on how many such corrections should lower trust in the remaining AskCoworker [Verified] claims (for example the permission-set list reused unqueried in Section 6).",
+    "spec-format says Flow Tests cannot cover async paths; for a flow whose only logic is on a scheduled path there is nothing testable automatically, and the skill does not say whether an Apex test (which also cannot run scheduled paths) or no test row is expected."
+  ]
+}

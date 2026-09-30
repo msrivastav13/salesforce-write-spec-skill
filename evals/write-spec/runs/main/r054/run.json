@@ -1,0 +1,43 @@
+{
+  "id": "r054",
+  "skill_rev": "v23",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r054/promotion-auto-expire-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49},
+    {"seq": 3, "kind": "d2", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 4, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 29},
+    {"seq": 19, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 20, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49},
+    {"seq": 25, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 35}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable, API version", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "full custom object scan for promotion concept", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Promotion__c fields, Status__c picklist values, End_Date__c type", "command_summary": "sf sobject describe Promotion__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no triggers on Promotion__c", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId='Promotion__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "no flows on Promotion__c; scheduled flows in org", "command_summary": "FlowDefinitionView by TriggerObjectOrEventId and TriggerType='Scheduled'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "DurableId, data shape, current records, cron jobs, org type/time zone", "command_summary": "EntityDefinition; GROUP BY Status__c; record sample LIMIT 10; CronTrigger; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "validation rules, field descriptions, Apex readers/writers of Promotion__c", "command_summary": "Tooling ValidationRule, CustomField, ApexClass bodies searched locally, FlowDefinitionView Orch", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "read Promotion Apex bodies (Draft default, MerchantRiskScoreAction usage)", "command_summary": "Tooling ApexClass Body by Name IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Schedulable/Batchable/Expired in Apex; Status__c metadata; dependencies on Status__c and object", "command_summary": "ApexClass body scan; CustomField.Metadata (failed parse first); MetadataComponentDependency x2", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Status__c restricted/required", "command_summary": "Tooling CustomField Metadata by Id (rerun with fixed parser)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "object and field access", "command_summary": "ObjectPermissions, FieldPermissions for Promotion__c / Status__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "same concept elsewhere (expiry fields)", "command_summary": "Tooling CustomField DeveloperName LIKE '%Expir%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "agent actions on promotions; Experience sites as customer surface", "command_summary": "Tooling GenAiFunctionDefinition LIKE '%Promotion%'; Network", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "Data 360 involvement; matching records for backfill (re-run count)", "command_summary": "SELECT COUNT() FROM DataStream; COUNT Promotion__c Active AND End_Date__c < TODAY", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "new flow name not taken", "command_summary": "Tooling Flow by Definition.DeveloperName (failed: unsupported); FlowDefinitionView ApiName LIKE '%Promotion%' = 0", "ok": false, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "project source for Promotion__c", "command_summary": "grep force-app for Promotion__c", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 1, "create": 1, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Rule 5 lists 'automation that overwrites values people edit by hand' as an ask case, but also says to decide any intent question the requirement's wording answers; for auto-expiry overriding an agent's manual re-activation, both apply and the skill gives no tie-break. I decided from wording.",
+    "The external customer-facing reader is outside the org and unidentifiable by any allowed query; the skill's 'which external platform is meant' ask case conflicts with 'undeliverable responsibility: mark blocking, ask only if it defeats the main purpose'. The inventory does not change either way, so I marked it blocking for delivery without asking.",
+    "Testing guidance does not cover schedule-triggered flows, which neither FlowTest nor Apex can exercise; AskCoworker pushed an invocable Apex extraction for testability, and the skill offers no explicit rule on adding code purely for test coverage (I rejected it under Rule 4).",
+    "AskCoworker labelled facts from this run's own earlier calls as 'prior session'; the memory row covers echoed facts but not facts from its own earlier replies in the same run."
+  ]
+}

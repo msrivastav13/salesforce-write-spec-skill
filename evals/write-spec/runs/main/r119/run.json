@@ -1,0 +1,42 @@
+{
+  "id": "r119",
+  "skill_rev": "v35",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r119/retire-transaction-object-spec.md",
+  "askcoworker_calls": [
+    {"seq": 2, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 16, "kind": "d2", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 17, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 11},
+    {"seq": 19, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 37},
+    {"seq": 20, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 26}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Find objects matching 'Transaction' (full custom list and all sObjects)", "command_summary": "sf sobject list --sobject custom / all, filter 'transact'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "Object identity, labels, namespace, DurableId", "command_summary": "Tooling EntityDefinition for Transaction__c, Loyalty_Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Record counts incl. recycle bin", "command_summary": "COUNT() Transaction__c, --all-rows, Loyalty_Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Custom fields of Transaction__c (D1 claimed 0)", "command_summary": "Tooling CustomField WHERE TableEnumOrId", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 6, "purpose": "Dependencies on object and each field", "command_summary": "Tooling MetadataComponentDependency by object and 6 field Ids", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Triggers, record-triggered flows, VRs, layouts, tabs, FlexiPages on object; describe child relationships", "command_summary": "ApexTrigger, FlowDefinitionView, ValidationRule, Layout, TabDefinition, FlexiPage, sobject describe", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Object and field access grants (D1 claimed Agentforce_Reference_App grants access)", "command_summary": "ObjectPermissions and FieldPermissions WHERE SobjectType = 'Transaction__c'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 9, "purpose": "Apex/trigger bodies reading the object; project source", "command_summary": "Tooling ApexClass/ApexTrigger Body search; grep force-app", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "What the FlexiPage reference is", "command_summary": "Tooling FlexiPage Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Lookup semantics, reports, Contact layouts related lists", "command_summary": "CustomField Metadata by Id; Report LIKE; Layout Metadata for 4 Contact layouts", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Other automation and CDC/history", "command_summary": "FlowDefinitionView count, QuickActionDefinition (failed, unsupported), LWC list, PlatformEventChannelMember, FieldDefinition history, ProcessDefinition, WorkflowRule", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "LWC, Aura, VF, flow-to-object dependencies", "command_summary": "LightningComponentResource/AuraDefinition/ApexPage source search; MetadataComponentDependency Flow->CustomObject", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Unmanaged flow metadata reads/writes of the object", "command_summary": "FlowDefinition unmanaged + Flow.Metadata by Id (14 flows)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "List views, Data 360, managed PS assignments, agent actions, sharing model", "command_summary": "ListView, DataStream COUNT, PermissionSetAssignment, GenAiFunctionDefinition, EntityDefinition sharing", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "Verify D2 integration claims (users, View/Modify All, scheduled jobs, named credentials)", "command_summary": "PermissionSetAssignment, ObjectPermissions ViewAll/ModifyAll, User by profile, CronTrigger, NamedCredential", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 0, "update": 1, "delete": 1},
+  "skill_friction": [
+    "Step 5 lists 'an ambiguous set of components to delete' as an Ask case, but also says intent answered by the org's semantics is decided. Here 'Transaction object' matched Transaction__c by exact label and Loyalty_Transaction__c by keyword; AskCoworker marked the ambiguity blocking. The skill does not say whether an exact label match counts as resolving delete-set ambiguity; I decided without asking.",
+    "Rule 3's AskCoworker wrong-claim counter does not say whether wrong platform claims attached to proposals (e.g. 'layouts must be deleted before the object', 'custom objects cannot be undeleted') count the same as wrong facts; counting them reached four and allowed skipping T.",
+    "Inventory rules say one row per deployable component, but for a CustomObject delete it is unclear whether cascaded children (fields, layout) need their own Delete rows; I folded them into the object row as documented cascade behavior.",
+    "No guidance on how to treat access grants in managed/platform permission sets for a Delete (they are auto-removed by the object delete); the Access rules only cover exclusive-access cases.",
+    "The RUNNER says to use {out}/.tmp for scratch files, but org-verification.md says design/.tmp/; followed the eval note."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+ "id": "r114",
+ "category": "new-automation",
+ "requirement": "Menu items need a price greater than zero if they're marked available.",
+ "hidden_intent": "Validation rule: if Available is true, Price must be > 0.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Validation on Menu_Item__c using Available__c and Price__c."
+ }
+}

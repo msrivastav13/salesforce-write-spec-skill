@@ -1,0 +1,7 @@
+{"id": "r042", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0}, "wrong_claims": ["Permission sets with Create/Edit on Promotion__c are Agentforce_Reference_App and sfdc_accelerate_dms (reported by AskCoworker). ObjectPermissions shows Create/Edit only for sfdc_accelerate_dms and the System Administrator profile. Agentforce_Reference_App has no ObjectPermissions row on Promotion__c."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "An unverified AskCoworker claim about which permission sets can create or edit Promotion__c was kept in Section 2 Grounding. It was labelled 'reported by AskCoworker' and marked as not needed, but it is wrong: Agentforce_Reference_App has no access. A single ObjectPermissions query would have caught it.", "skill_gap": "The skill should say to drop unverified AskCoworker facts that the design does not need, or verify them if they are cheap to check, rather than list them in Grounding."}
+ ]}

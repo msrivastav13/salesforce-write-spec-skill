@@ -1,0 +1,10 @@
+{
+ "id": "r080",
+ "category": "security",
+ "requirement": "Hide the refund amount from support agents below Tier 2.",
+ "hidden_intent": "Amount hidden for Tier 1 agents; visible to a Tier 2 permission set.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "FLS on Refund__c.Amount__c; 'Tier 2' isn't defined in the org \u2014 ask which profile/perm set; Issue_Refund flow/agent still needs access."
+ }
+}

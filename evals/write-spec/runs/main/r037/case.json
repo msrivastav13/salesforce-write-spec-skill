@@ -1,0 +1,4 @@
+{
+ "id": "r037",
+ "requirement": "Publish an event whenever a storefront's status changes so the mobile app can hide closed restaurants instantly."
+}

@@ -1,0 +1,8 @@
+{"id": "r064", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Divide-by-zero in the existing Average_Review_Score__c formula (2 storefronts with 0 reviews) is recorded only as a non-blocking proposal; reasonable for an already-met case, but the choice between gap and proposal was a judgment call.", "skill_gap": "None explicit: SKILL.md does not say whether an edge-case defect in an existing component that already meets the requirement counts as a verified gap or a proposal."},
+  {"defect": "Section 9 renders an empty change-set table header with no rows; readable but slightly odd for a zero-change spec.", "skill_gap": "None; spec-format could say to omit the table when Total is 0."}
+ ]}

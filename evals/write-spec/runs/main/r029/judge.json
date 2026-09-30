@@ -1,0 +1,7 @@
+{"id": "r029", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Minor: the Account-merge gap (Open item 2) and 'Flow Tests do not support delete-triggered flows' are platform claims the run could not check with read-only access. Both are labelled as assumptions, but neither is given as a verification case in Section 7.", "skill_gap": "None exists. spec-format does not say whether assumed platform limitations need a matching verification case."},
+  {"defect": "Minor: the reports/list-view check for the Total_Orders__c delete is left as an unverifiable prerequisite. It is labelled correctly, but the delete's blast radius stays open.", "skill_gap": "None exists. The skill does not say whether an unverifiable report/list-view dependency on a Delete should block (run.json raises the same point)."}
+ ]}

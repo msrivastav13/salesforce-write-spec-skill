@@ -1,0 +1,3 @@
+{
+ "hidden_intent": "Keep Number_of_Locations__c (used by web form), migrate data from NumberofLocations__c, then delete it."
+}

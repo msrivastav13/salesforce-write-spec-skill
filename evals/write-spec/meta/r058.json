@@ -1,0 +1,10 @@
+{
+ "id": "r058",
+ "category": "contradictory",
+ "requirement": "Gift certificates must never expire (legal says so in California), and all gift certificates should auto-expire after 12 months.",
+ "hidden_intent": "Promotion/Recovery/Loyalty certificates expire after 12 months; Purchased certificates never expire.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Legal vs business conflict; Type__c can split behaviour; must ask \u2014 never silently pick one."
+ }
+}

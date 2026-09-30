@@ -1,0 +1,10 @@
+{
+ "id": "r034",
+ "category": "new-automation",
+ "requirement": "When a storefront is Closed, all its menus should be deactivated and all menu items marked unavailable.",
+ "hidden_intent": "Record-triggered flow on Storefront status change to Closed: Menu Active=false for its menus and Available=false for their items. Not reversed on reopen.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Cascade across Menu__c and Menu_Item__c (items relate via Menu__c); bulk-safe; not auto-reversible."
+ }
+}

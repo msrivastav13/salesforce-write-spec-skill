@@ -1,0 +1,10 @@
+{
+ "id": "r013",
+ "category": "multi-part",
+ "requirement": "Storefront lifecycle: new storefronts start as Pending Activation, can't go Active without at least one active menu and hours for all 7 days, suspended ones notify the account owner, and closed ones deactivate menus.",
+ "hidden_intent": "All four rules as stated.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Default picklist value; Menu_Count__c counts all menus, not active ones \u2014 needs filtered roll-up or query; hours need 7 distinct days; cascade on close."
+ }
+}

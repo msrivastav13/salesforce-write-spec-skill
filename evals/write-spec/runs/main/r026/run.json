@@ -1,0 +1,37 @@
+{
+  "id": "r026",
+  "skill_rev": "v11",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r026/ghost-kitchen-lead-routing-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 33},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 11, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 32},
+    {"seq": 13, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 47},
+    {"seq": 15, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "Queues, queue supported objects, Lead triggers, Lead record-triggered flows, assignment rules (tests D1/D2 claims)", "command_summary": "Group Type=Queue; QueueSobject; Tooling ApexTrigger TableEnumOrId=Lead; FlowDefinitionView TriggerObjectOrEventId=Lead; AssignmentRule", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Data shape of Business_Type__c and owner type; same concept fields elsewhere", "command_summary": "Lead GROUP BY Business_Type__c; Lead Owner.Type for Ghost Kitchen; Tooling CustomField LIKE Ghost/Business_Type/Kitchen", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Business_Type__c picklist values and restriction; Lead custom fields", "command_summary": "sf sobject describe Lead", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Validation rules on Lead; field Id; org edition", "command_summary": "Tooling ValidationRule EntityDefinitionId=Lead; CustomField Id; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Readers of Business_Type__c; Apex referencing Lead or assignment headers", "command_summary": "Tooling MetadataComponentDependency on field Id; ApexClass bodies (70 unmanaged) searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Existing sales team groups/roles; lead-creating flows; queue members", "command_summary": "Group LIKE Ghost/Kitchen/Sales; UserRole LIKE Sales; FlowDefinitionView ApiName LIKE Lead; GroupMember of Unqualified_Leads; FlowDefinitionView CreateSalesLead", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Lead OWD, Process Builder, queue-owned leads (security and runtime)", "command_summary": "Organization DefaultLeadAccess; Tooling Flow ProcessType=Workflow count; Lead Owner.Type=Queue count", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Data 360 involvement (AskCoworker prior-session claim of 0 data streams)", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 9, "question": "Who should be members of the new Ghost Kitchen Sales Team queue? Options: (a) specific named users, (b) a role such as an existing sales role, (c) a public group, (d) create the queue empty and add members after deployment. Evidence: no role, group, or user in the org is identified with ghost kitchens. Recommendation: (d).", "simulated_answer": "No preference; use your recommended default."},
+    {"seq": 10, "question": "How should routing be implemented? Options: (a) add an entry to the existing active 'Standard' lead assignment rule (its entries cannot be read, and it only fires when the rule is applied), or (b) a new record-triggered flow on Lead create that sets the owner for Ghost Kitchen leads only. Recommendation: (b).", "simulated_answer": "Business Type = Ghost Kitchen goes to the Ghost Kitchen sales queue; other leads unchanged. No preference on mechanism otherwise."}
+  ],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 2, "create": 2, "update": 0, "delete": 0},
+  "skill_friction": [
+    "Step 5 says 'decide, don't ask' unless both conditions hold; queue membership and mechanism (assignment rule vs flow) were borderline. I asked, but both had clear defaults, so the questions may have been unnecessary under a strict reading.",
+    "The queue name ('Ghost Kitchen Sales Team' vs the hidden intent's 'Ghost Kitchen Sales') was treated as a label detail per Rule 5, but the queue DeveloperName is an inventory API name; SKILL.md does not say whether an API name the requirement implies but does not state is a label default or a scope question.",
+    "AskCoworker repeatedly tagged facts I sent as 'Verified: prior session' and made wrong platform claims (per-record SOQL in record-triggered flows, hard-coded queue Id, QueueSobject as separate deployable row, before-save ordering vs assignment rules); the skill handles this via the 'fix from evidence' rule, which worked, but there is no guidance on order-of-execution checks for assignment rules vs flows.",
+    "Assignment rule entries are unreadable with allowed commands; org-verification.md mentions this but gives no recommended design stance when the requirement is routing (flow vs rule edit)."
+  ]
+}

@@ -1,0 +1,4 @@
+{
+ "id": "r010",
+ "requirement": "We need to track a sum of all review scores per storefront for our ranking algorithm"
+}

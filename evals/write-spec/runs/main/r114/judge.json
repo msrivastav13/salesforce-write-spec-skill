@@ -1,0 +1,34 @@
+{
+ "id": "r114",
+ "claims": {
+  "correct": 6,
+  "wrong": 0,
+  "unverifiable": 0
+ },
+ "wrong_claims": [],
+ "duplicate_create": [],
+ "phantom_target": [],
+ "questions": {
+  "intent": 0,
+  "implementation": 0,
+  "missing_intent": 0
+ },
+ "scores": {
+  "requirement_fit": 2,
+  "reuse": 2,
+  "scope_behavior": 2,
+  "honesty": 2,
+  "safety": 2,
+  "clarity": 2
+ },
+ "defects": [
+  {
+   "defect": "Row 2 updates ApexClass AgentCreateMenuWithItemsActions for a description-only change in an org where no test class covers it, so the Apex deploy can fail the 75% coverage gate and couples a cosmetic change to the validation rule. The spec mitigates this by suggesting a separate VR deploy, but it still keeps the row in the change set.",
+   "skill_gap": "None exists. The design rule 'updating descriptions made false is part of the inventory' says nothing about weighing a description-only Apex deploy against its coverage risk, or about offering it as a proposal."
+  },
+  {
+   "defect": "The @InvocableMethod description ('inserts multiple menu items in one transaction') is left as is, although the spec itself shows the Menu__c insert commits even when the item insert fails. The row fixes one false description and leaves a related one.",
+   "skill_gap": "None exists. The rule about false descriptions does not require checking every description on the class it touches."
+  }
+ ]
+}

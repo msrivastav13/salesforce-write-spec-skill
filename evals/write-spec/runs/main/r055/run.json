@@ -1,0 +1,48 @@
+{
+  "id": "r055",
+  "skill_rev": "v23",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r055/gift-certificate-issue-defaults-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 54},
+    {"seq": 4, "kind": "d2", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 5, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 36},
+    {"seq": 20, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 46},
+    {"seq": 22, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 23, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 14},
+    {"seq": 26, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 30}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable", "command_summary": "sf org display --json", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "scan custom objects for gift certificate concept", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "field types, uniqueness, required, picklists on Gift_Certificate__c", "command_summary": "sf sobject describe Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no triggers on Gift_Certificate__c", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId='Gift_Certificate__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "no record-triggered flows", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId='Gift_Certificate__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "object DurableId", "command_summary": "Tooling EntityDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "no validation rules", "command_summary": "Tooling ValidationRule by EntityDefinitionId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "complete custom field list and descriptions", "command_summary": "Tooling CustomField by TableEnumOrId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "data shape: null counts of value/code fields", "command_summary": "SOQL COUNT aggregates on Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "status/channel distribution", "command_summary": "SOQL GROUP BY Status__c, Source_Channel__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "creators/readers and which fields they set", "command_summary": "Tooling ApexClass bodies (unmanaged) searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "existing trigger/handler pattern in org", "command_summary": "Tooling ApexTrigger unmanaged all", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "same concept fields elsewhere (code, remaining, balance)", "command_summary": "Tooling CustomField DeveloperName LIKE", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "references to External_Code__c", "command_summary": "Tooling MetadataComponentDependency by field Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "existing gift/trigger/handler classes and tests", "command_summary": "Tooling ApexClass Name LIKE", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "field access on the three fields", "command_summary": "FieldPermissions WHERE Field IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "callers catch insert exceptions (AskCoworker I claim)", "command_summary": "Tooling ApexClass bodies for the two creators", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "org edition", "command_summary": "SELECT OrganizationType, IsSandbox FROM Organization", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 3, "create": 3, "update": 0, "delete": 0},
+  "skill_friction": [
+    "AskCoworker R stated Apex before triggers run before before-save flows (wrong); the skill's correction rule covered it, but no query can test order of execution, so it had to be tagged as documented platform behavior.",
+    "D2 and R both timed out at default limits; the narrowed retries dropped security/permissions/integrations. The skill says to cover left-out parts with org queries, which worked, but the D2 template at 350 words seems routinely too broad for this service.",
+    "AskCoworker repeatedly labelled facts 'Verified: ... prior session' and 'Verified: clarified requirement' for my own assumptions; the skill says echoed facts are established, but it does not say how to treat assumptions echoed back as [Verified].",
+    "Rule 4 'prefer flows, then code' vs. minimizing components: splitting one requirement into a flow plus a trigger (because code is needed anyway) is a judgment call the skill does not address.",
+    "Whether to ask about 'issued' meaning insert vs. Status transition to Active (Draft value exists) was judged answered by the wording 'new'; the skill's guidance on org-semantics-answered intent was sufficient but borderline."
+  ]
+}

@@ -1,0 +1,10 @@
+{"id": "r035", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 1, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Asked the user which cuisine value set to copy (Storefront__c.Cuisine__c vs Account.Cuisine_Type__c), even though a clear default existed: the Storefront is the record the value is written to. The user had no preference. Of the other two questions, persona (who fills in the application) is legitimate intent; per-status timestamps is borderline but matches hidden_intent.", "skill_gap": "Step 5 limits questions to intent, but it does not say to skip a same-label/value-set question when the write target already decides it. The run's skill_friction flags the same gap."},
+  {"defect": "Onboarding_Application__c.Cuisine__c copies the 102 Storefront__c.Cuisine__c values into a local restricted picklist. That creates a second copy of the value set that will drift, and the source is unrestricted, so a value added on the Storefront will not be accepted on the application. A GlobalValueSet shared by both fields (converting the Storefront field) was not considered.", "skill_gap": "None specific. The reuse/single-source guidance does not cover shared picklist value sets."},
+  {"defect": "Allow Reports on Onboarding_Application__c was left as a Conditional Update because the Tooling CustomObject.Metadata query failed. The report type and report both depend on it.", "skill_gap": "org-verification.md says CustomObject.Metadata by Id is readable, and it failed here. The reference needs a working fallback (for example EntityDefinition or a describe property)."},
+  {"defect": "The notify flow (responsibility 3) has no FlowTest for its entry conditions (new record or status changed, email not blank). Only manual verification is planned.", "skill_gap": "None. The spec states the limitation openly."}
+ ]}

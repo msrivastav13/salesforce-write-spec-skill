@@ -1,0 +1,10 @@
+{"id": "r084", "claims": {"correct": 4, "wrong": 1, "unverifiable": 1},
+ "wrong_claims": ["Section 6: the backfill can be run by 'a System Administrator, or a user with Agentforce_Reference_App or sfdc_accelerate_dms'. The System Administrator profile has no FieldPermissions row on Storefront__c.Address__c; only permission sets grant Edit, so a System Administrator without those sets cannot write the sub-fields."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 1, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Asked the user how coordinates get onto records (one-time backfill vs geocoding vs manual) although a safe default (existing sub-fields, backfill as a data step, ongoing geocoding as a proposal) existed and meta expected no question; the answer added nothing.", "skill_gap": "v29 SKILL.md step 5 predict-the-answer rule covers it; the skill does not explicitly classify 'one-time vs ongoing population' as implementation."},
+  {"defect": "Claims a System Administrator can run the backfill; admin profile has no FLS on Address__c (only permission sets grant Edit).", "skill_gap": "v29 reference/org-verification.md: ObjectPermissions/FieldPermissions 'check profile rows too; View All Data and Modify All Data do not override field-level security' (exists, not followed)."},
+  {"defect": "AskCoworker-reported purpose of Pronto_Pass_Factory (Apple Wallet) kept although NamedCredential Endpoint is null and unverifiable; harmless but unnecessary.", "skill_gap": "v29 SKILL.md rule 3: drop an AskCoworker fact the design does not need."}
+ ]}

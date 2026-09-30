@@ -1,0 +1,4 @@
+{
+ "id": "r085",
+ "requirement": "Make the promotion discount field required, but merchants should also be able to create promotions without a discount for free-delivery offers."
+}

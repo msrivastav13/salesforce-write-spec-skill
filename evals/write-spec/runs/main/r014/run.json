@@ -1,0 +1,43 @@
+{
+  "id": "r014",
+  "skill_rev": "v14",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r014/loyalty-program-v2-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 42},
+    {"seq": 2, "kind": "d2", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 34},
+    {"seq": 16, "kind": "i", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 60},
+    {"seq": 17, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 51},
+    {"seq": 18, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 61},
+    {"seq": 19, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 28},
+    {"seq": 20, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 17},
+    {"seq": 21, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49}
+  ],
+  "org_queries": [
+    {"seq": 3, "purpose": "org reachable; full custom object list for loyalty concepts", "command_summary": "sf org display; sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "field semantics on Contact, Loyalty_Transaction__c, Gift_Certificate__c (MD, picklists incl. Gift_Certificate__c.Type__c)", "command_summary": "sf sobject describe x3", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 5, "purpose": "no triggers or record-triggered flows on the three objects; scheduled flows", "command_summary": "Tooling ApexTrigger; FlowDefinitionView by object and TriggerType=Scheduled", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "same concept elsewhere (points/balance/tier/expiry fields org-wide)", "command_summary": "Tooling CustomField DeveloperName LIKE filters, unnamespaced", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "no validation rules; no Loyalty Management standard objects", "command_summary": "Tooling ValidationRule by EntityDefinitionId; sf sobject list --sobject all filtered", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "data shape: ledger rows, tier distribution, gift cert types, null/negative points", "command_summary": "aggregate SOQL on Loyalty_Transaction__c, Contact, Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Apex readers/writers of loyalty fields and gift certificates", "command_summary": "Tooling ApexClass Body search of 70 classes; read 3 bodies", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "field IDs, DataStream count, object and field permissions", "command_summary": "Tooling CustomField by TableEnumOrId; COUNT DataStream; ObjectPermissions; FieldPermissions", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "dependencies on Loyalty_Tier__c, Transaction_Type__c, Points__c, ledger object; picklist restricted; agent actions", "command_summary": "Tooling MetadataComponentDependency x4; CustomField.Metadata by Id x3; GenAiFunctionDefinition", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "names to create do not exist; org edition", "command_summary": "FlowDefinitionView name LIKE; PermissionSet name LIKE; Organization", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Contact layouts and FlexiPages for placement", "command_summary": "Tooling Layout and FlexiPage for Contact", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "record types on ledger (picklist value assignment); ledger layout", "command_summary": "RecordType by SobjectType; Tooling Layout for Loyalty_Transaction__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "project source for existing components", "command_summary": "ls/grep force-app/main/default (project file)", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [],
+  "validator_first_pass_ok": true,
+  "validator_attempts": 1,
+  "counts": {"total": 14, "create": 13, "update": 1, "delete": 0},
+  "skill_friction": [
+    "Tier thresholds and reward value are missing business values that do not change the inventory, so step 5 says not to ask, yet they make two responsibilities undeliverable; the 'Undeliverable responsibility' special case says ask only if it defeats the main purpose, which is a judgment call for a four-part requirement. Recorded as blocking for delivery without asking.",
+    "The I template with a long 'Established so far' list plus one extra question timed out at 60s; the skill gives no guidance on how many established facts to send, and the retry only succeeded after cutting them.",
+    "R template (400 words) timed out; splitting it into runtime and security halves worked. The skill says 'a split counts as one retry' but run.json has no way to mark two calls as one split retry; both recorded as kind 'retry'.",
+    "AskCoworker repeatedly tagged facts as '[Verified: prior session]' even though every call says to ignore earlier conversations; the handling table covers this but it adds verification load.",
+    "Several platform behaviors the design depends on (roll-up recalculation firing parent before/after-save flows, scheduled path offset in months, flows bulkifying Create Records) cannot be tested with allowed commands; the skill says tag them as assumption (documented platform behavior) but offers no place to track which of them are load-bearing."
+  ]
+}

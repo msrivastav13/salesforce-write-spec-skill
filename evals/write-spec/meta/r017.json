@@ -1,0 +1,10 @@
+{
+ "id": "r017",
+ "category": "new-automation",
+ "requirement": "Every time an order-sourced loyalty transaction is created, award points at 1 point per dollar. The dollar amount is on the order.",
+ "hidden_intent": "When the Pronto app posts an order, create an Earn Loyalty Transaction with points = floor(order total). They assume order data exists in Salesforce; it would come from the app payload.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Loyalty_Transaction__c has no amount field and Transaction__c has no custom fields; 'the order' has no home in the org \u2014 must ask where order totals come from."
+ }
+}

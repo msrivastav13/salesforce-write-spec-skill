@@ -1,0 +1,10 @@
+{
+ "id": "r087",
+ "category": "security",
+ "requirement": "Support agents shouldn't be able to delete cases or refunds. Ever.",
+ "hidden_intent": "Remove Delete on Case and Refund from agent profiles/perm sets.",
+ "expect": {
+  "should_ask_user": false,
+  "notes": "Object permissions; check Merchant_Support_Agent_Permissions and agent profiles; spec-only."
+ }
+}

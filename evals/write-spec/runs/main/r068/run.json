@@ -1,0 +1,274 @@
+{
+ "id": "r068",
+ "skill_rev": "v26",
+ "outcome": "saved",
+ "stop_reason": null,
+ "spec_path": "evals/write-spec/runs/main/r068/review-warehouse-cdc-spec.md",
+ "askcoworker_calls": [
+  {
+   "seq": 2,
+   "kind": "d1",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 50
+  },
+  {
+   "seq": 3,
+   "kind": "d2",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 40
+  },
+  {
+   "seq": 31,
+   "kind": "i",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 33
+  },
+  {
+   "seq": 32,
+   "kind": "r",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 50
+  },
+  {
+   "seq": 34,
+   "kind": "t",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 48
+  }
+ ],
+ "org_queries": [
+  {
+   "seq": 1,
+   "purpose": "Entry check / full custom object scan: does a review object exist",
+   "command_summary": "sf sobject list --sobject custom",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 4,
+   "purpose": "CDC already enabled for Review__c?",
+   "command_summary": "Tooling PlatformEventChannelMember (all rows)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 5,
+   "purpose": "Custom CDC channels exist?",
+   "command_summary": "Tooling PlatformEventChannel",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 6,
+   "purpose": "Triggers on Review__c/Storefront__c",
+   "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (Review__c, Storefront__c)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 7,
+   "purpose": "Record-triggered flows on Review__c",
+   "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN ('Review__c')",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 8,
+   "purpose": "Existing platform events / change event entity",
+   "command_summary": "sf sobject list --sobject all filtered for __e and Review",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 9,
+   "purpose": "Formatter_* classes AskCoworker flagged as possibly relevant",
+   "command_summary": "Tooling ApexClass WHERE Name LIKE 'Formatter_%' (NamespacePrefix)",
+   "ok": true,
+   "contradicted_askcoworker": true
+  },
+  {
+   "seq": 10,
+   "purpose": "Review__c fields, picklist values, OwnerId absence",
+   "command_summary": "sf sobject describe Review__c",
+   "ok": true,
+   "contradicted_askcoworker": true
+  },
+  {
+   "seq": 11,
+   "purpose": "Complete custom field list (semi-join attempt)",
+   "command_summary": "Tooling CustomField WHERE TableEnumOrId IN (semi-join)",
+   "ok": false,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 12,
+   "purpose": "Review__c DurableId",
+   "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName='Review__c'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 13,
+   "purpose": "Existing named credentials for a warehouse",
+   "command_summary": "Tooling NamedCredential",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 14,
+   "purpose": "Existing external credentials",
+   "command_summary": "Tooling ExternalCredential",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 15,
+   "purpose": "Outbound messages",
+   "command_summary": "Tooling WorkflowOutboundMessage",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 16,
+   "purpose": "Data 360 streams",
+   "command_summary": "SELECT COUNT() FROM DataStream",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 17,
+   "purpose": "Org edition",
+   "command_summary": "Organization OrganizationType, IsSandbox",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 18,
+   "purpose": "Status__c data shape (status filter question)",
+   "command_summary": "Review__c COUNT GROUP BY Status__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 19,
+   "purpose": "Complete custom field list",
+   "command_summary": "Tooling CustomField WHERE TableEnumOrId = DurableId",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 20,
+   "purpose": "Triggers on change event (LIKE attempt)",
+   "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId LIKE '%ChangeEvent'",
+   "ok": false,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 21,
+   "purpose": "Readers/writers of Review__c",
+   "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId = Review__c DurableId",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 22,
+   "purpose": "Apex bodies referencing Review__c (insert, EventBus, callouts, sharing)",
+   "command_summary": "Tooling ApexClass Body WHERE NamespacePrefix = null, local search",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 23,
+   "purpose": "Flows on Review__c or Review__ChangeEvent",
+   "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (Review__c, Review__ChangeEvent)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 24,
+   "purpose": "Object access grants on Review__c",
+   "command_summary": "ObjectPermissions WHERE SobjectType='Review__c'",
+   "ok": true,
+   "contradicted_askcoworker": true
+  },
+  {
+   "seq": 26,
+   "purpose": "Triggers on Review__ChangeEvent",
+   "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId = 'Review__ChangeEvent'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 27,
+   "purpose": "Duplicate/integration permission set names",
+   "command_summary": "PermissionSet WHERE Name LIKE Warehouse/Review/Integration",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 28,
+   "purpose": "Field grants on Review__c",
+   "command_summary": "FieldPermissions WHERE SobjectType='Review__c'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 29,
+   "purpose": "Active users by profile (integration user presence)",
+   "command_summary": "User COUNT GROUP BY Profile.Name WHERE IsActive",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 30,
+   "purpose": "Change event entity fields",
+   "command_summary": "sf sobject describe Review__ChangeEvent",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 33,
+   "purpose": "Master-detail reparenting and cascade delete (verify R claims)",
+   "command_summary": "Tooling CustomField Metadata by Id for Storefront__c; describe cascadeDelete",
+   "ok": true,
+   "contradicted_askcoworker": false
+  }
+ ],
+ "user_questions": [
+  {
+   "seq": 25,
+   "question": "How should the data warehouse receive new reviews? Options: (a) Change Data Capture on Review__c, with the warehouse connector subscribing via the Pub/Sub API (recommended: no CDC channel member, platform event, outbound message, or credential exists today, and CDC is declarative); (b) Salesforce pushes each review to a warehouse endpoint via callout (needs an endpoint and credential; only Pronto_Pass_Factory and Pronto_Orders_API named credentials exist); (c) Data 360 data stream feeding the warehouse (0 DataStreams exist).",
+   "simulated_answer": "CDC on Review consumed by warehouse via Pub/Sub API."
+  }
+ ],
+ "validator_first_pass_ok": true,
+ "validator_attempts": 1,
+ "counts": {
+  "total": 2,
+  "create": 2,
+  "update": 0,
+  "delete": 0
+ },
+ "skill_friction": [
+  "Batching several org queries in one Bash call (as org-verification.md encourages for efficiency) makes per-query seq numbers approximate within a batch.",
+  "Step 5 rule 'Predict the answer first' vs 'which platform/channel is meant' conflicts here: CDC via Pub/Sub API is a safe, reversible default and could have been decided without asking, but the platform/delivery-path clause says to ask. I asked.",
+  "SKILL.md does not say how to handle documented-platform permission requirements that cannot be verified by query (CDC subscriber permissions: View All vs Read); had to make it a load-bearing assumption with no clear rule on whether it is blocking.",
+  "Integration users, connected apps/external client apps needed for Pub/Sub OAuth are Setup, not rows; spec-format says non-metadata setup required for a responsibility is blocking for delivery but does not say whether an OAuth client the external connector may already own should be a row.",
+  "The 'after two wrong AskCoworker claims, verify every fact you keep' rule triggered early (Formatter classes, OwnerId, Agentforce_Reference_App grants, cascade undelete); several remaining kept facts are documented platform behavior that cannot be verified by query, so the rule is only partly actionable."
+ ]
+}

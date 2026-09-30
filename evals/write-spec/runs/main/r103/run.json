@@ -1,0 +1,387 @@
+{
+ "id": "r103",
+ "skill_rev": "v13",
+ "outcome": "saved",
+ "stop_reason": null,
+ "spec_path": "evals/write-spec/runs/main/r103/win-back-loyalty-segment-spec.md",
+ "askcoworker_calls": [
+  {
+   "seq": 1,
+   "kind": "d1",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 28
+  },
+  {
+   "seq": 2,
+   "kind": "d2",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 37
+  },
+  {
+   "seq": 44,
+   "kind": "i",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 47
+  },
+  {
+   "seq": 49,
+   "kind": "r",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 54
+  },
+  {
+   "seq": 50,
+   "kind": "t",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 42
+  }
+ ],
+ "org_queries": [
+  {
+   "seq": 3,
+   "purpose": "org reachable",
+   "command_summary": "sf org display",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 4,
+   "purpose": "objects exist (Contact, Loyalty_Transaction__c, Transaction__c, Order, Campaign, CampaignMember)",
+   "command_summary": "Tooling EntityDefinition by QualifiedApiName",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 5,
+   "purpose": "Loyalty_Transaction__c fields and picklists",
+   "command_summary": "sobject describe Loyalty_Transaction__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 6,
+   "purpose": "Contact fields; no balance/last order field; child relationships",
+   "command_summary": "sobject describe Contact",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 7,
+   "purpose": "complete Contact custom field list",
+   "command_summary": "Tooling CustomField WHERE TableEnumOrId='Contact'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 8,
+   "purpose": "same concept elsewhere (Point/Order/Balance/Loyal/Last/Segment)",
+   "command_summary": "Tooling CustomField name LIKE search org-wide",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 9,
+   "purpose": "Loyalty_Transaction__c custom field ids",
+   "command_summary": "Tooling CustomField by DurableId",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 10,
+   "purpose": "concept search excluding DMOs",
+   "command_summary": "Tooling CustomField LIKE with NOT LIKE filter (failed)",
+   "ok": false,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 11,
+   "purpose": "identify objects owning Order_Date/Display_Order",
+   "command_summary": "Tooling EntityDefinition by DurableId",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 12,
+   "purpose": "Order data exists",
+   "command_summary": "COUNT/MAX on Order",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 13,
+   "purpose": "Loyalty transaction data shape / Redeem sign",
+   "command_summary": "GROUP BY type/source on Loyalty_Transaction__c (0 rows)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 14,
+   "purpose": "Contact data shape (Lifetime_Orders__c, Pronto_App_Account_Id__c)",
+   "command_summary": "COUNT aggregates on Contact",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 15,
+   "purpose": "Data 360 streams",
+   "command_summary": "SELECT COUNT() FROM DataStream",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 16,
+   "purpose": "Review__c.Order_Date__c as proxy",
+   "command_summary": "sobject describe Review__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 17,
+   "purpose": "Review__c data shape",
+   "command_summary": "COUNT/MAX on Review__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 18,
+   "purpose": "Account order fields",
+   "command_summary": "sobject describe Account",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 19,
+   "purpose": "master-detail semantics of Contact__c",
+   "command_summary": "Tooling CustomField.Metadata by Id",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 20,
+   "purpose": "Pronto_Orders_API credential exists",
+   "command_summary": "Tooling NamedCredential",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 21,
+   "purpose": "triggers on objects in scope",
+   "command_summary": "Tooling ApexTrigger by TableEnumOrId",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 22,
+   "purpose": "record-triggered flows on objects in scope",
+   "command_summary": "FlowDefinitionView per object (5 queries)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 23,
+   "purpose": "validation rules on Loyalty_Transaction__c",
+   "command_summary": "Tooling ValidationRule",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 24,
+   "purpose": "validation rules on Contact",
+   "command_summary": "Tooling ValidationRule",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 25,
+   "purpose": "readers of Loyalty_Transaction__c",
+   "command_summary": "Tooling MetadataComponentDependency",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 26,
+   "purpose": "existing campaigns",
+   "command_summary": "Campaign LIMIT 20",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 27,
+   "purpose": "report folders",
+   "command_summary": "Folder WHERE Type='Report'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 28,
+   "purpose": "report name collisions",
+   "command_summary": "Report DeveloperName LIKE",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 29,
+   "purpose": "permission set name collisions",
+   "command_summary": "PermissionSet Name LIKE",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 30,
+   "purpose": "org edition",
+   "command_summary": "Organization",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 31,
+   "purpose": "report folder distribution",
+   "command_summary": "Report GROUP BY FolderName (failed: not groupable)",
+   "ok": false,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 32,
+   "purpose": "Apex readers of loyalty/order fields",
+   "command_summary": "Tooling ApexClass bodies searched locally",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 33,
+   "purpose": "CampaignMember create grants",
+   "command_summary": "ObjectPermissions CampaignMember",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 34,
+   "purpose": "FLS on Points__c",
+   "command_summary": "FieldPermissions",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 35,
+   "purpose": "OrderPickerController claims (external orders, stub)",
+   "command_summary": "Tooling ApexClass Body",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 36,
+   "purpose": "report folder names",
+   "command_summary": "Report FolderName LIMIT 200",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 38,
+   "purpose": "Marketing Cloud Connect installed",
+   "command_summary": "Tooling InstalledSubscriberPackage",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 39,
+   "purpose": "marketing permission sets",
+   "command_summary": "PermissionSet by Name",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 40,
+   "purpose": "marketing PS assignments",
+   "command_summary": "PermissionSetAssignment COUNT",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 41,
+   "purpose": "Data 360 segment/activation objects exist",
+   "command_summary": "sobject list all filtered",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 42,
+   "purpose": "Data 360 setup state",
+   "command_summary": "COUNT on MarketSegment, ActivationTarget, DataSpace, DataStream",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 43,
+   "purpose": "activation platforms",
+   "command_summary": "ActivationTargetPlatform (failed: bad column)",
+   "ok": false,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 45,
+   "purpose": "editability of sfdc_a360_sfcrm_data_extract",
+   "command_summary": "PermissionSet NamespacePrefix/Type",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 46,
+   "purpose": "connector user assignment",
+   "command_summary": "PermissionSetAssignment COUNT",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 47,
+   "purpose": "ssot Individual/ContactPointEmail DMO present",
+   "command_summary": "sobject list all filtered (none)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 48,
+   "purpose": "Contact email coverage",
+   "command_summary": "COUNT(Email) on Contact",
+   "ok": true,
+   "contradicted_askcoworker": false
+  }
+ ],
+ "user_questions": [
+  {
+   "seq": 37,
+   "question": "Two choices change the components in this spec. (1) Where should the 'last order date' come from? Orders are not in Salesforce (Order has 0 records; OrderPickerController says they live in the external Pronto Orders API). Options: (a) a new Contact.Last_Order_Date__c written by the Pronto app integration, like Lifetime_Orders__c [recommended]; (b) a roll-up of Loyalty_Transaction__c records with source 'Order'; (c) a scheduled Apex callout to Pronto_Orders_API. (2) How should the segment reach the win-back campaign? Options: (a) a Contact report whose results are added to a Salesforce Campaign [recommended: Campaign records exist, no Data 360 streams]; (b) a Data 360 segment activated to Marketing Cloud; (c) a Contact list view only.",
+   "simulated_answer": "(1) No preference; use your recommended default. (2) Activate the segment to Marketing Cloud."
+  }
+ ],
+ "validator_first_pass_ok": true,
+ "validator_attempts": 1,
+ "counts": {
+  "total": 12,
+  "create": 11,
+  "update": 1,
+  "delete": 0
+ },
+ "skill_friction": [
+  "Step 5 says 'If you can write a recommendation for the question, you have a basis: do not ask', but the Undeliverable-responsibility special case says ask if it defeats the main purpose, and the delivery-channel fork (Campaign vs Data 360/Marketing Cloud) needs completely different components. Nearly every fork admits a recommendation, so the two rules conflict; I asked anyway because the channel fork would make the inventory substantially wrong, and the hidden intent (Marketing Cloud) confirmed my recommendation would have been wrong.",
+  "Data 360 components (data stream, DMO mapping, segment, activation target, activation) have no documented metadata type names or standard force-app folders in the reference files, and they cannot be read with the allowed commands; I used sObject names verified in the org as Type and 'Not specified' as Module, but the skill gives no guidance on the correct deployable type names.",
+  "org-verification.md has no guidance on confirming Data 360 activation targets or a Marketing Cloud Engagement connection (ActivationTargetPlatform columns unknown), so the activation rows had to be Conditional on an unverifiable fact.",
+  "org-verification.md does not warn that Tooling CustomField LIKE searches return hundreds of Data 360 DMO fields (TableEnumOrId 9sd...) in Data 360 orgs, and a NOT LIKE filter on TableEnumOrId fails; local filtering is needed.",
+  "AskCoworker repeatedly tagged facts I sent in 'Established so far' as '[Verified: prior session]'; the handling table covers echoed facts but the label is misleading and could be mistaken for an independent check.",
+  "The skill does not say how to handle an access grant that is required for delivery but goes to an integration user (Data 360 connector, app integration): spec-format says such grants are open decisions, not defaults, which leaves a responsibility undelivered by the inventory; I recorded them as blocking for delivery."
+ ]
+}

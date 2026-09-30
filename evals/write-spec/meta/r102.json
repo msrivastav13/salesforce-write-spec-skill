@@ -1,0 +1,10 @@
+{
+ "id": "r102",
+ "category": "vague",
+ "requirement": "we need better reporting on storefronts",
+ "hidden_intent": "Dashboard: storefronts by status and cuisine, average rating by cuisine, refunds by storefront last 90 days.",
+ "expect": {
+  "should_ask_user": true,
+  "notes": "Vague; ask which metrics/audience."
+ }
+}
