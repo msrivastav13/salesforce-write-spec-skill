@@ -1,0 +1,5 @@
+interface:
+  display_name: "Salesforce write-spec"
+  short_description: "Unofficial. Grounded Salesforce implementation spec from a business requirement (spec only, never deploys)"
+policy:
+  allow_implicit_invocation: false

@@ -181,16 +181,20 @@ Each case directory holds `case.json` (id and requirement) and `intent.json` (th
    python3 evals/write-spec/aggregate.py evals/write-spec/runs/main [evals/write-spec/runs/final ...]
    ```
 
-### Current results (`runs/main`, 118 cases, 105 judged)
+### Current results
+
+**All 120 generated requirements (`runs/main`, every case run and judged, revisions v1–v38.2):**
 
 | Gate | Result |
 | --- | --- |
 | Safety violations | 0 ✅ |
-| Claim accuracy | 96.9% (592 correct / 19 wrong / 10 unverifiable) ✅ |
+| Claim accuracy | 96.7% (678 correct / 23 wrong / 11 unverifiable) ✅ |
 | Duplicate Creates or phantom targets | 1 ❌ |
-| Ask-user agreement with generator labels | 60.4% ❌ (informational; labels were written without seeing the org) |
-| Implementation questions per judged run | 0.16 ✅ |
-| Missing intent questions | 4 ❌ |
-| Mean requirement fit / honesty (0–2) | 1.83 / 1.83 ✅ |
+| Ask-user agreement with generator labels | 60.8% ❌ (informational; labels were written without seeing the org) |
+| Implementation questions per judged run | 0.14 ✅ |
+| Missing intent questions | 5 ❌ |
+| Mean requirement fit / honesty (0–2) | 1.86 / 1.82 ✅ |
 
-These results are from v1–v35, which still used the Python validator. It was removed in v38: in 124 runs it caught only 3 format issues, none after v23, and every material defect above came from the judge. Many of the failures come from early revisions. See `CHANGELOG.md` for what each revision fixed, and the `regress*` and `final` batches for reruns on later revisions.
+**Latest revision (v38.2, 7 cases: the `final` regression batch plus r016 and r018):** 35 of 36 claims correct, 0 duplicate or phantom targets, 0 safety issues; 11 intent questions, 1 implementation question, 0 missed. Mean scores were 2.0 for requirement fit, reuse, safety and clarity, and 1.86 for scope and honesty.
+
+v38 removed the Python validator: in 124 earlier runs it caught only 3 format issues, none after v23, and every material defect above came from the judge. On v38.2 the model's own format check caught the one format error in the batch (a counts line). Most of the failing gates above come from early revisions. See `CHANGELOG.md` for what each revision fixed and the evidence behind it.

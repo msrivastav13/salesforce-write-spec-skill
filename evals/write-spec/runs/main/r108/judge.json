@@ -1,0 +1,10 @@
+{"id": "r108", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0}, "wrong_claims": ["'CDPAdmin, GenieAdmin, and GenieUserEnhancedSecurity ... none of them is assigned to any user' (labelled verified by org query): GenieAdmin is assigned to active System Administrator user 'OrgFarm EPIC'. Open item 1 (blocking) is built on this wrong fact."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Wrong 'verified by org query' claim that no Data Cloud permission set is assigned (GenieAdmin has an active assignee), producing an unnecessary blocking open item.", "skill_gap": "none exists (verification was attempted; the query or its reading was wrong)"},
+  {"defect": "Existing Apex class GetDataFromRTDatagraph (Real-Time Data Graph reader) not mentioned; data graphs were not checked as a reuse candidate or downstream consumer (DataGraph count is 0 today, so no reuse was lost).", "skill_gap": "none exists; org-verification.md could list DataGraph among Data 360 components to check"},
+  {"defect": "D2 AskCoworker call was skipped without saying so in Section 2 (runner admitted it); automation coverage came from org queries instead.", "skill_gap": "SKILL.md step 2 requires D2 unless D1 answered it; no instruction requires disclosing a skipped D2 in the evidence line"},
+  {"defect": "Data Cloud metadata type names and generated API names are unverifiable; correctly labelled as assumptions, Module 'Not specified' on all 15 rows.", "skill_gap": "none exists (spec-format.md gives no canonical Data Cloud types/folders)"}
+ ]}

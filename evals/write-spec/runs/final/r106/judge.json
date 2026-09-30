@@ -1,0 +1,9 @@
+{"id": "r106", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "The one-line summary says 'all user access' moves to the kept field, but only 14 of the 45 profiles with rows on the retired field get new rows; the other 31 are handled as a proposal.", "skill_gap": "None exists. SKILL.md does not say whether 'access parity' means every FieldPermissions row or only effective access (the run reported this as friction)."},
+  {"defect": "The profile-scope choice (14 profiles only) is labelled an assumption but listed under Resolved rather than Open, so an unconfirmed scoping decision looks settled.", "skill_gap": "None exists. No SKILL.md rule says that assumption-only decisions affecting other users' access must stay in Open."},
+  {"defect": "The question to the user recommended the opposite of the user's intent (keep NumberofLocations__c). The run still asked, so the spec is correct, but the recommendation leaned on org evidence and did not mention that external writers such as web forms cannot be seen from the org.", "skill_gap": "None exists. The ambiguous-delete ask rule could require the question to name evidence the org cannot show (external integrations, web forms)."}
+ ]}

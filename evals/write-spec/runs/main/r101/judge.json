@@ -1,0 +1,8 @@
+{"id": "r101", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 1, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Section 6 tags the behavior change for existing callers (agent actions and users saving an Active promotion with a past or current end date now get Expired) as a user decision; the user only said 'promotions auto-expire on end date' and never decided the at-save behavior for other callers.", "skill_gap": "Rule 3 says an option the user picked is a user decision and a default is an assumption, which should have prevented it; no stronger rule exists."},
+  {"defect": "A1 ('on end date' means End_Date__c <= today, so a promotion is expired at 00:05 on its last day) is a business-value interpretation that may cut off the final day of a promotion; it is labelled an assumption but not surfaced as a blocking or confirm-before-delivery item.", "skill_gap": "None exists: SKILL.md step 5 lists business values as ask-worthy, but gives no guidance on inclusive vs exclusive date boundaries."}
+ ]}

@@ -1,0 +1,8 @@
+{"id": "r018", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "'Flow Tests do not cover schedule-triggered flows' in Section 7 is stated as fact without an assumption or documented-behavior label.", "skill_gap": "SKILL.md requires platform claims to be labelled; the rule was not applied in the Testing section."},
+  {"defect": "The validation-rule root fix (require Price__c when Available__c is true) appears only indirectly in Open item 3 ('a record-triggered flow or validation rule would close the gap'), and the spec does not state the rule's condition.", "skill_gap": "None exists. No SKILL.md instruction asks for a concrete statement of the better root-cause alternative as a proposal."}
+ ]}

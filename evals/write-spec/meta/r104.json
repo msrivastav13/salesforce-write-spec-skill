@@ -1,10 +1,10 @@
 {
  "id": "r104",
- "category": "already-met",
+ "category": "partly-met",
  "requirement": "We need a readable description of what each account type means, shown on the account.",
  "hidden_intent": "Explanation text per account type.",
  "expect": {
   "should_ask_user": false,
-  "notes": "Already met: Account.Account_Type_Description__c formula (CASE on Type)."
+  "notes": "Partly met: Account.Account_Type_Description__c formula (CASE on Type) exists, but the org shows it on no layout or FlexiPage and readable by no profile, so 'shown on the account' needs placement and access (reuse the formula; no new field). Corrected after the r104 judge."
  }
 }

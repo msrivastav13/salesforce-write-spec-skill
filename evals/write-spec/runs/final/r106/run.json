@@ -1,0 +1,58 @@
+{
+  "id": "r106",
+  "skill_rev": "v38.2",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/final/r106/lead-number-of-locations-dedup-spec.md",
+  "askcoworker_calls": [
+    {"seq": 1, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41},
+    {"seq": 35, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 77},
+    {"seq": 36, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48}
+  ],
+  "org_queries": [
+    {"seq": 2, "purpose": "org context (connected, alias, id, apiVersion)", "command_summary": "sf org display --json | grep connectedStatus/alias/id/apiVersion", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 3, "purpose": "complete Lead custom field list; confirm both duplicate fields exist and are unmanaged", "command_summary": "Tooling CustomField WHERE TableEnumOrId = 'Lead'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "same concept elsewhere in org", "command_summary": "Tooling CustomField WHERE DeveloperName LIKE '%Location%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "type/precision/label of both Lead fields", "command_summary": "sobject describe Lead, filtered to location fields", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Account.NumberofLocations__c type/precision (conversion target)", "command_summary": "sobject describe Account, filtered to location fields", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "data shape: populated counts on both Lead fields", "command_summary": "SELECT COUNT(Id), COUNT(NumberofLocations__c), COUNT(Number_of_Locations__c) FROM Lead", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Account field populated count", "command_summary": "SELECT COUNT(Id), COUNT(NumberofLocations__c) FROM Account", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Leads with both fields populated (migration conflicts)", "command_summary": "SELECT COUNT() FROM Lead WHERE both not null", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "dependencies on both Lead fields and Account field", "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId = <3 field Ids>", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "dependency retry with 15-char Ids", "command_summary": "Tooling MetadataComponentDependency with 15-char Ids", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Lead layouts list", "command_summary": "Tooling Layout WHERE TableEnumOrId = 'Lead'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Lead FlexiPages", "command_summary": "Tooling FlexiPage WHERE EntityDefinitionId = 'Lead'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Dynamic Forms references to either field", "command_summary": "Tooling FlexiPage.Metadata by Id (2 pages), grep fieldItem", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Apex class references to either field", "command_summary": "Tooling ApexClass Name, Body WHERE NamespacePrefix = null, search locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Apex trigger references", "command_summary": "Tooling ApexTrigger Body WHERE NamespacePrefix = null", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "flows in org (record-triggered on Lead?)", "command_summary": "FlowDefinitionView WHERE NamespacePrefix = null", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "flow references to either field", "command_summary": "Tooling Flow.Metadata by Id for 13 active versions, grep", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "find draft flow version", "command_summary": "Tooling Flow DeveloperName query (failed: no such column), then Flow WHERE Definition.DeveloperName = 'Personalized_Recommendations'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "draft flow references", "command_summary": "Tooling Flow.Metadata by Id 301ak00003SJcpjAAD, grep", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "Lead validation rules", "command_summary": "Tooling ValidationRule WHERE EntityDefinition.QualifiedApiName = 'Lead'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "Lead triggers incl. managed", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId = 'Lead'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "Lead workflow rules", "command_summary": "Tooling WorkflowRule WHERE TableEnumOrId = 'Lead' (first attempt failed on Active column; retried without it)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "who sees each field (FLS)", "command_summary": "FieldPermissions WHERE Field IN (Lead.NumberofLocations__c, Lead.Number_of_Locations__c)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 25, "purpose": "editability of permission sets with rows", "command_summary": "PermissionSet Name, NamespacePrefix, Type WHERE Name IN (4 sets)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 26, "purpose": "permission set assignments", "command_summary": "PermissionSetAssignment GROUP BY PermissionSet.Name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "full custom object scan", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 28, "purpose": "Data 360 involvement", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 29, "purpose": "Lead-related objects", "command_summary": "sf sobject list --sobject all | grep lead", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 30, "purpose": "history tracking on both fields", "command_summary": "FieldDefinition IsFieldHistoryTracked", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 31, "purpose": "active users by profile", "command_summary": "User WHERE IsActive GROUP BY Profile.Name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 32, "purpose": "profile licenses", "command_summary": "Profile Name, UserType, UserLicense.Name for standard profiles", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 33, "purpose": "which profiles have Lead object access (scope of FLS parity)", "command_summary": "ObjectPermissions WHERE SobjectType = 'Lead' AND profile-owned", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 34, "question": "Which 'Number of Locations' field should stay on Lead? (A) Keep Lead.NumberofLocations__c (Number(3,0), on the Lead (Marketing) and Lead (Sales) layouts, Read+Edit on 45 profiles, same API name as Account.NumberofLocations__c) and delete Lead.Number_of_Locations__c (Number(5,0), on no layout, no profile access, only 4 permission sets, no references). (B) Keep Lead.Number_of_Locations__c and delete Lead.NumberofLocations__c, moving its layout placement and access to the kept field. Neither field has data on any of the 5 Leads. Recommendation: A, because the evidence shows it is the one people use today.", "simulated_answer": "B: keep Number_of_Locations__c (used by the web form), migrate data from NumberofLocations__c, then delete it."}
+  ],
+  "format_fixes": ["Counts line said Delete: 0; the table has 1 Delete row. Fixed to Total: 18 · Create: 0 · Update: 17 · Delete: 1."],
+  "counts": {"total": 18, "create": 0, "update": 17, "delete": 1},
+  "skill_friction": [
+    "Design rule 'the field you keep gets the access the deleted one had' plus 'grant profile access through Update rows' produced 14 Profile rows; the retired field had FieldPermissions rows on 45 profiles, 31 of which lack Lead object access. The skill does not say whether parity means every FieldPermissions row or only effective access, so I scoped to profiles with Lead ObjectPermissions and listed the rest as a proposal.",
+    "The wrong-claim counter reached four during R (misclassified profile-owned permission sets as managed, 'field API names cannot be renamed', 'a field on a layout cannot be deleted', 'sfdc_a360_sfcrm_data_extract has no row on the kept field'). The skill allows skipping remaining R and T calls, but with R split into runtime/security halves it is unclear whether the counter check happens between halves; I skipped the security half and T.",
+    "Lead conversion field mapping cannot be read, and the reference files do not state documented behavior for deleting a mapped custom field (blocked vs mapping silently removed); AskCoworker asserted 'silently removed' as [Verified]. Had to make the LeadConvertSettings row Conditional and put the behavior in Open.",
+    "The AskCoworker header requires sourceApiVersion but the project has no sfdx-project.json; no instruction for what to put there (used org API version).",
+    "Ambiguous delete where the user's hidden reason (web form) is an environment fact the org cannot show: evidence favored the opposite field, so predicting the answer would have produced the wrong delete. The skill's ask rule handled it, but the recommendation in the question was contrary to the user's intent."
+  ]
+}

@@ -13,7 +13,7 @@ You are running ONE eval case of the `write-spec` skill. Behave as the skill wou
 1. Read `skills/write-spec/SKILL.md` and follow it exactly, with `$ARGUMENTS` = `case.requirement` and the org `TestWriteSpecDE` (pass `--target-org TestWriteSpecDE` on every `sf` command). Read the reference files it links when the steps call for them.
 2. **Simulated user.** When the skill tells you to ask the user something:
    - write the exact question you would ask;
-   - open `intent.json` and answer as the user would, using only its `hidden_intent`;
+   - only after the question is written down, open `intent.json` in a tool call of its own (never batched with other work) and answer as the user would, using only its `hidden_intent`;
    - if it does not cover the question, answer "No preference; use your recommended default."
    Record each exchange.
 3. Save the spec as `{out}/{slug}-spec.md`, not under `design/`.

@@ -1,0 +1,8 @@
+{"id": "r113", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "senderType DefaultWorkflowUser depends on a Default Workflow User being set in Process Automation Settings. The run did not verify this and did not list it as an Open item (only deliverability was flagged).", "skill_gap": "None exists. No SKILL.md instruction asks the run to list unreadable org settings that a chosen option depends on."},
+  {"defect": "AskCoworker correction (4) says the Send Email action's sender defaults to the current user, and it is stated as fact without an assumption or documented-behavior label.", "skill_gap": "SKILL.md requires every platform claim to be labelled; the rule was not applied inside the Resolved corrections list."}
+ ]}

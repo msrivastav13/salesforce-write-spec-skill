@@ -1,0 +1,8 @@
+{"id": "r110", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 1, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Existing Escalate_Case flow (the org's single definition of 'escalate', also used by an agent action) was rejected in favor of an escalation rule, leaving two separate escalation paths with different side effects; reusing it from a scheduled path/flow was not weighed beyond 'no time trigger'.", "skill_gap": "None exists: SKILL.md reuse guidance does not say to prefer invoking an existing autolaunched flow that implements the same business action over a parallel declarative mechanism."},
+  {"defect": "EscalationRules Case row is labelled Create but becomes an Update of an existing active rule if one exists (not queryable); the Action column is ambiguous.", "skill_gap": "None exists: SKILL.md/org-verification does not say how to label a Create vs Update for singleton-style metadata (only one active escalation rule) whose existence cannot be read."}
+ ]}

@@ -1,0 +1,7 @@
+{"id": "r104", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 0, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Meta expected 'already met', but the org shows Account_Type_Description__c on no layout or FlexiPage and readable by no profile, so the 'shown on the account' part is not met; the run correctly reused the formula and only added placement and access. The four Layout rows are Conditional on unreadable page assignments and may be unnecessary.", "skill_gap": "None exists: spec-format.md forces one Conditional row per layout when page activation cannot be read, with no guidance to collapse or default them."}
+ ]}

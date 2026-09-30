@@ -1,0 +1,60 @@
+{
+  "id": "r113",
+  "skill_rev": "v38.2",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/final/r113/kitchen-inventory-low-stock-alert-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 74},
+    {"seq": 4, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 27},
+    {"seq": 29, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 60},
+    {"seq": 36, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 41},
+    {"seq": 37, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 48}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Org reachable, alias, API version", "command_summary": "sf org display --json filtered to connectedStatus/alias/id/apiVersion", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "Full custom object list; any ingredient/inventory object", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Same concept elsewhere: inventory/stock/ingredient objects and fields org-wide", "command_summary": "sf sobject list --sobject all | grep keywords; Tooling CustomField DeveloperName LIKE Stock/Inventor/Ingredient/Threshold/Reorder/Quantity/Par_Level (filtered 9sd DMO fields)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "DurableIds of Storefront__c, Menu__c, Menu_Item__c", "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Complete custom field lists on candidate objects; no stock fields on Storefront__c", "command_summary": "Tooling CustomField WHERE TableEnumOrId IN (3 ids); sobject describe Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Recipient candidates and child relationships (Primary_Contact__c -> Contact, OwnerId)", "command_summary": "sobject describe Storefront__c reference fields and childRelationships", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Data shape: storefront count and primary contact population", "command_summary": "SELECT COUNT(Id), COUNT(Primary_Contact__c) FROM Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "Storefront owners (owner persona)", "command_summary": "SELECT Owner.Name, COUNT(Id) FROM Storefront__c GROUP BY Owner.Name", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "Existing triggers on objects in scope", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (Storefront__c, Menu_Item__c, Menu__c)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Existing record-triggered flows on objects in scope", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "Scheduled flows that might already check stock", "command_summary": "FlowDefinitionView WHERE TriggerType = 'Scheduled'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "Existing custom notification types for alerts", "command_summary": "Tooling CustomNotificationType", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "Readers/writers of Storefront__c", "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId = Storefront__c DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Who has access to Storefront__c", "command_summary": "ObjectPermissions WHERE SobjectType = 'Storefront__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "Persona permission sets (store/kitchen/merchant/inventory)", "command_summary": "PermissionSet WHERE Name LIKE keywords AND IsOwnedByProfile = false", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "Primary contacts have email", "command_summary": "SELECT COUNT(Id), COUNT(Primary_Contact__r.Email) FROM Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "Email opt-out among primary contacts", "command_summary": "COUNT Storefront__c WHERE Primary_Contact__r.HasOptedOutOfEmail = true", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "Org-wide email addresses for sender", "command_summary": "SELECT Address FROM OrgWideEmailAddress", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "Existing inventory/stock email templates", "command_summary": "EmailTemplate WHERE DeveloperName LIKE Inventor/Stock", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "Storefront__c layouts", "command_summary": "Tooling Layout WHERE TableEnumOrId = Storefront__c DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 25, "purpose": "Storefront__c record pages", "command_summary": "Tooling FlexiPage WHERE EntityDefinitionId = Storefront__c DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 26, "purpose": "Editability of Agentforce_Reference_App", "command_summary": "PermissionSet Name, NamespacePrefix, Type WHERE Name = 'Agentforce_Reference_App'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 27, "purpose": "Assignments of Agentforce_Reference_App", "command_summary": "COUNT PermissionSetAssignment WHERE PermissionSet.Name = 'Agentforce_Reference_App'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 28, "purpose": "Storefront_Record_Page uses Dynamic Forms / dynamic related lists", "command_summary": "Tooling FlexiPage.Metadata by Id, componentName counts", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 30, "purpose": "New permission set name is free", "command_summary": "COUNT PermissionSet WHERE Name = 'Kitchen_Inventory_Access'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 31, "purpose": "New flow name is free", "command_summary": "FlowDefinitionView WHERE ApiName LIKE '%Inventory%'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 32, "purpose": "Internal users/personas available", "command_summary": "User WHERE IsActive AND UserType = 'Standard' LIMIT 10", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 33, "purpose": "Persona profiles (kitchen/store/merchant)", "command_summary": "Profile WHERE Name LIKE keywords", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 34, "purpose": "Storefront__c sharing model for Master-Detail child create access", "command_summary": "Tooling EntityDefinition InternalSharingModel, ExternalSharingModel for Storefront__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 35, "purpose": "FLS on Primary_Contact__c and Contact.Email", "command_summary": "FieldPermissions WHERE Field IN (...) AND Parent.Name = 'Agentforce_Reference_App'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 38, "purpose": "AskCoworker claim: Contact internal OWD ReadWrite", "command_summary": "Tooling EntityDefinition InternalSharingModel for Contact", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 39, "purpose": "AskCoworker claim: no DataStream records (Data 360 not involved)", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 18, "question": "Who should receive the low-stock alert? Options: (a) the storefront record owner, an internal User (all 21 storefronts are owned by 'OrgFarm EPIC'), via in-app notification or email; (b) the storefront's Primary_Contact__c, a Contact (all 21 populated, all with email), via email; (c) both. Recommendation: (b), since it is the storefront-specific person.", "simulated_answer": "Alert the storefront's Primary Contact when below threshold."},
+    {"seq": 19, "question": "How should 'runs low' be defined and what should be tracked? Options: (a) a new Inventory Item record per storefront with quantity on hand, unit of measure, and a per-item reorder threshold; (b) a single org-wide threshold value. Recommendation: (a).", "simulated_answer": "New Inventory Item object per storefront with quantity, unit, reorder threshold; alert when below threshold."}
+  ],
+  "format_fixes": [],
+  "counts": {"total": 11, "create": 9, "update": 2, "delete": 0},
+  "skill_friction": [
+    "D2 skip rule: SKILL.md allows skipping D2 only if D1 and step-3 queries answered its questions; for a greenfield object the queries covered all D2 topics, but the skill does not say explicitly whether 'no objects in scope exist yet' justifies skipping D2. Skipped and covered with trigger/flow/dependency queries.",
+    "Wrong-claim counting: Rule 3 counts distinct wrong claims including platform claims that cannot be tested by query (flow sharing context, bulk SOQL behavior, email limits, default sender). Four such claims accrued across R halves, which triggered the optional T skip; it is unclear whether uncheckable-but-documented platform corrections should count toward the four-claim threshold the same way as query-contradicted facts.",
+    "Timing the D1 timeout: the MCP call timed out at ~74s; the skill's retry guidance says 'narrower', but D1 has a fixed 300-word template; guidance on which D1 return items to drop first would help.",
+    "Asking about both recipient and data shape used two of the three questions; scope.md says structure is decided, but 'runs low' threshold semantics (per-item vs global) is a business value, so the boundary between the two was a judgment call."
+  ]
+}

@@ -1,0 +1,8 @@
+{"id": "r023", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 1, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Asked how partial redemptions should be recorded (existing Remaining_Value__c vs new child object) although the existing field plus the requirement gave a clear default the run itself recommended; the requirement was already met, so this question was avoidable.", "skill_gap": "Step 5 'always ask about money' pushes this question; SKILL.md lacks an exception for when an existing field already satisfies the money requirement and the question only confirms reuse."},
+  {"defect": "Inventory includes a Conditional Layout update whose need depends on unreadable page assignment; it is a hedge rather than a determined change.", "skill_gap": "None exists: no rule says whether an unconfirmable conditional row belongs in the Change set or in Open decisions."}
+ ]}

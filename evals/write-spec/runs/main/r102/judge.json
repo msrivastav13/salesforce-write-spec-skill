@@ -1,0 +1,8 @@
+{"id": "r102", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 1},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Audience was not asked, although the run's own evidence shows only two permission sets (one assignment each) grant Read on the report fields and System Administrator has none, so the dashboard shared with AllInternalUsers shows data to almost nobody; the answer would change the inventory (a viewer permission set), yet it was deferred to a Section 8 proposal.", "skill_gap": "SKILL.md step 5 says to always ask about persona choices whose candidates are different audiences, which should have prevented it; the run predicted 'no preference' instead. The skill could say explicitly that when existing grants cover almost no viewers, the audience question must be asked."},
+  {"defect": "Allow Reports on the three objects is load-bearing for four rows and recorded as a blocking open item, but those rows are not marked Conditional.", "skill_gap": "None exists: spec-format.md does not say whether rows that depend on a blocking unreadable prerequisite must also be marked Conditional."}
+ ]}

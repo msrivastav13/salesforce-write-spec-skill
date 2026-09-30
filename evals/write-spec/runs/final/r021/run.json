@@ -1,0 +1,388 @@
+{
+ "id": "r021",
+ "skill_rev": "v38.2",
+ "outcome": "saved",
+ "stop_reason": null,
+ "spec_path": "evals/write-spec/runs/final/r021/contact-loyalty-tier-sync-spec.md",
+ "askcoworker_calls": [
+  {
+   "seq": 1,
+   "kind": "d1",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 44
+  },
+  {
+   "seq": 42,
+   "kind": "i",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 60
+  },
+  {
+   "seq": 43,
+   "kind": "r",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 36
+  },
+  {
+   "seq": 44,
+   "kind": "r",
+   "error": false,
+   "timed_out": false,
+   "end_marker": true,
+   "resumed_fragment": false,
+   "seconds": 37
+  }
+ ],
+ "org_queries": [
+  {
+   "seq": 2,
+   "purpose": "Org reachable, alias, ID, API version",
+   "command_summary": "sf org display --json filtered to connectedStatus/alias/id/apiVersion",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 3,
+   "purpose": "Full custom object list; same concept (points/tier/loyalty/balance) fields org-wide",
+   "command_summary": "sf sobject list --sobject custom; Tooling CustomField WHERE DeveloperName LIKE Point/Tier/Loyal/Balance",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 4,
+   "purpose": "DurableIds of Contact, Loyalty_Transaction__c, Transaction__c",
+   "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName IN (...)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 5,
+   "purpose": "Complete custom field list on Contact and Loyalty_Transaction__c",
+   "command_summary": "Tooling CustomField WHERE TableEnumOrId IN ('01Iak00000Dx4KKEAZ','Contact')",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 6,
+   "purpose": "Field types, picklist values, restricted picklist, default, relationship (D1 field claims)",
+   "command_summary": "sf sobject describe Contact and Loyalty_Transaction__c --json filtered",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 7,
+   "purpose": "Contact__c is Master-Detail and reparentability",
+   "command_summary": "Tooling CustomField.Metadata by Id 00Nak00004nK0SyEAK",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 8,
+   "purpose": "Data shape / sign convention of Points__c by Transaction_Type__c",
+   "command_summary": "SELECT Transaction_Type__c, COUNT, MIN, MAX, SUM FROM Loyalty_Transaction__c GROUP BY type",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 9,
+   "purpose": "Current Loyalty_Tier__c distribution",
+   "command_summary": "SELECT Loyalty_Tier__c, COUNT(Id) FROM Contact GROUP BY Loyalty_Tier__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 10,
+   "purpose": "Contacts with transactions",
+   "command_summary": "SELECT COUNT_DISTINCT(Contact__c) FROM Loyalty_Transaction__c",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 11,
+   "purpose": "Apex triggers on Contact / Loyalty_Transaction__c",
+   "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 12,
+   "purpose": "Flows on either object (IN)",
+   "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN (...)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 13,
+   "purpose": "Validation rules on either object",
+   "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId IN (...)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 14,
+   "purpose": "References to Loyalty_Tier__c, Points__c, Transaction_Type__c, Loyalty_Transaction__c",
+   "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId IN (...)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 15,
+   "purpose": "Flows on Contact (separate query)",
+   "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId = 'Contact'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 16,
+   "purpose": "Flows on Loyalty_Transaction__c (separate)",
+   "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId = 'Loyalty_Transaction__c'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 17,
+   "purpose": "Flows named Loyal/Tier/Point (used OR; returned empty, OR unsupported)",
+   "command_summary": "FlowDefinitionView WHERE ApiName LIKE ... OR ...",
+   "ok": false,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 18,
+   "purpose": "Validation rules on Loyalty_Transaction__c",
+   "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId = '01Iak00000Dx4KK'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 19,
+   "purpose": "Validation rules on Contact",
+   "command_summary": "Tooling SELECT COUNT() FROM ValidationRule WHERE EntityDefinitionId = 'Contact'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 20,
+   "purpose": "FlowDefinitionView is populated (sanity for empty results)",
+   "command_summary": "SELECT COUNT() FROM FlowDefinitionView",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 21,
+   "purpose": "Flows named %Loyal%",
+   "command_summary": "FlowDefinitionView WHERE ApiName LIKE '%Loyal%'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 22,
+   "purpose": "Flows named %Tier%",
+   "command_summary": "FlowDefinitionView WHERE ApiName LIKE '%Tier%'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 23,
+   "purpose": "Apex readers/writers of loyalty fields",
+   "command_summary": "Tooling ApexClass bodies (unmanaged, 70) searched locally",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 24,
+   "purpose": "Trigger bodies referencing Loyalty",
+   "command_summary": "Tooling ApexTrigger bodies (unmanaged, 0)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 25,
+   "purpose": "AgentGetLoyaltyTierActions reads or writes the tier",
+   "command_summary": "Tooling ApexClass Body WHERE Name = 'AgentGetLoyaltyTierActions'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 26,
+   "purpose": "Standard Loyalty Management objects exist",
+   "command_summary": "sf sobject list --sobject all | grep loyal/tier/point",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 27,
+   "purpose": "FLS on Loyalty_Tier__c, Points__c, Transaction_Type__c",
+   "command_summary": "FieldPermissions WHERE Field IN (...)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 28,
+   "purpose": "Object access on Loyalty_Transaction__c",
+   "command_summary": "ObjectPermissions WHERE SobjectType = 'Loyalty_Transaction__c'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 29,
+   "purpose": "ApexClass Id for dependency checks",
+   "command_summary": "Tooling ApexClass Id WHERE Name = 'AgentGetLoyaltyTierActions'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 30,
+   "purpose": "Agent actions named Loyalty",
+   "command_summary": "Tooling GenAiFunctionDefinition WHERE DeveloperName LIKE '%Loyalty%'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 31,
+   "purpose": "Scheduled flows that might write Contact",
+   "command_summary": "FlowDefinitionView WHERE TriggerType = 'Scheduled'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 32,
+   "purpose": "Agent action targeting AgentGetLoyaltyTierActions",
+   "command_summary": "Tooling GenAiFunctionDefinition WHERE InvocationTarget = '01pak00000VxafAAAR'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 33,
+   "purpose": "Orch flow active version",
+   "command_summary": "Tooling FlowDefinition WHERE DeveloperName = 'Orch'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 34,
+   "purpose": "Orch flow namespace and trigger object",
+   "command_summary": "FlowDefinitionView WHERE ApiName = 'Orch'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 35,
+   "purpose": "Components referencing AgentGetLoyaltyTierActions",
+   "command_summary": "Tooling MetadataComponentDependency WHERE RefMetadataComponentId = class Id",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 36,
+   "purpose": "Editability/namespace of permission sets granting tier access",
+   "command_summary": "PermissionSet WHERE Name IN (...)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 37,
+   "purpose": "Existing loyalty permission set",
+   "command_summary": "SELECT COUNT() FROM PermissionSet WHERE Name LIKE '%Loyal%'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 38,
+   "purpose": "New roll-up names free on Contact",
+   "command_summary": "Tooling CustomField WHERE TableEnumOrId='Contact' AND DeveloperName LIKE Earn/Redeem",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 45,
+   "purpose": "AskCoworker claim that Data Cloud already ingests transactions",
+   "command_summary": "SELECT COUNT() FROM DataStream",
+   "ok": true,
+   "contradicted_askcoworker": true
+  },
+  {
+   "seq": 46,
+   "purpose": "AskCoworker-cited permission set Id and namespace",
+   "command_summary": "PermissionSet WHERE Name IN ('sfdc_a360_sfcrm_data_extract','sfdc_slack')",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 47,
+   "purpose": "Org edition",
+   "command_summary": "SELECT OrganizationType, IsSandbox FROM Organization",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 48,
+   "purpose": "Re-run: all contacts have null tier (backfill decision)",
+   "command_summary": "SELECT COUNT() FROM Contact WHERE Loyalty_Tier__c != null",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 49,
+   "purpose": "Test class name free",
+   "command_summary": "Tooling ApexClass WHERE Name LIKE '%Loyalty%'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 50,
+   "purpose": "Who can create transactions",
+   "command_summary": "PermissionSet WHERE Id IN (ObjectPermissions Create on Loyalty_Transaction__c)",
+   "ok": true,
+   "contradicted_askcoworker": false
+  },
+  {
+   "seq": 51,
+   "purpose": "Profile behind profile-owned permission set",
+   "command_summary": "PermissionSet Profile.Name WHERE Name = 'X00ex00000018ozh_128_09_04_12_1'",
+   "ok": true,
+   "contradicted_askcoworker": false
+  }
+ ],
+ "user_questions": [
+  {
+   "seq": 39,
+   "question": "What net-points thresholds define each tier (Explorer, Insider, Pronto Plus, Pronto One, Pronto Elite)? No thresholds exist in the org. Recommendation: none possible; a business value is needed.",
+   "simulated_answer": "Explorer 0-999, Insider 1000-4999, Pronto Plus 5000-9999, Pronto One 10000-24999, Pronto Elite 25000+."
+  },
+  {
+   "seq": 40,
+   "question": "How is the points balance computed? Options: (a) net = SUM of Earn Points__c minus SUM of Redeem Points__c (Redeem stored positive); (b) Redeem stored as negative numbers, balance = SUM of all Points__c; (c) lifetime Earn only. Evidence: Transaction_Type__c has Earn/Redeem; 0 transaction records, so no data settles the sign. Recommendation: (a).",
+   "simulated_answer": "Net points: Earn minus Redeem across all Loyalty Transactions."
+  },
+  {
+   "seq": 41,
+   "question": "Should the tier always follow the balance, including downgrades and overwriting tiers set by hand (Agentforce_Reference_App and sfdc_accelerate_dms can edit Loyalty_Tier__c), or only upgrade? Recommendation: always follow, recalculated on every transaction insert/update/delete.",
+   "simulated_answer": "Recalculate on every loyalty transaction insert/update/delete. Tiers can go down."
+  }
+ ],
+ "format_fixes": [],
+ "counts": {
+  "total": 4,
+  "create": 4,
+  "update": 0,
+  "delete": 0
+ },
+ "skill_friction": [
+  "No sfdx-project.json in the project: the AskCoworker header requires a sourceApiVersion and the skill does not say what to put (used the org apiVersion and said so).",
+  "Wrong-claim counting (Rule 3) is ambiguous for fabricated [Verified: ...] labels (e.g. 'FieldPermissions SOQL returned 0 rows' for fields that do not exist yet) and for over-reaching inferences (Data Cloud 'already ingests' with 0 DataStreams); unclear whether these count as wrong claims. Counting them reached four and allowed skipping T, which removed the only external review of open decisions.",
+  "The R/T split rule (>4 established facts => split R into runtime and security halves) doubles R calls for small inventories (4 rows) where one R call would likely fit the time limit.",
+  "The skill does not say whether an internal helper field that only a system-context flow reads counts as a field 'people use' (content rule requiring access and placement); had to decide no grants and list visibility as a proposal.",
+  "No guidance that roll-up summary creation recalculates values without firing parent flows/triggers, so existing parents need a backfill save; handled as a non-blocking data step from general knowledge.",
+  "Step 5 says to send one question message after D1 and step 3, but spec-format and askcoworker-calls give no template slot for recording the simulated answers' mapping when the answer (e.g. 'tiers can go down') covers a question only indirectly (hand-edit overwrite); mapped per scope.md 'answer that picks no option'.",
+  "Hit the documented FlowDefinitionView OR-returns-empty trap despite the note; the note could be surfaced in the 'Existing automation' checklist, not only in API notes."
+ ]
+}

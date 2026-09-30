@@ -1,0 +1,57 @@
+{
+  "id": "r023",
+  "skill_rev": "v38.2",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/final/r023/gift-certificate-balance-case-link-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 58},
+    {"seq": 27, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 65},
+    {"seq": 28, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49},
+    {"seq": 31, "kind": "r", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 62},
+    {"seq": 34, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 55}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "org reachable, alias, id, API version", "command_summary": "sf org display --json | grep connectedStatus/alias/id/apiVersion", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "full custom object list; Gift_Certificate__c exists, no redemption object", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "Gift_Certificate__c DurableId", "command_summary": "Tooling EntityDefinition WHERE QualifiedApiName='Gift_Certificate__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "complete custom field list and descriptions (D1 said 29 fields)", "command_summary": "Tooling CustomField WHERE TableEnumOrId='01Iak00000Dx4JX'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "field types, precision, picklists, lookup targets", "command_summary": "sobject describe Gift_Certificate__c (fields)", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 7, "purpose": "child relationships of Gift_Certificate__c (redemption child?) and Case (Case_Gift_Certificates__r)", "command_summary": "sobject describe Gift_Certificate__c and Case (childRelationships)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "same concept elsewhere (redeem/balance/remaining/gift/case fields)", "command_summary": "Tooling CustomField WHERE DeveloperName LIKE ...", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "triggers on Gift_Certificate__c and Case", "command_summary": "Tooling ApexTrigger WHERE TableEnumOrId IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "record-triggered flows on Gift_Certificate__c", "command_summary": "FlowDefinitionView WHERE TriggerObjectOrEventId IN ('Gift_Certificate__c')", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "validation rules on Gift_Certificate__c", "command_summary": "Tooling ValidationRule WHERE EntityDefinitionId='01Iak00000Dx4JX'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "components referencing Gift_Certificate__c", "command_summary": "Tooling MetadataComponentDependency by object DurableId", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 13, "purpose": "readers/writers of Remaining_Value__c, Issued_For_Case__c, Original_Value__c, Status__c", "command_summary": "Tooling MetadataComponentDependency by 4 field Ids", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 14, "purpose": "how referencing Apex writes balance and case fields", "command_summary": "Tooling ApexClass Body for 4 referencing classes, grep locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 15, "purpose": "absence of any redemption/decrement logic in all unmanaged Apex", "command_summary": "Tooling ApexClass Body WHERE NamespacePrefix=null, grep locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "data shape by Status and Type", "command_summary": "SELECT Status__c, Type__c, COUNT(Id) FROM Gift_Certificate__c GROUP BY ...", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 17, "purpose": "population of Remaining_Value__c, Original_Value__c, Issued_For_Case__c", "command_summary": "SELECT COUNT(...) FROM Gift_Certificate__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 18, "purpose": "FLS on the three fields", "command_summary": "FieldPermissions WHERE SobjectType='Gift_Certificate__c' AND Field IN (...)", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "layouts on Gift_Certificate__c", "command_summary": "Tooling Layout WHERE TableEnumOrId='01Iak00000Dx4JX'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 20, "purpose": "record pages on Gift_Certificate__c", "command_summary": "Tooling FlexiPage WHERE EntityDefinitionId='01Iak00000Dx4JX'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "tab exists", "command_summary": "TabDefinition WHERE SobjectName='Gift_Certificate__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 22, "purpose": "fields placed on Gift Certificate Layout", "command_summary": "Tooling Layout.Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 23, "purpose": "fields placed on Gift_Certificate_Record_Page (Remaining_Value__c missing)", "command_summary": "Tooling FlexiPage.Metadata by Id", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 24, "purpose": "IssueGiftCardAction inputs (no caseId; defaults Type to Recovery)", "command_summary": "Tooling ApexClass Body WHERE Name='IssueGiftCardAction'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 29, "purpose": "R claim: no Data 360 streams", "command_summary": "SELECT COUNT() FROM DataStream", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 30, "purpose": "R claim: lookup SetNull on Case delete, not required", "command_summary": "describe cascadeDelete + Tooling CustomField.Metadata for Issued_For_Case__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 32, "purpose": "security claim: OWD of Gift_Certificate__c and Case", "command_summary": "EntityDefinition InternalSharingModel/ExternalSharingModel", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 33, "purpose": "security claim: object permissions incl. profile-owned sets", "command_summary": "ObjectPermissions WHERE SobjectType='Gift_Certificate__c'", "ok": true, "contradicted_askcoworker": true},
+    {"seq": 35, "purpose": "T claim: field history tracking status", "command_summary": "Tooling FieldDefinition IsFieldHistoryTracked for 3 fields", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 36, "purpose": "T claim: existing records' balance vs original", "command_summary": "SELECT Remaining_Value__c, Original_Value__c FROM Gift_Certificate__c LIMIT 1 (+COUNT)", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 25, "question": "How should partial redemptions be recorded? Options: (A) keep the existing Gift_Certificate__c.Remaining_Value__c (Currency 18,2, set at issue by IssueGiftCardAction and AgentGiftCertificateActions, nothing decrements it today) as the stored balance, edited at each redemption; (B) add a new redemption child record per partial redemption and derive the balance from it. Evidence: no redemption object, automation, or Apex exists in the org. Recommendation: A.", "simulated_answer": "No preference; use your recommended default."},
+    {"seq": 26, "question": "Should Issued_For_Case__c (existing optional Lookup to Case) become required when Type__c = 'Recovery'? Options: (A) keep it optional; (B) require it for Recovery. Evidence: IssueGiftCardAction creates Recovery certificates with no Case input, and the one existing Recovery record has no Case, so (B) would break that agent action. Recommendation: A.", "simulated_answer": "No preference; use your recommended default."}
+  ],
+  "format_fixes": [],
+  "counts": {"total": 2, "create": 0, "update": 2, "delete": 0},
+  "skill_friction": [
+    "Step 5 'always ask about money' pushed a question on the redemption mechanism even though the predicted answer was 'no preference'; the hidden intent ('Remaining balance tracking + case link') covered neither question, so both questions only produced assumptions.",
+    "No guidance for a requirement whose field exists but has no writer after issue (nothing decrements Remaining_Value__c): design-rules 'metadata exists but values are empty' and 'if the only writer never sets it, list the gap' point to a placement-only inventory, while AskCoworker I proposed a new Apex redemption action; the call on whether a redemption process is in scope is left to judgment.",
+    "The R/T split rule (more than 4 established facts -> API names only, split R into runtime/security, T at 250 words) forced three calls for a 2-row UI-only inventory where R and T add little; a skip or merge rule for UI-only inventories would save calls.",
+    "Wrong-claim counting is ambiguous for D1's 'Currency(16,2)' repeated in I (counted once) and for the security call calling profile-owned permission sets 'unrecognized' plus the wrong Edit claim (counted as one claim)."
+  ]
+}

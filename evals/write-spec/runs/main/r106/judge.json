@@ -1,0 +1,8 @@
+{"id": "r106", "claims": {"correct": 5, "wrong": 1, "unverifiable": 0}, "wrong_claims": ["'45 profiles (every profile in the org...)' have FLS on Lead.NumberofLocations__c: the 45 count is right but the org has 48 profiles, so it is not every profile."],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Overstated 'every profile in the org' for the 45 profile FieldPermissions rows (org has 48 profiles); inconsequential to the design but presented as verified.", "skill_gap": "none exists"},
+  {"defect": "Permission set assignment scope (which users work Leads) is an assumption on a blocking-for-delivery item; acceptable but it re-homes access from 45 profiles to a new PS, a potential access regression for users on profiles not listed.", "skill_gap": "none exists (run noted no design rule for re-homing access when consolidating duplicate fields)"}
+ ]}

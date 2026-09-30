@@ -1,0 +1,41 @@
+{
+  "id": "r018",
+  "skill_rev": "v38.2",
+  "outcome": "saved",
+  "stop_reason": null,
+  "spec_path": "evals/write-spec/runs/main/r018/nightly-deactivate-unpriced-menu-items-spec.md",
+  "askcoworker_calls": [
+    {"seq": 3, "kind": "d1", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 101},
+    {"seq": 15, "kind": "i", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 66},
+    {"seq": 17, "kind": "r", "error": true, "timed_out": true, "end_marker": false, "resumed_fragment": false, "seconds": 75},
+    {"seq": 18, "kind": "retry", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 40},
+    {"seq": 20, "kind": "t", "error": false, "timed_out": false, "end_marker": true, "resumed_fragment": false, "seconds": 49}
+  ],
+  "org_queries": [
+    {"seq": 1, "purpose": "Org context and connection", "command_summary": "sf org display --json filtered to connectedStatus/alias/id/apiVersion", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 2, "purpose": "Full custom object list (menu objects exist)", "command_summary": "sf sobject list --sobject custom", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 4, "purpose": "DurableIds of menu objects; Menu_Item__c field types (Available__c boolean, Price__c)", "command_summary": "Tooling EntityDefinition for Menu objects; sobject describe Menu_Item__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 5, "purpose": "Complete custom field list on Menu_Item__c, Menu__c, Menu_Category__c (no other active/status field)", "command_summary": "Tooling CustomField WHERE TableEnumOrId IN menu DurableIds", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 6, "purpose": "Price__c type/nillable; data shape: total, null-price, zero-price counts, Available__c distribution", "command_summary": "describe Price__c; COUNT() queries; GROUP BY Available__c", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 7, "purpose": "Available__c default and Price__c required/precision", "command_summary": "Tooling CustomField.Metadata by Id for Available and Price", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 8, "purpose": "Existing automation and dependencies on Menu_Item__c", "command_summary": "Tooling ApexTrigger; FlowDefinitionView by object and scheduled flows; Tooling ValidationRule; MetadataComponentDependency on object", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 9, "purpose": "Scheduled flow Orch object; field-level dependencies on Available__c/Price__c; existing scheduled jobs", "command_summary": "FlowDefinitionView Orch; MetadataComponentDependency on field Ids; CronTrigger", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 10, "purpose": "How readers/writers use Available__c and Price__c, sharing modes", "command_summary": "Tooling ApexClass Body for 6 dependent classes, searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 11, "purpose": "All unmanaged Apex readers of Menu_Item__c; existing Schedulable/Batchable classes; price action null handling", "command_summary": "Tooling ApexClass Body WHERE NamespacePrefix = null, searched locally", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 12, "purpose": "Whether create action allows null price; inactive menus count", "command_summary": "AgentCreateMenuWithItemsActions body search; COUNT() Menu__c WHERE Active__c = false", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 16, "purpose": "Verify I claims: datamask classes managed, no Menu permission set, flow name unused", "command_summary": "Tooling ApexClass by name; PermissionSet LIKE '%Menu%'; FlowDefinitionView by ApiName", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 19, "purpose": "Verify R sharing model claim and field access rows for Available__c", "command_summary": "EntityDefinition sharing models; FieldPermissions WHERE Field = 'Menu_Item__c.Available__c'", "ok": true, "contradicted_askcoworker": false},
+    {"seq": 21, "purpose": "Verify T claims: org time zone and Menu__c lookup type", "command_summary": "Organization TimeZoneSidKey; describe Menu_Item__c.Menu__c", "ok": true, "contradicted_askcoworker": false}
+  ],
+  "user_questions": [
+    {"seq": 13, "question": "What counts as 'no price'? Options: (a) Price__c is blank only; (b) blank or $0.00. Evidence: Menu_Item__c.Price__c is an optional Currency field with no default; today 0 of 206 items are blank and 0 are $0.00; AgentCreateMenuWithItemsActions can insert items with a blank price. Recommendation: (a) blank only, so intentionally free items stay orderable.", "simulated_answer": "Blank only: Menu Items where Price is null and Available = true should be set to Available = false."}
+  ],
+  "format_fixes": [],
+  "counts": {"total": 1, "create": 1, "update": 0, "delete": 0},
+  "skill_friction": [
+    "The R security half was never re-sent after the narrowed retry dropped it; handling table says cover with org queries 'where they can answer it', but execution context of a scheduled flow is a documented platform fact no query can test, so it fell back to documented behavior without clear guidance on whether a second retry was expected.",
+    "Wrong-claim counting is ambiguous for related platform claims (a '2,000-row' batch/DML limit repeated across R and T, and 'single bulk DML call'): unclear whether these share one root cause or count separately toward the two/four thresholds.",
+    "Section 7 guidance says a flow whose only logic runs on a scheduled path gets no test row; it is unclear whether a schedule-triggered flow (start is the schedule, not a scheduled path) is covered by that rule or by the 'one Flow Test row for the main outcome' rule. Chose manual checks since Flow Tests do not support schedule-triggered flows.",
+    "No sfdx-project.json exists; the AskCoworker header requires sourceApiVersion and the skill gives no instruction for this case (used org apiVersion)."
+  ]
+}

@@ -1,0 +1,8 @@
+{"id": "r097", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 1, "implementation": 0, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 2, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "ExtlClntAppOauthConfigurablePolicies row (Pronto_App_Orders_oauthPlcy) depends on a run-as user set only by a Setup step, so the row cannot be fully delivered by deploy; its Module folder names for External Client App types are best-effort and unverified.", "skill_gap": "None exists: spec-format.md does not say whether Salesforce-hosted OAuth client metadata (External Client App and its child types) are rows or setup steps, nor give their source folders."},
+  {"defect": "The before-save flow sets Transaction_Type__c = Earn and Transaction_Source__c = Order on any record whose Order_Total__c is set or changed, including manual edits by other users, which is not called out as a behavior change.", "skill_gap": "SKILL.md step 5 lists 'changes to other users' or callers' behavior' as an ask/record item, but no rule requires stating the effect of new automation on manual edits in Section 6."}
+ ]}

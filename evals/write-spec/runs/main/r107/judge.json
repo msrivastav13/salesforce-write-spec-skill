@@ -1,0 +1,9 @@
+{"id": "r107", "claims": {"correct": 6, "wrong": 0, "unverifiable": 0}, "wrong_claims": [],
+ "duplicate_create": [], "phantom_target": [],
+ "questions": {"intent": 2, "implementation": 1, "missing_intent": 0},
+ "scores": {"requirement_fit": 2, "reuse": 2, "scope_behavior": 1, "honesty": 2, "safety": 2, "clarity": 2},
+ "defects": [
+  {"defect": "Q1 (who is the approving manager) asked although 'manager approval' has a clear default (submitter's User.ManagerId), which the run itself recommended; meta expected no question. Q2 (reject status) and Q3 (behavior of existing writers/agent) are legitimate intent questions.", "skill_gap": "SKILL.md step 5 'predict the answer; if a clear default exists, decide and record it as an assumption' would have prevented Q1"},
+  {"defect": "Inventory grows to 14 rows including peripheral updates (GenAiFunction description, layout with approval history); defensible but adds scope beyond the minimum.", "skill_gap": "none exists"},
+  {"defect": "IssueRefundReceiptAction still mints the wallet receipt before insert for Pending (>500) refunds; the spec does not consider whether a receipt should be issued for an unapproved refund.", "skill_gap": "none exists"}
+ ]}

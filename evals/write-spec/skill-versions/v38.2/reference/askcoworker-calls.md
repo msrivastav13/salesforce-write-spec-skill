@@ -10,7 +10,7 @@ Answer only from this message and the org. Ignore earlier conversations.
 
 Requirement: "{requirement, verbatim}"
 {If the user clarified it: Clarified requirement (user decision): "{clarified requirement}"}
-Project: {project name, or the working directory name}; org alias {alias}; API version {sourceApiVersion, or the org's apiVersion if there is no sfdx-project.json}.
+Project: {project name}; org alias {alias}; sourceApiVersion {version}.
 Established so far:
 {short bullets (at most about 10) of the verified facts, user decisions, and accepted inventory that this call needs, each tagged (verified by org query | user decision | reported by AskCoworker); or "nothing yet"}
 
@@ -62,7 +62,7 @@ Accepted inventory: {numbered list}.
 Return: the tests in the inventory mapped to behaviors; bulk, negative, and permission cases; recommended manual verification; open decisions (assumptions, unresolved choices with a recommended default, parts of the requirement not addressed), each marked blocking or non-blocking.
 ```
 
-Send R and T as separate calls; combined, they often exceed the time limit. For more than 4 changes, list the inventory as API names only, split R into runtime and security halves, and lower T's limit to 250 words. For 4 or fewer changes, send one R.
+Send R and T as separate calls; combined, they often exceed the time limit. For more than 4 changes, or more than 4 established facts, list the inventory as API names only, split R into runtime and security halves, and lower T's limit to 250 words.
 
 ## Handling responses
 
@@ -79,15 +79,6 @@ Send R and T as separate calls; combined, they often exceed the time limit. For 
 | A fact you sent was wrong | Resend with the correction (counts as a follow-up). |
 | AskCoworker disputes a fact you verified | Your fact stands; record the conflict. |
 | More than 3 follow-ups (retries not counted) | Stop and report what is missing. |
-
-## Counting wrong claims (Rule 3 thresholds)
-
-A claim is wrong when an org query or documented platform behavior contradicts it. Count:
-- facts, platform claims, and claims that something cannot be queried;
-- `[Verified]` labels for checks that did not happen or that returned something else;
-- design proposals that rest on a wrong fact or wrong platform behavior.
-
-Do not count: details you simply chose differently, untestable claims that no documentation contradicts (keep those *reported by AskCoworker*), or claims a query only partly contradicts (count them if the design relied on the wrong part). Count each distinct claim once, however often it repeats; claims with one root cause (for example one FLS-hidden describe) count once. Check the count after every call, including between split halves. When you skip *R* or *T* after four, say so in Section 2.
 
 ## After a timeout
 
